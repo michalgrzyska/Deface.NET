@@ -9,6 +9,8 @@ internal class ShapeDrawingService(Settings settings)
     private readonly Settings _settings = settings;
     private static readonly Size _gaussianBlurSize = new(51, 51);
 
+    private const double MosaicSizeFactor = 0.03;
+
     public void DrawShapes(Mat frame, IEnumerable<FaceInfo> faces)
     {
         if (_settings.MaskScale != 1.0f)
@@ -76,11 +78,13 @@ internal class ShapeDrawingService(Settings settings)
 
     private void DrawMosaicShape(Mat frame, FaceInfo face)
     {
-        int mosaicSize = frame.Width / 75;
+        var mosaicSize = frame.Width > frame.Height
+            ? frame.Width * MosaicSizeFactor
+            : frame.Height * MosaicSizeFactor;
 
-        for (int y = (int)face.Y1; y < face.Y2; y += mosaicSize)
+        for (int y = (int)face.Y1; y < face.Y2; y += (int)mosaicSize)
         {
-            for (int x = (int)face.X1; x < face.X2; x += mosaicSize)
+            for (int x = (int)face.X1; x < face.X2; x += (int)mosaicSize)
             {
                 Point pt1 = new(x, y);
                 Point pt2 = new(Math.Min((int)face.X2, x + mosaicSize - 1), Math.Min(face.Y2, y + mosaicSize - 1));
