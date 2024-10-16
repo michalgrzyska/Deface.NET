@@ -25,7 +25,7 @@ internal class DProgressLogger<T>(ILogger<T> logger, DefaceLoggingLevel loggingL
         return _stopwatch.Elapsed;
     }
 
-    public void LogProgress(int currentStep, string message, object[]? args = default)
+    public void LogProgress(int currentStep, string message)
     {
         if (_loggingLevel < DefaceLoggingLevel.Detailed)
         {
@@ -49,6 +49,6 @@ internal class DProgressLogger<T>(ILogger<T> logger, DefaceLoggingLevel loggingL
 
         string resultMessage = message + " | {StepInfo} | {PercentInfo} | {Time}";
 
-        _logger.LogInformation(resultMessage, args, paddedStepInfo, paddedPercentInfo, time);
+        _logger.LogInformation(resultMessage, paddedStepInfo, paddedPercentInfo, time);
     }
 }
