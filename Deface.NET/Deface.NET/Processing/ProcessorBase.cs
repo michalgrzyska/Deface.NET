@@ -15,7 +15,7 @@ internal abstract class ProcessorBase(Settings settings)
         }
 
         var settingsClone = _settings.ShallowCopy();
-        action(settingsClone);
+        settingsClone.ApplyAction(action);
 
         _overridenSettings = settingsClone;
     }
