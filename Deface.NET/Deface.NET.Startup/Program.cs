@@ -2,13 +2,13 @@
 
 var defaceService = DefaceProvider.GetDefaceService(x =>
 {
-    x.AnonimizationMethod = AnonimizationMethod.Mosaic;
+    x.AnonimizationMethod = AnonimizationMethod.GaussianBlur;
     x.RunDetectionEachNFrames = 3;
 });
 
-var path = Path.GetFullPath("C://Test/aga.mp4");
+//var path = Path.GetFullPath("C://Test/aga.mp4");
 //var path = Path.GetFullPath("C://Test/test.mp4");
-//var path = Path.GetFullPath("2.mp4");
+var path = Path.GetFullPath("2.mp4");
 var pathImg = Path.GetFullPath("1.png");
 
 

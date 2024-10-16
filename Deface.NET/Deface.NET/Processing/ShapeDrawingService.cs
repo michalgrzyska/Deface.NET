@@ -7,9 +7,9 @@ namespace Deface.NET.Processing;
 internal class ShapeDrawingService(Settings settings)
 {
     private readonly Settings _settings = settings;
-    private static readonly Size _gaussianBlurSize = new(51, 51);
 
     private const double MosaicSizeFactor = 0.03;
+    private const double GaussianBlurFactor = 0.1;
 
     public void DrawShapes(Mat frame, IEnumerable<FaceInfo> faces)
     {
@@ -54,12 +54,20 @@ internal class ShapeDrawingService(Settings settings)
 
     private void DrawGaussianBlurShape(Mat frame, FaceInfo face)
     {
+        var factor = (int)(frame.Width > frame.Height
+            ? frame.Width * GaussianBlurFactor
+            : frame.Height * GaussianBlurFactor);
+
+        var factorNormalized = factor % 2 == 0 ? factor + 1 : factor; // Blur size must be odd number
+
+        Size gaussianBlurSize = new(factorNormalized, factorNormalized);
+
         if (_settings.AnonimizationShape == AnonimizationShape.Rectangle)
         {
             var rect = face.ToRect();
             Mat roi = new(frame, rect);
 
-            Cv2.GaussianBlur(roi, roi, _gaussianBlurSize, sigmaX: 0);
+            Cv2.GaussianBlur(roi, roi, gaussianBlurSize, sigmaX: 0);
             roi.CopyTo(frame[rect]);
         }
         else if (_settings.AnonimizationShape == AnonimizationShape.Ellipse)
@@ -67,7 +75,7 @@ internal class ShapeDrawingService(Settings settings)
             var (center, axes) = face.ToEllipse();
 
             Mat blurredImage = new();
-            Cv2.GaussianBlur(frame, blurredImage, _gaussianBlurSize, sigmaX: 0);
+            Cv2.GaussianBlur(frame, blurredImage, gaussianBlurSize, sigmaX: 0);
 
             Mat mask = Mat.Zeros(frame.Size(), MatType.CV_8UC1);
             Cv2.Ellipse(mask, center, axes, angle: 0, startAngle: 0, endAngle: 360, color: new Scalar(255), thickness: -1);
@@ -78,13 +86,13 @@ internal class ShapeDrawingService(Settings settings)
 
     private void DrawMosaicShape(Mat frame, FaceInfo face)
     {
-        var mosaicSize = frame.Width > frame.Height
+        var mosaicSize = (int)(frame.Width > frame.Height
             ? frame.Width * MosaicSizeFactor
-            : frame.Height * MosaicSizeFactor;
+            : frame.Height * MosaicSizeFactor);
 
-        for (int y = (int)face.Y1; y < face.Y2; y += (int)mosaicSize)
+        for (int y = (int)face.Y1; y < face.Y2; y += mosaicSize)
         {
-            for (int x = (int)face.X1; x < face.X2; x += (int)mosaicSize)
+            for (int x = (int)face.X1; x < face.X2; x += mosaicSize)
             {
                 Point pt1 = new(x, y);
                 Point pt2 = new(Math.Min((int)face.X2, x + mosaicSize - 1), Math.Min(face.Y2, y + mosaicSize - 1));
