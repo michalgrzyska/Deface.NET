@@ -4,6 +4,8 @@ namespace Deface.NET.CenterFace;
 
 internal sealed class FaceInfo
 {
+    private bool _isEnlarged = false;
+
     public float X1 { get; internal set; }
     public float Y1 { get; internal set; }
     public float X2 { get; internal set; }
@@ -33,6 +35,11 @@ internal sealed class FaceInfo
 
     public void Enlarge(double factor)
     {
+        if (_isEnlarged)
+        {
+            return;
+        }
+
         var width = X2 - X1;
         var height = Y2 - Y1;
 
@@ -46,5 +53,7 @@ internal sealed class FaceInfo
         X2 = (float)(centerX + newWidth / 2);
         Y1 = (float)(centerY - newHeight / 2);
         Y2 = (float)(centerY + newHeight / 2);
+
+        _isEnlarged = true;
     }
 }

@@ -3,7 +3,7 @@
 var defaceService = DefaceProvider.GetDefaceService(x =>
 {
     x.AnonimizationMethod = AnonimizationMethod.Mosaic;
-    x.RunDetectionEachNFrames = 2;
+    x.RunDetectionEachNFrames = 3;
 });
 
 var path = Path.GetFullPath("C://Test/aga.mp4");
