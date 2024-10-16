@@ -4,24 +4,22 @@ using OpenCvSharp;
 
 namespace Deface.NET.Processing;
 
-internal class ShapeDrawingService(Settings settings)
+internal static class ShapeDrawer
 {
-    private readonly Settings _settings = settings;
-
     private const double MosaicSizeFactor = 0.03;
     private const double GaussianBlurFactor = 0.1;
 
-    public void DrawShapes(Mat frame, IEnumerable<FaceInfo> faces)
+    public static void DrawShapes(Mat frame, IEnumerable<FaceInfo> faces, Settings settings)
     {
-        if (_settings.MaskScale != 1.0f)
+        if (settings.MaskScale != 1.0f)
         {
             foreach (FaceInfo face in faces)
             {
-                face.Enlarge(_settings.MaskScale);
+                face.Enlarge(settings.MaskScale);
             }
         }
 
-        Action<Mat, FaceInfo> processFn = _settings.AnonimizationMethod.Type switch
+        Action<Mat, FaceInfo, Settings> processFn = settings.AnonimizationMethod.Type switch
         {
             AnonimizationType.Color => DrawColorShape,
             AnonimizationType.GaussianBlur => DrawGaussianBlurShape,
@@ -31,28 +29,28 @@ internal class ShapeDrawingService(Settings settings)
 
         foreach (var face in faces)
         {
-            processFn(frame, face);
+            processFn(frame, face, settings);
         }
     }
 
-    private void DrawColorShape(Mat frame, FaceInfo face)
+    private static void DrawColorShape(Mat frame, FaceInfo face, Settings settings)
     {
-        var color = _settings.AnonimizationMethod.ColorValue!.Value;
+        var color = settings.AnonimizationMethod.ColorValue!.Value;
 
-        if (_settings.AnonimizationShape == AnonimizationShape.Ellipse)
+        if (settings.AnonimizationShape == AnonimizationShape.Ellipse)
         {
             var (center, axes) = face.ToEllipse();
             Cv2.Ellipse(frame, center, axes, angle: 0, startAngle: 0, endAngle: 360, color, thickness: -1);
 
         }
-        else if (_settings.AnonimizationShape == AnonimizationShape.Rectangle)
+        else if (settings.AnonimizationShape == AnonimizationShape.Rectangle)
         {
             var rect = face.ToRect();
             Cv2.Rectangle(frame, rect, color, thickness: -1);
         }
     }
 
-    private void DrawGaussianBlurShape(Mat frame, FaceInfo face)
+    private static void DrawGaussianBlurShape(Mat frame, FaceInfo face, Settings settings)
     {
         var factor = (int)(frame.Width > frame.Height
             ? frame.Width * GaussianBlurFactor
@@ -62,7 +60,7 @@ internal class ShapeDrawingService(Settings settings)
 
         Size gaussianBlurSize = new(factorNormalized, factorNormalized);
 
-        if (_settings.AnonimizationShape == AnonimizationShape.Rectangle)
+        if (settings.AnonimizationShape == AnonimizationShape.Rectangle)
         {
             var rect = face.ToRect();
             Mat roi = new(frame, rect);
@@ -70,7 +68,7 @@ internal class ShapeDrawingService(Settings settings)
             Cv2.GaussianBlur(roi, roi, gaussianBlurSize, sigmaX: 0);
             roi.CopyTo(frame[rect]);
         }
-        else if (_settings.AnonimizationShape == AnonimizationShape.Ellipse)
+        else if (settings.AnonimizationShape == AnonimizationShape.Ellipse)
         {
             var (center, axes) = face.ToEllipse();
 
@@ -84,7 +82,7 @@ internal class ShapeDrawingService(Settings settings)
         }
     }
 
-    private void DrawMosaicShape(Mat frame, FaceInfo face)
+    private static void DrawMosaicShape(Mat frame, FaceInfo face, Settings settings)
     {
         var mosaicSize = (int)(frame.Width > frame.Height
             ? frame.Width * MosaicSizeFactor

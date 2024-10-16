@@ -7,20 +7,20 @@ internal sealed class DefaceService(IServiceProvider serviceProvider) : IDefaceS
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
 
-    public ProcessingResult ProcessVideo(string inputVideoFilePath, string outputVideoFilePath)
+    public ProcessingResult ProcessVideo(string inputVideoFilePath, string outputVideoFilePath, Action<Settings>? customSettings = default)
     {
         ValidateInput(inputVideoFilePath, outputVideoFilePath);
 
         using var processor = _serviceProvider.GetRequiredService<VideoProcessor>();
-        return processor.Process(inputVideoFilePath, outputVideoFilePath);
+        return processor.Process(inputVideoFilePath, outputVideoFilePath, customSettings);
     }
 
-    public ProcessingResult ProcessImage(string inputPhotoFilePath, string outputPhotoFilePath)
+    public ProcessingResult ProcessImage(string inputPhotoFilePath, string outputPhotoFilePath, Action<Settings>? customSettings = default)
     {
         ValidateInput(inputPhotoFilePath, outputPhotoFilePath);
 
         using var processor = _serviceProvider.GetRequiredService<ImageProcessor>();
-        return processor.Process(inputPhotoFilePath, outputPhotoFilePath);
+        return processor.Process(inputPhotoFilePath, outputPhotoFilePath, customSettings);
     }
 
     private static void ValidateInput(string inputFilePath, string outputFilePath)

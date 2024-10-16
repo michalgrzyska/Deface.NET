@@ -20,7 +20,6 @@ public static class DependencyInjection
         services.AddSingleton<IDefaceService, DefaceService>();
         services.AddTransient(typeof(DLogger<>));
         services.AddDefaultLoggerIfNeeded();
-        services.AddSingleton<ShapeDrawingService>();
         services.AddTransient<VideoProcessor>();
         services.AddTransient<ImageProcessor>();
 

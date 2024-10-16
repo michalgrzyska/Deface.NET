@@ -4,25 +4,19 @@ using OpenCvSharp;
 
 namespace Deface.NET.Processing;
 
-internal sealed class VideoProcessor
-(
-    Settings settings,
-    DLogger<IDefaceService> logger,
-    ShapeDrawingService shapeDrawingService
-) : IDisposable
+internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> logger) : ProcessorBase(settings), IDisposable
 {
-    private readonly Settings _settings = settings;
     private readonly DLogger<IDefaceService> _logger = logger;
-    private readonly ShapeDrawingService _shapeDrawingService = shapeDrawingService;
-
     private readonly CenterFaceModel _centerFace = new();
 
     private List<FaceInfo> _lastDetectedObjects = [];
 
     public void Dispose() => _centerFace.Dispose();
 
-    public ProcessingResult Process(string inputPath, string outputPath)
+    public ProcessingResult Process(string inputPath, string outputPath, Action<Settings>? customSettings)
     {
+        ApplyScopedSettings(customSettings);
+
         using VideoCapture capture = new(inputPath);
         Size captureSize = capture.ToSize();
 
@@ -39,7 +33,7 @@ internal sealed class VideoProcessor
             capture.Read(frame);
 
             TryUpdateLastDetectedObjects(frame, adjustedSize, i);
-            _shapeDrawingService.DrawShapes(frame, _lastDetectedObjects);
+            ShapeDrawer.DrawShapes(frame, _lastDetectedObjects, Settings);
 
             writer.Write(frame);
 
@@ -49,24 +43,24 @@ internal sealed class VideoProcessor
         TimeSpan processingTime = progressLogger.Stop();
         _logger.Log(DefaceLoggingLevel.Basic, "Video processing result:\n\tFile: \"{Path}\"\n\tTime: {Time}", inputPath, processingTime.ToString(@"hh\:mm\:ss\:fff"));
 
-        return new(inputPath, outputPath, processingTime, captureSize, adjustedSize, _settings.Threshold, capture.Fps);
+        return new(inputPath, outputPath, processingTime, captureSize, adjustedSize, Settings.Threshold, capture.Fps);
     }
 
     private Size GetAdjustedSize(VideoCapture videoCapture)
     {
-        if (!_settings.RescaleVideoWithShorterSideEqualsTo.HasValue)
+        if (!Settings.RescaleVideoWithShorterSideEqualsTo.HasValue)
         {
             return new(videoCapture.FrameWidth, videoCapture.FrameHeight);
         }
 
-        return ResolutionRescaler.RescaleIfNeeded(videoCapture, _settings.RescaleVideoWithShorterSideEqualsTo.Value);
+        return ResolutionRescaler.RescaleIfNeeded(videoCapture, Settings.RescaleVideoWithShorterSideEqualsTo.Value);
     }
 
     private void TryUpdateLastDetectedObjects(Mat frame, Size size, int i)
     {
-        if (i % _settings.RunDetectionEachNFrames == 0)
+        if (i % Settings.RunDetectionEachNFrames == 0)
         {
-            _lastDetectedObjects = _centerFace.Detect(frame, size, scoreThreshold: _settings.Threshold);
+            _lastDetectedObjects = _centerFace.Detect(frame, size, scoreThreshold: Settings.Threshold);
         }
     }
 }

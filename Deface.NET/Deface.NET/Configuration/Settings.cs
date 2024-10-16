@@ -55,11 +55,21 @@ public class Settings
 
     internal Settings(Action<Settings>? builderAction)
     {
+        ApplyAction(builderAction);
+    }
+
+    internal void ApplyAction(Action<Settings>? builderAction)
+    {
         if (builderAction is not null)
         {
             builderAction(this);
             Validate();
         }
+    }
+
+    internal Settings ShallowCopy()
+    {
+        return (Settings)MemberwiseClone();
     }
 
     private void Validate()
