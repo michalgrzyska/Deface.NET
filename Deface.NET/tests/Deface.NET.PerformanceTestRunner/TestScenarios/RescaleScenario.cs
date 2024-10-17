@@ -6,7 +6,7 @@ namespace Deface.NET.PerformanceTestRunner.TestScenarios;
 
 internal class RescaleScenario : VideoTestScenarioBase
 {
-    public RescaleScenario() : base(Resources.Video_Short_HD_1280_720_24fps)
+    public RescaleScenario() : base(TestResources.TestResources.Video_Short_HD_1280_720_24fps)
     { }
 
     [Scenario("Default")]

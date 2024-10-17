@@ -15,19 +15,14 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Deface.NET\Deface.NET.csproj" />
+		<ProjectReference Include="..\tests\Deface.NET.TestResources\Deface.NET.TestResources.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Update="1.mp4">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="1.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 		<None Update="2.mp4">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="3.mp4">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

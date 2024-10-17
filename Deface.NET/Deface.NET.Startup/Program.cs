@@ -1,4 +1,5 @@
 ﻿using Deface.NET;
+using Deface.NET.TestResources;
 
 var defaceService = DefaceProvider.GetDefaceService(x =>
 {
@@ -6,13 +7,7 @@ var defaceService = DefaceProvider.GetDefaceService(x =>
     x.RunDetectionEachNFrames = 3;
 });
 
-//var path = Path.GetFullPath("C://Test/aga.mp4");
-//var path = Path.GetFullPath("C://Test/test.mp4");
-var path = Path.GetFullPath("2.mp4");
-var pathImg = Path.GetFullPath("1.png");
-
-
-var t1 = defaceService.ProcessVideo(path, "C://Test/test1.mp4", x =>
+var t1 = defaceService.ProcessVideo(Resources.Video_Short_640_360_24fps, "C://Test/test1.mp4", x =>
 {
     x.AnonimizationMethod = AnonimizationMethod.Mosaic;
 });

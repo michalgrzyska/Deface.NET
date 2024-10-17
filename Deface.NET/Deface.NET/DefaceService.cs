@@ -1,11 +1,17 @@
 ﻿using Deface.NET.Processing;
 using Microsoft.Extensions.DependencyInjection;
+using OpenCvSharp;
 
 namespace Deface.NET;
 
-internal sealed class DefaceService(IServiceProvider serviceProvider) : IDefaceService
+internal sealed class DefaceService : IDefaceService
 {
-    private readonly IServiceProvider _serviceProvider = serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
+
+    public DefaceService(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
 
     public ProcessingResult ProcessVideo(string inputVideoFilePath, string outputVideoFilePath, Action<Settings>? customSettings = default)
     {

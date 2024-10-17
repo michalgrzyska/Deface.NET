@@ -82,7 +82,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         Cv2.ImWrite(outputPath, image, [(int)ImwriteFlags.PngCompression, 3]);
         return imageSize;
     }
-
+    
     private static string GetOutputPath(string inputPath, string outputDirPath)
     {
         var filename = Path.GetFileName(inputPath);

@@ -5,7 +5,7 @@ namespace Deface.NET.PerformanceTestRunner.TestScenarios;
 
 public class AnonimizationTypeScenario : VideoTestScenarioBase
 {
-    public AnonimizationTypeScenario() : base(Resources.Video_Short_HD_1280_720_24fps)
+    public AnonimizationTypeScenario() : base(TestResources.TestResources.Video_Short_HD_1280_720_24fps)
     { }
 
     [Scenario("Ellipse GaussianBlur")]
