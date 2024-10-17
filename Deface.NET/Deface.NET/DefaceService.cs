@@ -9,7 +9,7 @@ internal sealed class DefaceService(IServiceProvider serviceProvider) : IDefaceS
 
     public ProcessingResult ProcessVideo(string inputVideoFilePath, string outputVideoFilePath, Action<Settings>? customSettings = default)
     {
-        ValidateInput(inputVideoFilePath, outputVideoFilePath);
+        ValidateFileInput(inputVideoFilePath, outputVideoFilePath);
 
         using var processor = _serviceProvider.GetRequiredService<VideoProcessor>();
         return processor.Process(inputVideoFilePath, outputVideoFilePath, customSettings);
@@ -17,13 +17,21 @@ internal sealed class DefaceService(IServiceProvider serviceProvider) : IDefaceS
 
     public ProcessingResult ProcessImage(string inputPhotoFilePath, string outputPhotoFilePath, Action<Settings>? customSettings = default)
     {
-        ValidateInput(inputPhotoFilePath, outputPhotoFilePath);
+        ValidateFileInput(inputPhotoFilePath, outputPhotoFilePath);
 
         using var processor = _serviceProvider.GetRequiredService<ImageProcessor>();
         return processor.Process(inputPhotoFilePath, outputPhotoFilePath, customSettings);
     }
 
-    private static void ValidateInput(string inputFilePath, string outputFilePath)
+    public IEnumerable<ProcessingResult> ProcessImages(string inputDirectory, string outputDirectory, Action<Settings>? customSettings = null)
+    {
+        ValidateDirectoryInput(inputDirectory, outputDirectory);
+
+        using var processor = _serviceProvider.GetRequiredService<ImageProcessor>();
+        return processor.ProcessMany(inputDirectory, outputDirectory, customSettings);
+    }
+
+    private static void ValidateFileInput(string inputFilePath, string outputFilePath)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(inputFilePath, nameof(inputFilePath));
         ArgumentException.ThrowIfNullOrWhiteSpace(outputFilePath, nameof(outputFilePath));
@@ -31,6 +39,22 @@ internal sealed class DefaceService(IServiceProvider serviceProvider) : IDefaceS
         if (!File.Exists(inputFilePath))
         {
             throw new FileNotFoundException($"File {inputFilePath} does not exist.");
+        }
+    }
+
+    private static void ValidateDirectoryInput(string inputDirectory, string outputDirectory)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(inputDirectory, nameof(inputDirectory));
+        ArgumentException.ThrowIfNullOrWhiteSpace(outputDirectory, nameof(outputDirectory));
+
+        if (!Directory.Exists(inputDirectory))
+        {
+            throw new DirectoryNotFoundException($"Directory {inputDirectory} does not exist.");
+        }
+
+        if (!Directory.Exists(outputDirectory)) 
+        {
+            Directory.CreateDirectory(outputDirectory);
         }
     }
 }

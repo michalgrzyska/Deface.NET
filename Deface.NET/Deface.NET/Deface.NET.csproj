@@ -33,13 +33,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<EditorConfigFiles
-			Remove="C:\Users\michal.grzyska\OneDrive - AddSecure\Documents\GitHub\Deface.NET\Deface.NET\Deface.NET\.editorconfig" />
+		<EditorConfigFiles Remove="C:\Users\michal.grzyska\OneDrive - AddSecure\Documents\GitHub\Deface.NET\Deface.NET\Deface.NET\.editorconfig" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None
-			Include="C:\Users\michal.grzyska\OneDrive - AddSecure\Documents\GitHub\Deface.NET\Deface.NET\Deface.NET\.editorconfig" />
+		<None Include="C:\Users\michal.grzyska\OneDrive - AddSecure\Documents\GitHub\Deface.NET\Deface.NET\Deface.NET\.editorconfig" />
 	</ItemGroup>
 
 </Project>

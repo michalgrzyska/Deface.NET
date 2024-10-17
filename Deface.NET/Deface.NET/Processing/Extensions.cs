@@ -1,6 +1,6 @@
 ﻿using OpenCvSharp;
 
-namespace Deface.NET;
+namespace Deface.NET.Processing;
 
 internal static class Extensions
 {
