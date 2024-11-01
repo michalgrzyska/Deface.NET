@@ -49,7 +49,6 @@ internal class Ultraface
     {
         using Bitmap bitmap = new Bitmap(imagePath);
 
-        // Convert to RGB and resize to 640x480
         using Bitmap resized = new Bitmap(bitmap, new Size(640, 480));
         float[] imageData = new float[1 * 3 * 480 * 640];
 
@@ -60,10 +59,9 @@ internal class Ultraface
             {
                 Color pixel = resized.GetPixel(x, y);
 
-                // Subtract mean and scale
-                imageData[index] = (pixel.R - 127) / 128f; // Red channel
-                imageData[index + 480 * 640] = (pixel.G - 127) / 128f; // Green channel
-                imageData[index + 2 * 480 * 640] = (pixel.B - 127) / 128f; // Blue channel
+                imageData[index] = (pixel.R - 127) / 128f;
+                imageData[index + 480 * 640] = (pixel.G - 127) / 128f;
+                imageData[index + 2 * 480 * 640] = (pixel.B - 127) / 128f;
 
                 index++;
             }
@@ -74,15 +72,14 @@ internal class Ultraface
     private static List<Face> PostProcess(float[] scores, float[] boxes, float confidenceThreshold = 0.5f, float iouThreshold = 0.5f)
     {
         var faces = new List<Face>();
-        int numBoxes = scores.Length / 2; // There are two scores for each box
+        int numBoxes = scores.Length / 2;
 
         for (int i = 0; i < numBoxes; i++)
         {
-            float score = scores[i * 2 + 1]; // Confidence for face presence
+            float score = scores[i * 2 + 1];
 
             if (score > confidenceThreshold)
             {
-                // Extract bounding box coordinates
                 float x1 = boxes[i * 4] * 640;
                 float y1 = boxes[i * 4 + 1] * 480;
                 float x2 = boxes[i * 4 + 2] * 640;
@@ -127,8 +124,6 @@ internal class Ultraface
 
         return (float)intersectionArea / unionArea;
     }
-
-
 }
 
 public record Face(int X1, int Y1, int X2, int Y2, float Confidence)

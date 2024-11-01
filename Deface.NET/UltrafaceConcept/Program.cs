@@ -1,4 +1,5 @@
 ﻿using Deface.NET.TestResources;
+using SkiaSharp;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -72,28 +73,53 @@ class Program
 
     static void ProcessFrame(byte[] frameData, int width, int height, int i)
     {
-        var pixelFormat = PixelFormat.Format24bppRgb;
-        int bytesPerPixel = Image.GetPixelFormatSize(pixelFormat) / 8;
-        int stride = width * bytesPerPixel;
-        byte[] rgbData = ConvertBgrToRgb(frameData);
-
-        var ptr = Marshal.UnsafeAddrOfPinnedArrayElement(rgbData, 0);
-
-        var bitmap = new Bitmap(width, height, stride, pixelFormat, ptr);
-        bitmap.Save("images/test" + i + ".png");
-    }
-
-    static byte[] ConvertBgrToRgb(byte[] bgrData)
-    {
-        byte[] rgbData = new byte[bgrData.Length];
-
-        for (int i = 0; i < bgrData.Length; i += 3)
+        if (frameData == null || frameData.Length != width * height * 3)
         {
-            rgbData[i] = bgrData[i + 2];
-            rgbData[i + 1] = bgrData[i + 1];
-            rgbData[i + 2] = bgrData[i]; 
+            throw new ArgumentException("Invalid frame data.");
         }
 
-        return rgbData;
+        byte[] rgbaData = new byte[width * height * 4];
+
+        for (int j = 0; j < width * height; j++)
+        {
+            int b = frameData[j * 3]; 
+            int g = frameData[j * 3 + 1]; 
+            int r = frameData[j * 3 + 2];
+
+            rgbaData[j * 4] = (byte)r;
+            rgbaData[j * 4 + 1] = (byte)g;
+            rgbaData[j * 4 + 2] = (byte)b;
+            rgbaData[j * 4 + 3] = 255;
+        }
+
+        using (var bitmap = new SKBitmap(width, height, SKColorType.Bgra8888, SKAlphaType.Premul))
+        {
+            GCHandle handle = GCHandle.Alloc(rgbaData, GCHandleType.Pinned);
+
+            try
+            {
+                nint pixelPointer = handle.AddrOfPinnedObject();
+                bitmap.InstallPixels(new SKImageInfo(width, height, SKColorType.Bgra8888), pixelPointer, width * 4);
+            }
+            finally
+            {
+                handle.Free();
+            }
+
+            string directoryPath = "images";
+            string filePath = Path.Combine(directoryPath, $"{i}.png");
+
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            using (var image = SKImage.FromBitmap(bitmap))
+            using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+            using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+                data.SaveTo(stream);
+            }
+        }
     }
 }
