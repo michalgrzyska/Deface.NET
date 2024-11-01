@@ -9,7 +9,6 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="FFMpegCore" Version="5.1.0" />
 		<PackageReference Include="Microsoft.ML" Version="3.0.1" />
 		<PackageReference Include="Microsoft.ML.ImageAnalytics" Version="3.0.1" />
 		<PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.19.2" />
