@@ -1,11 +1,12 @@
 ﻿using Deface.NET.TestResources;
 using SkiaSharp;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 class Ffmpeg
 {
-    static void Main()
+    public static void Main()
     {
         string videoFilePath = TestResources.Video_Short_HD_1280_720_24fps;
         ReadVideoFrames(videoFilePath);
@@ -52,8 +53,14 @@ class Ffmpeg
                 byte[] frameData = new byte[frameSize];
 
                 Array.Copy(buffer, 0, frameData, 0, frameSize);
-                ProcessFrame(frameData, width, height, i);
+                //ProcessFrame(frameData, width, height, i);
 
+                using var bitmap = new SKBitmap(width, height, SKColorType.Bgra8888, SKAlphaType.Premul);
+                GCHandle handle = GCHandle.Alloc(frameData, GCHandleType.Pinned);
+                nint pixelPointer = handle.AddrOfPinnedObject();
+                bitmap.InstallPixels(new SKImageInfo(width, height, SKColorType.Bgra8888), pixelPointer, width * 4);
+
+                Console.WriteLine("frame");
                 int excessBytes = totalBytesRead - frameSize;
 
                 if (excessBytes > 0)

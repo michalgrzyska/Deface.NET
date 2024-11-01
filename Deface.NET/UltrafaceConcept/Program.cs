@@ -1,13 +1,15 @@
-﻿using Deface.NET.TestResources;
-using UltrafaceConcept;
+﻿//using Deface.NET.TestResources;
+//using UltrafaceConcept;
 
-var ultraface = new Ultraface();
+//var ultraface = new Ultraface();
 
-var image = TestResources.Photo1;
+//var image = TestResources.Photo1;
 
-var faces = ultraface.Process(image);
+//var faces = ultraface.Process(image);
 
-foreach  (var face in faces)
-{
-    Console.WriteLine(face);
-}
+//foreach  (var face in faces)
+//{
+//    Console.WriteLine(face);
+//}
+
+Ffmpeg.Main();
