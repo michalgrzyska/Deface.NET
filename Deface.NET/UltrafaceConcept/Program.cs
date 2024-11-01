@@ -12,4 +12,6 @@
 //    Console.WriteLine(face);
 //}
 
-Ffmpeg.Main();
+var test = new Ffmpeg();
+
+test.Main();

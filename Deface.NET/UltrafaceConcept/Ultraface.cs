@@ -32,11 +32,11 @@ internal class Ultraface
     {
     }
 
-    public List<Face> Process(string imagePath)
+    public List<Face> Process(SKBitmap bitmap)
     {
         var input = new ModelInput
         {
-            Image = PreprocessImage(imagePath)
+            Image = PreprocessImage(bitmap)
         };
 
         var result = predictionEngine.Predict(input);
@@ -45,11 +45,9 @@ internal class Ultraface
         return faces;
     }
 
-    private static float[] PreprocessImage(string imagePath)
-    {
-        var image = SKImage.FromEncodedData(imagePath);
-        var bm = SKBitmap.FromImage(image);
-        var resized = bm.Resize(new SKSizeI(640, 480), SKFilterQuality.High);
+    private static float[] PreprocessImage(SKBitmap bitmap)
+    {;
+        var resized = bitmap.Resize(new SKSizeI(640, 480), SKFilterQuality.High);
 
         float[] imageData = new float[1 * 3 * 480 * 640];
 

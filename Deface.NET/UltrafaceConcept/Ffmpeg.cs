@@ -3,16 +3,19 @@ using SkiaSharp;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using UltrafaceConcept;
 
 class Ffmpeg
 {
-    public static void Main()
+    Ultraface ultraface = new();
+
+    public void Main()
     {
         string videoFilePath = TestResources.Video_Short_HD_1280_720_24fps;
         ReadVideoFrames(videoFilePath);
     }
 
-    static void ReadVideoFrames(string videoFilePath)
+    void ReadVideoFrames(string videoFilePath)
     {
         string ffmpegPath = "ffmpeg.exe";
         string arguments = $"-i \"{videoFilePath}\" -f image2pipe -pix_fmt rgb24 -vcodec rawvideo -";
@@ -55,12 +58,27 @@ class Ffmpeg
                 Array.Copy(buffer, 0, frameData, 0, frameSize);
                 //ProcessFrame(frameData, width, height, i);
 
+                byte[] rgbaData = new byte[width * height * 4];
+
+                for (int j = 0; j < width * height; j++)
+                {
+                    int b = frameData[j * 3];
+                    int g = frameData[j * 3 + 1];
+                    int r = frameData[j * 3 + 2];
+
+                    rgbaData[j * 4] = (byte)r;
+                    rgbaData[j * 4 + 1] = (byte)g;
+                    rgbaData[j * 4 + 2] = (byte)b;
+                    rgbaData[j * 4 + 3] = 255;
+                }
+
                 using var bitmap = new SKBitmap(width, height, SKColorType.Bgra8888, SKAlphaType.Premul);
-                GCHandle handle = GCHandle.Alloc(frameData, GCHandleType.Pinned);
+                GCHandle handle = GCHandle.Alloc(rgbaData, GCHandleType.Pinned);
                 nint pixelPointer = handle.AddrOfPinnedObject();
                 bitmap.InstallPixels(new SKImageInfo(width, height, SKColorType.Bgra8888), pixelPointer, width * 4);
 
-                Console.WriteLine("frame");
+                var faces = ultraface.Process(bitmap);
+                Console.WriteLine($"Frame {i}: {faces.Count} faces");
                 int excessBytes = totalBytesRead - frameSize;
 
                 if (excessBytes > 0)
