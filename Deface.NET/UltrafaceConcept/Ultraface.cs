@@ -1,7 +1,7 @@
 ﻿using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Transforms.Onnx;
-using System.Drawing;
+using SkiaSharp;
 
 namespace UltrafaceConcept;
 
@@ -47,9 +47,10 @@ internal class Ultraface
 
     private static float[] PreprocessImage(string imagePath)
     {
-        using Bitmap bitmap = new Bitmap(imagePath);
+        var image = SKImage.FromEncodedData(imagePath);
+        var bm = SKBitmap.FromImage(image);
+        var resized = bm.Resize(new SKSizeI(640, 480), SKFilterQuality.High);
 
-        using Bitmap resized = new Bitmap(bitmap, new Size(640, 480));
         float[] imageData = new float[1 * 3 * 480 * 640];
 
         int index = 0;
@@ -57,11 +58,11 @@ internal class Ultraface
         {
             for (int x = 0; x < resized.Width; x++)
             {
-                Color pixel = resized.GetPixel(x, y);
+                var pixel = resized.GetPixel(x, y);
 
-                imageData[index] = (pixel.R - 127) / 128f;
-                imageData[index + 480 * 640] = (pixel.G - 127) / 128f;
-                imageData[index + 2 * 480 * 640] = (pixel.B - 127) / 128f;
+                imageData[index] = (pixel.Red - 127) / 128f;
+                imageData[index + 480 * 640] = (pixel.Green - 127) / 128f;
+                imageData[index + 2 * 480 * 640] = (pixel.Blue - 127) / 128f;
 
                 index++;
             }
