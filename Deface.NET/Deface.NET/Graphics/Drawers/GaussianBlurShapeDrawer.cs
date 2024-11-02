@@ -3,7 +3,7 @@ using SkiaSharp;
 
 namespace Deface.NET.Graphics.Drawers;
 
-internal class GaussianBlurShapeDrawer : IDrawer
+internal class GaussianBlurShapeDrawer : IShapeDrawer
 {
     public SKBitmap Draw(SKBitmap bitmap, List<DetectedObject> objects, Settings settings)
     {

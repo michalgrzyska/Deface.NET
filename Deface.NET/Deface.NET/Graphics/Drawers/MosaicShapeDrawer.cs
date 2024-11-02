@@ -3,7 +3,7 @@ using SkiaSharp;
 
 namespace Deface.NET.Graphics.Drawers;
 
-internal class MosaicShapeDrawer : IDrawer
+internal class MosaicShapeDrawer : IShapeDrawer
 {
     public SKBitmap Draw(SKBitmap bitmap, List<DetectedObject> objects, Settings settings)
     {

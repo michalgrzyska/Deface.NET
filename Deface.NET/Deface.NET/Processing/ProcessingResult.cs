@@ -53,6 +53,17 @@ public class ProcessingResult
         Threshold = threshold;
         Fps = fps;
     }
+
+    internal ProcessingResult(string inputFile, string outputFile, TimeSpan processingTime, Dimensions inputSize, Dimensions processingSize, float threshold, double fps)
+    {
+        InputFile = inputFile;
+        OutputFile = outputFile;
+        ProcessingTime = processingTime;
+        InputDimensions = inputSize;
+        ProcessingDimensions = processingSize;
+        Threshold = threshold;
+        Fps = fps;
+    }
 }
 
 /// <summary>

@@ -38,6 +38,9 @@
 		<None Update="_Files\ultraface.onnx">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="_Files\ultraface1.onnx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,8 +1,9 @@
 ﻿using Deface.NET.CenterFace;
 using Deface.NET.Logging;
-using OpenCvSharp;
+using Deface.NET.ObjectDetection;
+using Deface.NET.ObjectDetection.UltraFace;
+using SkiaSharp;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace Deface.NET.Processing;
 
@@ -10,6 +11,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
 {
     private readonly DLogger<IDefaceService> _logger = logger;
     private readonly CenterFaceModel _centerFace = new();
+    private readonly UltraFaceDetector _detector = new();
 
     private readonly static string[] ImageExtensions = [".jpg", ".jpeg", ".png"];
 
@@ -22,13 +24,13 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        using Mat image = LoadImage(inputPath);
-        Size size = ProcessImage(image, outputPath);
+        using SKBitmap image = LoadImage(inputPath);
+        Dimensions dimensions = ProcessImage(image, outputPath);
 
         stopwatch.Stop();
 
         _logger.Log(DefaceLoggingLevel.Basic, "Processed {Input} and saved to {Output}", inputPath, outputPath);
-        return new(inputPath, outputPath, stopwatch.Elapsed, size, size, Settings.Threshold, 1);
+        return new(inputPath, outputPath, stopwatch.Elapsed, dimensions, dimensions, Settings.Threshold, 1);
     }
 
     public List<ProcessingResult> ProcessMany(string inputDirectory, string outputDirectory, Action<Settings>? customSettings)
@@ -53,18 +55,17 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         return results;
     }
 
-    private static Mat LoadImage(string path)
+    private static SKBitmap LoadImage(string path)
     {
         try
         {
-            Mat image = new(path);
-
-            if (image is null || image.Empty())
+            if (!File.Exists(path))
             {
-                throw new DefaceException($"Could not open image {path}.");
+                throw new FileNotFoundException("Image file not found", path);
             }
 
-            return image;
+            using FileStream stream = File.OpenRead(path);
+            return SKBitmap.Decode(stream);
         }
         catch (Exception e)
         {
@@ -72,15 +73,19 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         }
     }
 
-    private Size ProcessImage(Mat image, string outputPath)
+    private Dimensions ProcessImage(SKBitmap image, string outputPath)
     {
-        Size imageSize = image.Size();
+        Dimensions dimensions = new(image.Width, image.Height);
+        List<DetectedObject> detectedObjects = _detector.Detect(image);
+        SKBitmap result = Graphics.ShapeDrawer.DrawShapes(image, detectedObjects, Settings);
 
-        var detectedObjects = _centerFace.Detect(image, imageSize, Settings.Threshold);
-        ShapeDrawer.DrawShapes(image, detectedObjects, Settings);
+        using SKImage resultImage = SKImage.FromBitmap(result);
+        using SKData data = resultImage.Encode(SKEncodedImageFormat.Png, 100);
+        using FileStream stream = File.OpenWrite(outputPath);
 
-        Cv2.ImWrite(outputPath, image, [(int)ImwriteFlags.PngCompression, 3]);
-        return imageSize;
+        data.SaveTo(stream);
+
+        return dimensions;
     }
     
     private static string GetOutputPath(string inputPath, string outputDirPath)

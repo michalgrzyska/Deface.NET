@@ -22,11 +22,12 @@ internal class UltraFaceDetector : IObjectDetector
 
     public List<DetectedObject> Detect(SKBitmap bitmap)
     {
+        var (scaleW, scaleH) = GetScale(bitmap);
         float[] preprocessedImage = PreprocessImage(bitmap);
         Input input = new(preprocessedImage);
         Output output = predictionEngine.Predict(input);
 
-        return PostProcess(output.Scores, output.Boxes);
+        return PostProcess(output.Scores, output.Boxes, scaleW, scaleH);
     }
 
     private OnnxScoringEstimator GetPipeline()
@@ -42,6 +43,14 @@ internal class UltraFaceDetector : IObjectDetector
     {
         OnnxTransformer model = pipeline.Fit(mlContext.Data.LoadFromEnumerable(new List<Input>()));
         return mlContext.Model.CreatePredictionEngine<Input, Output>(model);
+    }
+
+    private (float ScaleW, float ScaleH) GetScale(SKBitmap bitmap)
+    {
+        var scaleW = bitmap.Width / (Width + 0.0);
+        var scaleH = bitmap.Height / (Height + 0.0);
+
+        return ((float)scaleW, (float)scaleH);
     }
 
     private static float[] PreprocessImage(SKBitmap bitmap)
@@ -67,7 +76,7 @@ internal class UltraFaceDetector : IObjectDetector
         return imageData;
     }
 
-    private static List<DetectedObject> PostProcess(float[] scores, float[] boxes, float confidenceThreshold = 0.5f, float iouThreshold = 0.5f)
+    private static List<DetectedObject> PostProcess(float[] scores, float[] boxes, float scaleW, float scaleH, float confidenceThreshold = 0.5f, float iouThreshold = 0.5f)
     {
         List<DetectedObject> faces = [];
         int numBoxes = scores.Length / 2;
@@ -78,10 +87,10 @@ internal class UltraFaceDetector : IObjectDetector
 
             if (score > confidenceThreshold)
             {
-                float x1 = boxes[i * 4] * Width;
-                float y1 = boxes[i * 4 + 1] * Height;
-                float x2 = boxes[i * 4 + 2] * Width;
-                float y2 = boxes[i * 4 + 3] * Height;
+                float x1 = boxes[i * 4] * Width * scaleW;
+                float y1 = boxes[i * 4 + 1] * Height * scaleH;
+                float x2 = boxes[i * 4 + 2] * Width * scaleW;
+                float y2 = boxes[i * 4 + 3] * Height * scaleH;
 
                 faces.Add(new((int)x1, (int)y1, (int)x2, (int)y2, score));
             }

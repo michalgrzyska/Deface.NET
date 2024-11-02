@@ -11,6 +11,9 @@ internal class Ultraface
     private OnnxScoringEstimator pipeline;
     private PredictionEngine<ModelInput, ModelOutput> predictionEngine;
 
+    private const int Width = 640;
+    private const int Height = 480;
+
     public Ultraface()
     {
         mlContext = new MLContext();
@@ -47,9 +50,9 @@ internal class Ultraface
 
     private static float[] PreprocessImage(SKBitmap bitmap)
     {;
-        var resized = bitmap.Resize(new SKSizeI(640, 480), SKFilterQuality.High);
+        var resized = bitmap.Resize(new SKSizeI(Width, Height), SKFilterQuality.High);
 
-        float[] imageData = new float[1 * 3 * 480 * 640];
+        float[] imageData = new float[1 * 3 * Height * Width];
 
         int index = 0;
         for (int y = 0; y < resized.Height; y++)
@@ -59,8 +62,8 @@ internal class Ultraface
                 var pixel = resized.GetPixel(x, y);
 
                 imageData[index] = (pixel.Red - 127) / 128f;
-                imageData[index + 480 * 640] = (pixel.Green - 127) / 128f;
-                imageData[index + 2 * 480 * 640] = (pixel.Blue - 127) / 128f;
+                imageData[index + Height * Width] = (pixel.Green - 127) / 128f;
+                imageData[index + 2 * Height * Width] = (pixel.Blue - 127) / 128f;
 
                 index++;
             }
@@ -79,10 +82,10 @@ internal class Ultraface
 
             if (score > confidenceThreshold)
             {
-                float x1 = boxes[i * 4] * 640;
-                float y1 = boxes[i * 4 + 1] * 480;
-                float x2 = boxes[i * 4 + 2] * 640;
-                float y2 = boxes[i * 4 + 3] * 480;
+                float x1 = boxes[i * 4] * Width;
+                float y1 = boxes[i * 4 + 1] * Height;
+                float x2 = boxes[i * 4 + 2] * Width;
+                float y2 = boxes[i * 4 + 3] * Height;
 
                 faces.Add(new((int)x1, (int)y1, (int)x2, (int)y2, score));
             }
