@@ -17,5 +17,5 @@ internal class DLogger<T>(Settings settings, ILogger<T> logger)
         _logger.LogInformation(message, args!);
     }
 
-    public DProgressLogger<T> GetProgressLogger(int totalSteps) => new(_logger, _loggingLevel, totalSteps);
+    public DProgressLogger<T> GetProgressLogger() => new(_logger, _loggingLevel);
 }

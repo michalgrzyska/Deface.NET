@@ -3,11 +3,10 @@ using System.Diagnostics;
 
 namespace Deface.NET.Logging;
 
-internal class DProgressLogger<T>(ILogger<T> logger, DefaceLoggingLevel loggingLevel, int totalSteps)
+internal class DProgressLogger<T>(ILogger<T> logger, DefaceLoggingLevel loggingLevel)
 {
     private readonly ILogger<T> _logger = logger;
     private readonly DefaceLoggingLevel _loggingLevel = loggingLevel;
-    private readonly int _totalSteps = totalSteps;
     private readonly Stopwatch _stopwatch = new();
 
     private const int MinLoggingInterval = 1_000;
@@ -27,7 +26,7 @@ internal class DProgressLogger<T>(ILogger<T> logger, DefaceLoggingLevel loggingL
 
     public TimeSpan GetEllapsedTime() => _stopwatch.Elapsed;
 
-    public void LogProgress(int currentStep, string message)
+    public void LogProgress(int currentStep, string message, int totalSteps)
     {
         if (_loggingLevel < DefaceLoggingLevel.Detailed)
         {
@@ -41,10 +40,10 @@ internal class DProgressLogger<T>(ILogger<T> logger, DefaceLoggingLevel loggingL
 
         _lastLogTime = _stopwatch.ElapsedMilliseconds;
 
-        string stepInfo = $"{currentStep}/{_totalSteps}";
-        string paddedStepInfo = stepInfo.PadLeft(stepInfo.Length + _totalSteps.ToString().Length - currentStep.ToString().Length);
+        string stepInfo = $"{currentStep}/{totalSteps}";
+        string paddedStepInfo = stepInfo.PadLeft(stepInfo.Length + totalSteps.ToString().Length - currentStep.ToString().Length);
 
-        string percentage = (currentStep * 100 / _totalSteps).ToString();
+        string percentage = (currentStep * 100 / totalSteps).ToString();
         string paddedPercentInfo = $"{percentage}%".PadLeft(4);
 
         string time = _stopwatch.Elapsed.ToString(@"hh\:mm\:ss\:fff");

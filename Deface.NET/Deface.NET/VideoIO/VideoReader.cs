@@ -5,7 +5,7 @@ namespace Deface.NET.VideoIO;
 
 internal class VideoReader : IDisposable
 {
-    private readonly Func<SKBitmap, int, Task> _frameProcess;
+    private readonly Func<SKBitmap, int, int, Task> _frameProcess;
     private readonly ExternalProcess _ffmpegProcess;
     private readonly string _videoFilePath;
 
@@ -15,7 +15,7 @@ internal class VideoReader : IDisposable
     private int _totalBytesRead = 0;
     private int _frameSize = 0;
 
-    public VideoReader(string videoFilePath, Func<SKBitmap, int, Task> frameProcess)
+    public VideoReader(string videoFilePath, Func<SKBitmap, int, int, Task> frameProcess)
     {
         _frameProcess = frameProcess;
         _videoFilePath = videoFilePath;
@@ -23,13 +23,14 @@ internal class VideoReader : IDisposable
         _ffmpegProcess = GetFfmpegProcess();
     }
 
-    public async Task Start()
+    public async Task<VideoInfo> Start()
     {
         await SetupFields();
 
         _ffmpegProcess.Start();
-
         await ProcessStream();
+
+        return _videoInfo;
     }
 
     public void Dispose() => _ffmpegProcess?.Dispose();
@@ -74,7 +75,7 @@ internal class VideoReader : IDisposable
         byte[] rgbaData = GraphicsHelper.ConvertBgrToRgba(frameData, _videoInfo.Width, _videoInfo.Height);
         SKBitmap bitmap = GraphicsHelper.GetBitmapFromBytes(rgbaData, _videoInfo.Width, _videoInfo.Height);
 
-        await _frameProcess(bitmap, i);
+        await _frameProcess(bitmap, i, _videoInfo.TotalFrames);
 
         int excessBytes = _totalBytesRead - _frameSize;
 

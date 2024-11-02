@@ -10,24 +10,24 @@ internal class RescaleScenario : VideoTestScenarioBase
     { }
 
     [Scenario("Default")]
-    public ProcessingResult Default()
+    public async Task<ProcessingResult> Default()
     {
-        return Run();
+        return await Run();
     }
 
     [Scenario("480p")]
-    public ProcessingResult Scale480p()
+    public async Task<ProcessingResult> Scale480p()
     {
-        return Run(x =>
+        return await Run(x =>
         {
             x.RescaleVideoWithShorterSideEqualsTo = 480;
         });
     }
 
     [Scenario("360p")]
-    public ProcessingResult Scale360p()
+    public async Task<ProcessingResult> Scale360p()
     {
-        return Run(x =>
+        return await Run(x =>
         {
             x.RescaleVideoWithShorterSideEqualsTo = 360;
         });

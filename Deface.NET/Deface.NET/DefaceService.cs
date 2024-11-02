@@ -13,12 +13,12 @@ internal sealed class DefaceService : IDefaceService
         _serviceProvider = serviceProvider;
     }
 
-    public ProcessingResult ProcessVideo(string inputVideoFilePath, string outputVideoFilePath, Action<Settings>? customSettings = default)
+    public async Task<ProcessingResult> ProcessVideo(string inputVideoFilePath, string outputVideoFilePath, Action<Settings>? customSettings = default)
     {
         ValidateFileInput(inputVideoFilePath, outputVideoFilePath);
 
         using var processor = _serviceProvider.GetRequiredService<VideoProcessor>();
-        return processor.Process(inputVideoFilePath, outputVideoFilePath, customSettings);
+        return await processor.Process(inputVideoFilePath, outputVideoFilePath, customSettings);
     }
 
     public ProcessingResult ProcessImage(string inputPhotoFilePath, string outputPhotoFilePath, Action<Settings>? customSettings = default)

@@ -12,7 +12,7 @@ public interface IDefaceService
     /// <param name="outputVideoFilePath">Location of output file.</param>
     /// <param name="customSettings">Override global Deface settings.</param>
     /// <returns>Basic information of processed video.</returns>
-    public ProcessingResult ProcessVideo(string inputVideoFilePath, string outputVideoFilePath, Action<Settings>? customSettings = default);
+    public Task<ProcessingResult> ProcessVideo(string inputVideoFilePath, string outputVideoFilePath, Action<Settings>? customSettings = default);
 
     /// <summary>
     /// Processes image for objects detection and anomitization.

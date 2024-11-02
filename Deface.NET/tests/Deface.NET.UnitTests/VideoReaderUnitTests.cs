@@ -16,7 +16,7 @@ public class VideoReaderUnitTests
         await videoReader.Start();
     }
 
-    private async Task Process(SKBitmap bitmap, int index)
+    private async Task Process(SKBitmap bitmap, int index, int totalFrames)
     {
         i++;
     }
