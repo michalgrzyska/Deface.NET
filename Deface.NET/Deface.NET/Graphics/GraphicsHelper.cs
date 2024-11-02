@@ -2,7 +2,7 @@
 using SkiaSharp;
 using System.Runtime.InteropServices;
 
-namespace Deface.NET;
+namespace Deface.NET.Graphics;
 
 internal static class GraphicsHelper
 {
