@@ -4,7 +4,9 @@ namespace Deface.NET;
 
 internal class ExternalProcess : IDisposable
 {
-    private readonly Process process;
+    private readonly Process _process;
+
+    public Stream OutputStream => _process.StandardOutput.BaseStream;
 
     public ExternalProcess(string path, string arguments)
     {
@@ -17,7 +19,7 @@ internal class ExternalProcess : IDisposable
             RedirectStandardOutput = true
         };
 
-        process = new()
+        _process = new()
         {
             StartInfo = info
         };
@@ -25,16 +27,15 @@ internal class ExternalProcess : IDisposable
 
     public async Task<string> ExecuteWithOutput()
     {
-        process.Start();
+        Start();
 
-        string output = await process.StandardOutput.ReadToEndAsync();
+        string output = await _process.StandardOutput.ReadToEndAsync();
 
-        await process.WaitForExitAsync();
+        await WaitForExitAsync();
         return output;
     }
 
-    public void Dispose()
-    {
-        process.Dispose();
-    }
+    public void Start() => _process.Start();
+    public async Task WaitForExitAsync() => await _process.WaitForExitAsync();
+    public void Dispose() => _process?.Dispose();
 }

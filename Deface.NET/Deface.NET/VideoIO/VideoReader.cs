@@ -1,102 +1,96 @@
 ﻿using SkiaSharp;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 namespace Deface.NET.VideoIO;
 
-internal class VideoReader
+internal class VideoReader : IDisposable
 {
-    public VideoReader()
+    private readonly Func<SKBitmap, int, Task> _frameProcess;
+    private readonly ExternalProcess _ffmpegProcess;
+    private readonly string _videoFilePath;
+
+    private VideoInfo _videoInfo = default!;
+    private byte[] _buffer = [];
+    private byte[] _rolloverBuffer = [];
+    private int _totalBytesRead = 0;
+    private int _frameSize = 0;
+
+    public VideoReader(string videoFilePath, Func<SKBitmap, int, Task> frameProcess)
     {
-        
+        _frameProcess = frameProcess;
+        _videoFilePath = videoFilePath;
+
+        _ffmpegProcess = GetFfmpegProcess();
     }
 
-    public async Task Start(string videoFilePath)
+    public async Task Start()
     {
-        VideoInfo videoInfo = await VideoInfo.GetInfo(videoFilePath);
+        await SetupFields();
 
-        string ffmpegPath = "ffmpeg.exe";
-        string arguments = $"-i \"{videoFilePath}\" -f image2pipe -pix_fmt rgb24 -vcodec rawvideo -";
+        _ffmpegProcess.Start();
 
-        using Process ffmpeg = new();
+        await ProcessStream();
+    }
 
-        ffmpeg.StartInfo.FileName = ffmpegPath;
-        ffmpeg.StartInfo.Arguments = arguments;
-        ffmpeg.StartInfo.UseShellExecute = false;
-        ffmpeg.StartInfo.RedirectStandardOutput = true;
-        ffmpeg.StartInfo.CreateNoWindow = true;
+    public void Dispose() => _ffmpegProcess?.Dispose();
 
-        ffmpeg.Start();
-
-        int frameSize = videoInfo.Width * videoInfo.Height * 3;
-        byte[] buffer = new byte[frameSize];
-        int totalBytesRead = 0;
-
-        byte[] rolloverBuffer = new byte[frameSize];
+    private async Task ProcessStream()
+    {
         int i = 0;
 
         while (true)
         {
-            int bytesRead = ffmpeg.StandardOutput.BaseStream.Read(buffer, totalBytesRead, frameSize - totalBytesRead);
+            int bytesRead = _ffmpegProcess.OutputStream.Read(_buffer, _totalBytesRead, _frameSize - _totalBytesRead);
 
             if (bytesRead == 0)
             {
                 break;
             }
 
-            totalBytesRead += bytesRead;
+            _totalBytesRead += bytesRead;
 
-            while (totalBytesRead >= frameSize)
+            while (_totalBytesRead >= _frameSize)
             {
-                byte[] frameData = new byte[frameSize];
-                Array.Copy(buffer, 0, frameData, 0, frameSize);
-
-                byte[] rgbaData = ConvertBgrToRgba(frameData, videoInfo);
-                SKBitmap bitmap = GetBitmapFromBytes(rgbaData, videoInfo);
-
-                // fn!
-
-                int excessBytes = totalBytesRead - frameSize;
-
-                if (excessBytes > 0)
-                {
-                    Array.Copy(buffer, frameSize, rolloverBuffer, 0, excessBytes);
-                }
-
-                Array.Copy(rolloverBuffer, 0, buffer, 0, excessBytes);
-                totalBytesRead = excessBytes;
-
+                await ProcessFrame(i);
                 i++;
             }
         }
     }
 
-    private static byte[] ConvertBgrToRgba(byte[] bgr, VideoInfo videoInfo)
+    private async Task SetupFields()
     {
-        byte[] rgbaData = new byte[videoInfo.Width * videoInfo.Height * 4];
+        _videoInfo = await VideoInfo.GetInfo(_videoFilePath);
 
-        for (int j = 0; j < videoInfo.Width * videoInfo.Height; j++)
-        {
-            int b = bgr[j * 3];
-            int g = bgr[j * 3 + 1];
-            int r = bgr[j * 3 + 2];
-
-            rgbaData[j * 4] = (byte)r;
-            rgbaData[j * 4 + 1] = (byte)g;
-            rgbaData[j * 4 + 2] = (byte)b;
-            rgbaData[j * 4 + 3] = 255;
-        }
-
-        return rgbaData;
+        _frameSize = _videoInfo.Width * _videoInfo.Height * 3;
+        _buffer = new byte[_frameSize];
+        _rolloverBuffer = new byte[_frameSize];
     }
 
-    private static SKBitmap GetBitmapFromBytes(byte[] bytes, VideoInfo videoInfo) 
+    private async Task ProcessFrame(int i)
     {
-        SKBitmap bitmap = new(videoInfo.Width, videoInfo.Height, SKColorType.Bgra8888, SKAlphaType.Premul);
-        GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-        nint pixelPointer = handle.AddrOfPinnedObject();
+        byte[] frameData = new byte[_frameSize];
+        Array.Copy(_buffer, 0, frameData, 0, _frameSize);
 
-        bitmap.InstallPixels(new SKImageInfo(videoInfo.Width, videoInfo.Height, SKColorType.Bgra8888), pixelPointer, videoInfo.Width * 4);
-        return bitmap;
+        byte[] rgbaData = GraphicsHelper.ConvertBgrToRgba(frameData, _videoInfo.Width, _videoInfo.Height);
+        SKBitmap bitmap = GraphicsHelper.GetBitmapFromBytes(rgbaData, _videoInfo.Width, _videoInfo.Height);
+
+        await _frameProcess(bitmap, i);
+
+        int excessBytes = _totalBytesRead - _frameSize;
+
+        if (excessBytes > 0)
+        {
+            Array.Copy(_buffer, _frameSize, _rolloverBuffer, 0, excessBytes);
+        }
+
+        Array.Copy(_rolloverBuffer, 0, _buffer, 0, excessBytes);
+        _totalBytesRead = excessBytes;
+    }
+
+    private ExternalProcess GetFfmpegProcess()
+    {
+        string file = "ffmpeg.exe";
+        string parameters = $"-i \"{_videoFilePath}\" -f image2pipe -pix_fmt rgb24 -vcodec rawvideo -";
+
+        return new(file, parameters);
     }
 }
