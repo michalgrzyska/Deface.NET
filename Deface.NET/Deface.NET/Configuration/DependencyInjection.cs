@@ -1,7 +1,6 @@
 ﻿using Deface.NET.Logging;
 using Deface.NET.Processing;
 using Microsoft.Extensions.DependencyInjection;
-using OpenCvSharp;
 
 namespace Deface.NET;
 

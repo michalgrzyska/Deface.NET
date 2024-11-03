@@ -1,7 +1,4 @@
-﻿using Deface.NET.Processing;
-using OpenCvSharp;
-
-namespace Deface.NET;
+﻿namespace Deface.NET;
 
 /// <summary>
 /// Represents the result of a Deface processing operation.

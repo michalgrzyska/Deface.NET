@@ -7,7 +7,6 @@ namespace Deface.NET;
 /// </summary>
 public sealed class AnonimizationMethod
 {
-
     internal AnonimizationType Type { get; private set; }
     internal Color? ColorValue { get; private set; }
 

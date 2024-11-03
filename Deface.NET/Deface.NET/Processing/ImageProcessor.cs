@@ -42,7 +42,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
 
         List<ProcessingResult> results = [];
 
-        foreach (var imageFilename in imageFilenames) 
+        foreach (var imageFilename in imageFilenames)
         {
             var outputPath = GetOutputPath(imageFilename, outputDirectory);
             var result = Process(imageFilename, outputPath, default); // We don't pass settings so we don't apply them in loop
@@ -82,7 +82,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
 
         data.SaveTo(stream);
     }
-    
+
     private static string GetOutputPath(string inputPath, string outputDirPath)
     {
         var filename = Path.GetFileName(inputPath);

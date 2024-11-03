@@ -1,6 +1,5 @@
 ﻿using Deface.NET.Processing;
 using Microsoft.Extensions.DependencyInjection;
-using OpenCvSharp;
 
 namespace Deface.NET;
 
@@ -58,7 +57,7 @@ internal sealed class DefaceService : IDefaceService
             throw new DirectoryNotFoundException($"Directory {inputDirectory} does not exist.");
         }
 
-        if (!Directory.Exists(outputDirectory)) 
+        if (!Directory.Exists(outputDirectory))
         {
             Directory.CreateDirectory(outputDirectory);
         }

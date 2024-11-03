@@ -1,5 +1,4 @@
-﻿using Deface.NET.TestResources;
-using Deface.NET.VideoIO;
+﻿using Deface.NET.VideoIO;
 
 namespace Deface.NET.UnitTests;
 

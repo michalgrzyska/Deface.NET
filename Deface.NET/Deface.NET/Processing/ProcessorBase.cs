@@ -9,7 +9,7 @@ internal abstract class ProcessorBase(Settings settings)
 
     protected void ApplyScopedSettings(Action<Settings>? action)
     {
-        if (action is null) 
+        if (action is null)
         {
             return;
         }

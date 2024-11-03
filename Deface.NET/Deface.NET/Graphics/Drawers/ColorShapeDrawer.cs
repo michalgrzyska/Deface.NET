@@ -19,7 +19,7 @@ internal class ColorShapeDrawer : IShapeDrawer
 
         foreach (var obj in objects)
         {
-            DrawObject(canvas, paint, obj, settings);          
+            DrawObject(canvas, paint, obj, settings);
         }
 
         return bitmap;

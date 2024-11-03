@@ -1,5 +1,4 @@
 ﻿using Deface.NET.PerformanceTestRunner.Config;
-using Deface.NET.TestResources;
 
 namespace Deface.NET.PerformanceTestRunner.TestScenarios;
 

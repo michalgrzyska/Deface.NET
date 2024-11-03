@@ -6,7 +6,7 @@ public class AnonimizationTypeScenario : VideoTestScenarioBase
 {
     public AnonimizationTypeScenario() : base(TestResources.TestResources.Video_Short_HD_1280_720_24fps)
     { }
-    
+
     [Scenario("Ellipse GaussianBlur")]
     public async Task<ProcessingResult> Ellipse_GaussianBlur()
     {
