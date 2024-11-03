@@ -1,27 +1,27 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Deface.NET.VideoIO.Models;
 
 internal class VideoInfoOutput
 {
-    [JsonProperty("streams")]
+    [JsonPropertyName("streams")]
     public VideoInfoStreamOutput[] Streams { get; set; } = [];
 }
 
 internal class VideoInfoStreamOutput
 {
-    [JsonProperty("width")]
+    [JsonPropertyName("width")]
     public int Width { get; set; }
 
-    [JsonProperty("height")]
+    [JsonPropertyName("height")]
     public int Height { get; set; }
 
-    [JsonProperty("nb_frames")]
+    [JsonPropertyName("nb_frames")]
     public string Frames { get; set; } = string.Empty;
 
-    [JsonProperty("r_frame_rate")]
+    [JsonPropertyName("r_frame_rate")]
     public string TargetFrameRate { get; set; } = string.Empty;
 
-    [JsonProperty("avg_frame_rate")]
+    [JsonPropertyName("avg_frame_rate")]
     public string AverageFrameRate { get; set; } = string.Empty;
 }

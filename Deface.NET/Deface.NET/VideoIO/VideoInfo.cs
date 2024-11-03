@@ -1,5 +1,5 @@
 ﻿using Deface.NET.VideoIO.Models;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Deface.NET.VideoIO;
 
@@ -10,7 +10,7 @@ internal record VideoInfo(int Width, int Height, int TotalFrames, float TargetFp
         using ExternalProcess process = GetProcess(filePath);
 
         var processOutput = await process.ExecuteWithOutput();
-        var output = JsonConvert.DeserializeObject<VideoInfoOutput>(processOutput)!;
+        var output = JsonSerializer.Deserialize<VideoInfoOutput>(processOutput)!;
 
         return ConvertOutputToVideoInfo(output);
     }
