@@ -40,14 +40,6 @@ public class Settings
     public int RunDetectionEachNFrames { get; set; } = 1;
 
     /// <summary>
-    /// Use this param to enable automatic frame rescaling for object detection. For example setting RescaleVideoWithShorterSideEqualsTo to 720 means that
-    /// a frame of original size 1920x1080 will be rescaled to 1280x720 for the detection process. Output video remains the same size and quality.
-    /// If shorter side length is smaller than a value given in RescaleVideoWithShorterSideEqualsTo, frame size remains the same. This process
-    /// can affect the quality of detection, but also improves the performance for high-res videos.
-    /// </summary>
-    public int? RescaleVideoWithShorterSideEqualsTo { get; set; }
-
-    /// <summary>
     /// Scale the size for anonimization area. The bigger the value is, the bigger area around a detected object is redacted to ensure the redaction is proper. 
     /// Default: 1.2f.
     /// </summary>
@@ -82,11 +74,6 @@ public class Settings
         if (RunDetectionEachNFrames <= 0)
         {
             throw new InvalidDataException($"{nameof(RunDetectionEachNFrames)} must be 1 or greater.");
-        }
-
-        if (RescaleVideoWithShorterSideEqualsTo.HasValue && RescaleVideoWithShorterSideEqualsTo <= 0)
-        {
-            throw new InvalidDataException($"{nameof(RescaleVideoWithShorterSideEqualsTo)} must be 1 or greater.");
         }
 
         if (MaskScale < 1)
