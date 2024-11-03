@@ -6,9 +6,10 @@ internal class ExternalProcess : IDisposable
 {
     private readonly Process _process;
 
+    public Stream InputStream => _process.StandardInput.BaseStream;
     public Stream OutputStream => _process.StandardOutput.BaseStream;
 
-    public ExternalProcess(string path, string arguments)
+    public ExternalProcess(string path, string arguments, bool redirectStandardInput = false)
     {
         ProcessStartInfo info = new()
         {
@@ -16,7 +17,8 @@ internal class ExternalProcess : IDisposable
             Arguments = arguments,
             UseShellExecute = false,
             CreateNoWindow = true,
-            RedirectStandardOutput = true
+            RedirectStandardOutput = true,
+            RedirectStandardInput = redirectStandardInput
         };
 
         _process = new()
