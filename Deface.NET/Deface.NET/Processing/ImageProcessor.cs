@@ -1,5 +1,4 @@
-﻿using Deface.NET.CenterFace;
-using Deface.NET.Logging;
+﻿using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.ObjectDetection.UltraFace;
 using SkiaSharp;
@@ -10,12 +9,11 @@ namespace Deface.NET.Processing;
 internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> logger) : ProcessorBase(settings), IDisposable
 {
     private readonly DLogger<IDefaceService> _logger = logger;
-    private readonly CenterFaceModel _centerFace = new();
     private readonly UltraFaceDetector _detector = new();
 
     private readonly static string[] ImageExtensions = [".jpg", ".jpeg", ".png"];
 
-    public void Dispose() => _centerFace.Dispose();
+    public void Dispose() { }
 
     public ProcessingResult Process(string inputPath, string outputPath, Action<Settings>? customSettings)
     {
@@ -25,12 +23,12 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         stopwatch.Start();
 
         using SKBitmap image = LoadImage(inputPath);
-        Dimensions dimensions = ProcessImage(image, outputPath);
+        ProcessImage(image, outputPath);
 
         stopwatch.Stop();
 
         _logger.Log(DefaceLoggingLevel.Basic, "Processed {Input} and saved to {Output}", inputPath, outputPath);
-        return new(inputPath, outputPath, stopwatch.Elapsed, dimensions, dimensions, Settings.Threshold, 1);
+        return new(inputPath, outputPath, stopwatch.Elapsed, Settings.Threshold, 1);
     }
 
     public List<ProcessingResult> ProcessMany(string inputDirectory, string outputDirectory, Action<Settings>? customSettings)
@@ -73,9 +71,8 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         }
     }
 
-    private Dimensions ProcessImage(SKBitmap image, string outputPath)
+    private void ProcessImage(SKBitmap image, string outputPath)
     {
-        Dimensions dimensions = new(image.Width, image.Height);
         List<DetectedObject> detectedObjects = _detector.Detect(image);
         SKBitmap result = Graphics.ShapeDrawer.DrawShapes(image, detectedObjects, Settings);
 
@@ -84,8 +81,6 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         using FileStream stream = File.OpenWrite(outputPath);
 
         data.SaveTo(stream);
-
-        return dimensions;
     }
     
     private static string GetOutputPath(string inputPath, string outputDirPath)

@@ -24,16 +24,6 @@ public class ProcessingResult
     public TimeSpan ProcessingTime { get; private set; }
 
     /// <summary>
-    /// Gets the dimensions of the input file.
-    /// </summary>
-    public Dimensions InputDimensions { get; private set; }
-
-    /// <summary>
-    /// Gets the dimensions after processing.
-    /// </summary>
-    public Dimensions ProcessingDimensions { get; private set; }
-
-    /// <summary>
     /// Gets the threshold used for processing.
     /// </summary>
     public float Threshold { get; private set; }
@@ -43,47 +33,12 @@ public class ProcessingResult
     /// </summary>
     public double Fps { get; private set; }
 
-    internal ProcessingResult(string inputFile, string outputFile, TimeSpan processingTime, Size inputSize, Size processingSize, float threshold, double fps)
+    internal ProcessingResult(string inputFile, string outputFile, TimeSpan processingTime, float threshold, double fps)
     {
         InputFile = inputFile;
         OutputFile = outputFile;
         ProcessingTime = processingTime;
-        InputDimensions = inputSize.ToDimensions();
-        ProcessingDimensions = processingSize.ToDimensions();
         Threshold = threshold;
         Fps = fps;
-    }
-
-    internal ProcessingResult(string inputFile, string outputFile, TimeSpan processingTime, Dimensions inputSize, Dimensions processingSize, float threshold, double fps)
-    {
-        InputFile = inputFile;
-        OutputFile = outputFile;
-        ProcessingTime = processingTime;
-        InputDimensions = inputSize;
-        ProcessingDimensions = processingSize;
-        Threshold = threshold;
-        Fps = fps;
-    }
-}
-
-/// <summary>
-/// Represents the dimensions of a media file or a processing frame.
-/// </summary>
-public class Dimensions
-{
-    /// <summary>
-    /// Gets the width.
-    /// </summary>
-    public int Width { get; private set; }
-
-    /// <summary>
-    /// Gets the height.
-    /// </summary>
-    public int Height { get; private set; }
-
-    internal Dimensions(int width, int height)
-    {
-        Width = width;
-        Height = height;
     }
 }

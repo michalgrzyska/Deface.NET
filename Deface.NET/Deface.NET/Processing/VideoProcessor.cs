@@ -20,7 +20,7 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
     {
         ApplyScopedSettings(customSettings);
 
-        var (videoInfo, processedFrames) = await GetProcessedFrames(inputPath);
+        var (videoInfo, processedFrames, time) = await GetProcessedFrames(inputPath);
 
         _logger.Log(DefaceLoggingLevel.Basic, "Saving video...");
 
@@ -28,10 +28,10 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
 
         _logger.Log(DefaceLoggingLevel.Basic, "Video saved");
 
-        return null!;
+        return new ProcessingResult(inputPath, outputPath, time, Settings.Threshold, videoInfo.AverageFps);
     }
 
-    private async Task<(VideoInfo, List<SKBitmap>)> GetProcessedFrames(string inputPath)
+    private async Task<(VideoInfo, List<SKBitmap>, TimeSpan)> GetProcessedFrames(string inputPath)
     {
         var progressLogger = _logger.GetProgressLogger();
         progressLogger.Start();
@@ -48,8 +48,9 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
         });
 
         VideoInfo videoInfo = await videoReader.Start();
+        TimeSpan processingTime = progressLogger.Stop();
 
-        return (videoInfo, processedFrames);
+        return (videoInfo, processedFrames, processingTime);
     }
 
     private SKBitmap ProcessFrame(SKBitmap frame, int i)
