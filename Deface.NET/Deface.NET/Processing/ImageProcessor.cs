@@ -1,7 +1,7 @@
-﻿using Deface.NET.Logging;
+﻿using Deface.NET.Graphics;
+using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.ObjectDetection.UltraFace;
-using SkiaSharp;
 using System.Diagnostics;
 
 namespace Deface.NET.Processing;
@@ -22,7 +22,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        using SKBitmap image = LoadImage(inputPath);
+        using Frame image = LoadImage(inputPath);
         ProcessImage(image, outputPath);
 
         stopwatch.Stop();
@@ -53,7 +53,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         return results;
     }
 
-    private static SKBitmap LoadImage(string path)
+    private static Frame LoadImage(string path)
     {
         try
         {
@@ -63,7 +63,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
             }
 
             using FileStream stream = File.OpenRead(path);
-            return SKBitmap.Decode(stream);
+            return new(stream);
         }
         catch (Exception e)
         {
@@ -71,16 +71,12 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         }
     }
 
-    private void ProcessImage(SKBitmap image, string outputPath)
+    private void ProcessImage(Frame image, string outputPath)
     {
         List<DetectedObject> detectedObjects = _detector.Detect(image);
-        SKBitmap result = Graphics.ShapeDrawer.DrawShapes(image, detectedObjects, Settings);
+        Frame result = ShapeDrawer.DrawShapes(image, detectedObjects, Settings);
 
-        using SKImage resultImage = SKImage.FromBitmap(result);
-        using SKData data = resultImage.Encode(SKEncodedImageFormat.Png, 100);
-        using FileStream stream = File.OpenWrite(outputPath);
-
-        data.SaveTo(stream);
+        result.SaveTo(outputPath);
     }
 
     private static string GetOutputPath(string inputPath, string outputDirPath)

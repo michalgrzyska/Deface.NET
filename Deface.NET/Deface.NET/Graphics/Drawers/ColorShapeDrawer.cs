@@ -5,8 +5,9 @@ namespace Deface.NET.Graphics.Drawers;
 
 internal class ColorShapeDrawer : IShapeDrawer
 {
-    public SKBitmap Draw(SKBitmap bitmap, List<DetectedObject> objects, Settings settings)
+    public Frame Draw(Frame frame, List<DetectedObject> objects, Settings settings)
     {
+        var bitmap = frame.GetNativeElement();
         var color = settings.AnonimizationMethod.ColorValue!;
 
         using SKCanvas canvas = new(bitmap);
@@ -22,7 +23,8 @@ internal class ColorShapeDrawer : IShapeDrawer
             DrawObject(canvas, paint, obj, settings);
         }
 
-        return bitmap;
+        frame.UpdateNativeElement(bitmap);
+        return frame;
     }
 
     private static void DrawObject(SKCanvas canvas, SKPaint paint, DetectedObject obj, Settings settings)

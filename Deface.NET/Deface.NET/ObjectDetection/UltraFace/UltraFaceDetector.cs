@@ -2,7 +2,6 @@
 using Deface.NET.Utils;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.Onnx;
-using SkiaSharp;
 
 namespace Deface.NET.ObjectDetection.UltraFace;
 
@@ -23,13 +22,13 @@ internal class UltraFaceDetector : IObjectDetector
         predictionEngine = GetPredictionEngine();
     }
 
-    public List<DetectedObject> Detect(SKBitmap bitmap)
+    public List<DetectedObject> Detect(Frame frame)
     {
-        float[] preprocessedImage = PreprocessImage(bitmap);
+        float[] preprocessedImage = PreprocessImage(frame);
         Input input = new(preprocessedImage);
         Output output = predictionEngine.Predict(input);
 
-        return PostProcess(output.Scores, output.Boxes, bitmap.Width, bitmap.Height);
+        return PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height);
     }
 
     private OnnxScoringEstimator GetPipeline()
@@ -47,9 +46,9 @@ internal class UltraFaceDetector : IObjectDetector
         return mlContext.Model.CreatePredictionEngine<Input, Output>(model);
     }
 
-    private static float[] PreprocessImage(SKBitmap bitmap)
+    private static float[] PreprocessImage(Frame frame)
     {
-        SKBitmap resized = GraphicsHelper.ScaleBitmapWithPadding(bitmap, Width, Height);
+        Frame resized = frame.GetRescaledWithPadding(Width, Height);
         float[] imageData = new float[1 * 3 * Height * Width];
         int index = 0;
 
@@ -57,11 +56,11 @@ internal class UltraFaceDetector : IObjectDetector
         {
             for (int x = 0; x < resized.Width; x++)
             {
-                SKColor pixel = resized.GetPixel(x, y);
+                Pixel pixel = resized.GetPixel(x, y);
 
-                imageData[index] = (pixel.Red - 127) / 128f;
-                imageData[index + Height * Width] = (pixel.Green - 127) / 128f;
-                imageData[index + 2 * Height * Width] = (pixel.Blue - 127) / 128f;
+                imageData[index] = (pixel.R - 127) / 128f;
+                imageData[index + Height * Width] = (pixel.G - 127) / 128f;
+                imageData[index + 2 * Height * Width] = (pixel.B - 127) / 128f;
 
                 index++;
             }

@@ -3,7 +3,6 @@ using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.ObjectDetection.UltraFace;
 using Deface.NET.VideoIO;
-using SkiaSharp;
 
 namespace Deface.NET.Processing;
 
@@ -29,16 +28,16 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
         return new ProcessingResult(inputPath, outputPath, time, Settings.Threshold, videoInfo.AverageFps);
     }
 
-    private async Task<(VideoInfo, List<SKBitmap>, TimeSpan)> GetProcessedFrames(string inputPath)
+    private async Task<(VideoInfo, List<Frame>, TimeSpan)> GetProcessedFrames(string inputPath)
     {
         var progressLogger = _logger.GetProgressLogger();
         progressLogger.Start();
 
-        List<SKBitmap> processedFrames = [];
+        List<Frame> processedFrames = [];
 
         using VideoReader videoReader = new(inputPath, Settings, (frame, index, totalFrames) =>
         {
-            SKBitmap processedFrame = ProcessFrame(frame, index);
+            Frame processedFrame = ProcessFrame(frame, index);
             processedFrames.Add(processedFrame);
 
             progressLogger.LogProgress(index + 1, "Processing video frames", totalFrames);
@@ -51,21 +50,21 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
         return (videoInfo, processedFrames, processingTime);
     }
 
-    private SKBitmap ProcessFrame(SKBitmap frame, int i)
+    private Frame ProcessFrame(Frame frame, int i)
     {
         if (i % Settings.RunDetectionEachNFrames == 0)
         {
             _lastDetectedObjects = _ultraFaceDetector.Detect(frame);
         }
 
-        SKBitmap processedFrame = ShapeDrawer.DrawShapes(frame, _lastDetectedObjects, Settings);
+        Frame processedFrame = ShapeDrawer.DrawShapes(frame, _lastDetectedObjects, Settings);
         return processedFrame;
     }
 
-    private void SaveVideo(List<SKBitmap> processedFrames, VideoInfo videoInfo, string outputPath)
+    private void SaveVideo(List<Frame> processedFrames, VideoInfo videoInfo, string outputPath)
     {
         var framesAsBytesArray = processedFrames
-            .Select(GraphicsHelper.ConvertSKBitmapToRgbByteArray)
+            .Select(x => x.ToByteArray())
             .ToList();
 
         VideoWriter.WriteVideo(framesAsBytesArray, videoInfo, outputPath, Settings);

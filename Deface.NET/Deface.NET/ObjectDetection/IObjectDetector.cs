@@ -1,8 +1,8 @@
-﻿using SkiaSharp;
+﻿using Deface.NET.Graphics;
 
 namespace Deface.NET.ObjectDetection;
 
 internal interface IObjectDetector
 {
-    public List<DetectedObject> Detect(SKBitmap bitmap);
+    public List<DetectedObject> Detect(Frame frame);
 }

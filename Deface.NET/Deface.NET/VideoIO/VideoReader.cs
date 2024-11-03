@@ -1,12 +1,11 @@
 ﻿using Deface.NET.Graphics;
 using Deface.NET.Utils;
-using SkiaSharp;
 
 namespace Deface.NET.VideoIO;
 
 internal class VideoReader : IDisposable
 {
-    private readonly Func<SKBitmap, int, int, Task> _frameProcess;
+    private readonly Func<Frame, int, int, Task> _frameProcess;
     private readonly ExternalProcess _ffmpegProcess;
     private readonly string _videoFilePath;
     private readonly Settings _settings;
@@ -18,7 +17,7 @@ internal class VideoReader : IDisposable
     private int _totalBytesRead = 0;
     private int _frameSize = 0;
 
-    public VideoReader(string videoFilePath, Settings settings, Func<SKBitmap, int, int, Task> frameProcess)
+    public VideoReader(string videoFilePath, Settings settings, Func<Frame, int, int, Task> frameProcess)
     {
         _frameProcess = frameProcess;
         _videoFilePath = videoFilePath;
@@ -76,10 +75,8 @@ internal class VideoReader : IDisposable
         byte[] frameData = new byte[_frameSize];
         Array.Copy(_buffer, 0, frameData, 0, _frameSize);
 
-        byte[] rgbaData = GraphicsHelper.ConvertBgrToRgba(frameData, _videoInfo.Width, _videoInfo.Height);
-        SKBitmap bitmap = GraphicsHelper.GetBitmapFromBytes(rgbaData, _videoInfo.Width, _videoInfo.Height);
-
-        await _frameProcess(bitmap, i, _videoInfo.TotalFrames);
+        Frame frame = new(frameData, _videoInfo.Width, _videoInfo.Height);
+        await _frameProcess(frame, i, _videoInfo.TotalFrames);
 
         int excessBytes = _totalBytesRead - _frameSize;
 

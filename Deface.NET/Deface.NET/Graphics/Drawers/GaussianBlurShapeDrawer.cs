@@ -5,8 +5,10 @@ namespace Deface.NET.Graphics.Drawers;
 
 internal class GaussianBlurShapeDrawer : IShapeDrawer
 {
-    public SKBitmap Draw(SKBitmap bitmap, List<DetectedObject> objects, Settings settings)
+    public Frame Draw(Frame frame, List<DetectedObject> objects, Settings settings)
     {
+        var bitmap = frame.GetNativeElement();
+
         SKImageInfo imageInfo = new(bitmap.Width, bitmap.Height);
         using SKSurface surface = SKSurface.Create(imageInfo);
         SKCanvas canvas = surface.Canvas;
@@ -29,7 +31,9 @@ internal class GaussianBlurShapeDrawer : IShapeDrawer
         SKBitmap resultBitmap = new(bitmap.Width, bitmap.Height);
 
         snapshot.ReadPixels(resultBitmap.Info, resultBitmap.GetPixels(), resultBitmap.RowBytes, 0, 0);
-        return resultBitmap;
+
+        frame.UpdateNativeElement(resultBitmap);
+        return frame;
     }
 
     private static void DrawShape(SKBitmap bitmap, SKPaint paint, Settings settings, DetectedObject obj, SKCanvas canvas)

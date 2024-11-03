@@ -1,5 +1,4 @@
 ﻿using Deface.NET.Configuration.FFMpeg;
-using System.Runtime.InteropServices;
 
 namespace Deface.NET;
 

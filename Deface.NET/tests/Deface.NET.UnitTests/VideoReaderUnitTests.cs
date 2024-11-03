@@ -1,5 +1,5 @@
-﻿using Deface.NET.VideoIO;
-using SkiaSharp;
+﻿using Deface.NET.Graphics;
+using Deface.NET.VideoIO;
 
 namespace Deface.NET.UnitTests;
 
@@ -16,7 +16,7 @@ public class VideoReaderUnitTests
         await videoReader.Start();
     }
 
-    private async Task Process(SKBitmap bitmap, int index, int totalFrames)
+    private async Task Process(Frame bitmap, int index, int totalFrames)
     {
         i++;
     }
