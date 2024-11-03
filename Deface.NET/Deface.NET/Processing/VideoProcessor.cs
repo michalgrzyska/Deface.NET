@@ -1,4 +1,5 @@
-﻿using Deface.NET.Logging;
+﻿using Deface.NET.Graphics;
+using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.ObjectDetection.UltraFace;
 using Deface.NET.VideoIO;
@@ -64,15 +65,9 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
 
     private async Task SaveVideo(List<SKBitmap> processedFrames, VideoInfo videoInfo, string outputPath)
     {
-        //_logger.Log(DefaceLoggingLevel.Basic, "Processing frames");
-
-        //var framesBytes = processedFrames
-        //    .Select(GraphicsHelper.ConvertSKBitmapToByteArray)
-        //    .ToList();
-
-        //_logger.Log(DefaceLoggingLevel.Basic, "Processed frames");
+        var framesAsBytesArray = processedFrames.Select(GraphicsHelper.ConvertSKBitmapToRgbByteArray).ToList();
 
         var videoCreator = new VideoWriter();
-        videoCreator.CreateVideoFromBitmaps(processedFrames, videoInfo.Width, videoInfo.Height, videoInfo.AverageFps, outputPath);
+        videoCreator.WriteVideo(framesAsBytesArray, videoInfo.Width, videoInfo.Height, videoInfo.AverageFps, outputPath);
     }
 }

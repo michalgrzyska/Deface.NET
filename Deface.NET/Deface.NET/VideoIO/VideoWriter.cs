@@ -1,12 +1,10 @@
 ﻿using Deface.NET;
-using Deface.NET.Graphics;
-using SkiaSharp;
 using System.Globalization;
 
 internal class VideoWriter
 {
-    public void CreateVideoFromBitmaps(
-        List<SKBitmap> bitmaps,
+    public void WriteVideo(
+        List<byte[]> bitmaps,
         int width,
         int height,
         float fps,
@@ -28,19 +26,7 @@ internal class VideoWriter
 
         foreach (var bitmap in bitmaps)
         {
-            if (bitmap.Width != width || bitmap.Height != height)
-            {
-                throw new ArgumentException("Bitmap size does not match the specified width and height.");
-            }
-
-            byte[] rgbData = GraphicsHelper.ConvertSKBitmapToRgbByteArray(bitmap);
-
-            if (rgbData.Length != width * height * 3)
-            {
-                throw new InvalidOperationException("RGB data size mismatch. Check frame dimensions and pixel format.");
-            }
-
-            ffmpegInput.Write(rgbData, 0, rgbData.Length);
+            ffmpegInput.Write(bitmap, 0, bitmap.Length);
         }
     }
 }
