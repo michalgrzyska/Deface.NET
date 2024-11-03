@@ -7,15 +7,26 @@ internal record VideoInfo(int Width, int Height, int TotalFrames, float TargetFp
 {
     public static async Task<VideoInfo> GetInfo(string filePath)
     {
-        using ExternalProcess process = new(
-            "ffprobe.exe",
-            $"-v error -select_streams v:0 -show_entries stream=width,height,nb_frames,r_frame_rate,avg_frame_rate -of json \"{filePath}\""
-        );
+        using ExternalProcess process = GetProcess(filePath);
 
         var processOutput = await process.ExecuteWithOutput();
         var output = JsonConvert.DeserializeObject<VideoInfoOutput>(processOutput)!;
 
         return ConvertOutputToVideoInfo(output);
+    }
+
+    private static ExternalProcess GetProcess(string filePath)
+    {
+        string args = string.Join(" ",
+        [
+            "-v", "error",
+            "-select_streams", "v:0",
+            "-show_entries", "stream=width,height,nb_frames,r_frame_rate,avg_frame_rate",
+            "-of", "json",
+            $"\"{filePath}\""
+        ]);
+
+        return new ExternalProcess("ffprobe.exe", args);
     }
 
     private static VideoInfo ConvertOutputToVideoInfo(VideoInfoOutput output)

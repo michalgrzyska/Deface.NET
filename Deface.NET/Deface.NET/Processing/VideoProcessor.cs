@@ -24,7 +24,7 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
 
         _logger.Log(DefaceLoggingLevel.Basic, "Saving video...");
 
-        await SaveVideo(processedFrames, videoInfo, outputPath);
+        SaveVideo(processedFrames, videoInfo, outputPath);
 
         _logger.Log(DefaceLoggingLevel.Basic, "Video saved");
 
@@ -63,11 +63,12 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
         return processedFrame;
     }
 
-    private async Task SaveVideo(List<SKBitmap> processedFrames, VideoInfo videoInfo, string outputPath)
+    private static void SaveVideo(List<SKBitmap> processedFrames, VideoInfo videoInfo, string outputPath)
     {
-        var framesAsBytesArray = processedFrames.Select(GraphicsHelper.ConvertSKBitmapToRgbByteArray).ToList();
+        var framesAsBytesArray = processedFrames
+            .Select(GraphicsHelper.ConvertSKBitmapToRgbByteArray)
+            .ToList();
 
-        var videoCreator = new VideoWriter();
-        videoCreator.WriteVideo(framesAsBytesArray, videoInfo.Width, videoInfo.Height, videoInfo.AverageFps, outputPath);
+        VideoWriter.WriteVideo(framesAsBytesArray, videoInfo, outputPath);
     }
 }

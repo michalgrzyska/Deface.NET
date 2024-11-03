@@ -90,9 +90,15 @@ internal class VideoReader : IDisposable
 
     private ExternalProcess GetFfmpegProcess()
     {
-        string file = "ffmpeg.exe";
-        string parameters = $"-i \"{_videoFilePath}\" -f image2pipe -pix_fmt rgb24 -vcodec rawvideo -";
+        string args = string.Join(" ",
+        [
+            "-i", $"\"{_videoFilePath}\"",
+            "-f", "image2pipe",
+            "-pix_fmt", "rgb24",
+            "-vcodec", "rawvideo",
+            "-"
+        ]);
 
-        return new(file, parameters);
+        return new ExternalProcess("ffmpeg.exe", args);
     }
 }

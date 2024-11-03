@@ -1,32 +1,37 @@
 ﻿using Deface.NET;
+using Deface.NET.VideoIO;
 using System.Globalization;
 
-internal class VideoWriter
+internal static class VideoWriter
 {
-    public void WriteVideo(
-        List<byte[]> bitmaps,
-        int width,
-        int height,
-        float fps,
-        string outputPath)
+    public static void WriteVideo(List<byte[]> frames, VideoInfo videoInfo, string outputPath)
     {
-        string fpsString = fps.ToString(CultureInfo.InvariantCulture);
-
-        var ffmpegArgs = $"-y -f rawvideo -pixel_format rgb24 -video_size {width}x{height} -framerate {fpsString} -i - -c:v libx264 -pix_fmt yuv420p \"{outputPath}\"";
-
-        using ExternalProcess ffmpegProcess = new(
-            "ffmpeg.exe",
-            ffmpegArgs,
-            redirectStandardInput: true
-        );
-
+        using ExternalProcess ffmpegProcess = GetFfmpegProcess(videoInfo, outputPath);
         ffmpegProcess.Start();
 
         using var ffmpegInput = ffmpegProcess.InputStream;
 
-        foreach (var bitmap in bitmaps)
+        foreach (var frame in frames)
         {
-            ffmpegInput.Write(bitmap, 0, bitmap.Length);
+            ffmpegInput.Write(frame);
         }
+    }
+
+    private static ExternalProcess GetFfmpegProcess(VideoInfo videoInfo, string outputPath)
+    {
+        string args = string.Join(" ",
+        [
+            "-y",
+            "-f", "rawvideo",
+            "-pixel_format", "rgb24",
+            "-video_size", $"{videoInfo.Width}x{videoInfo.Height}",
+            "-framerate",  videoInfo.AverageFps.ToString(CultureInfo.InvariantCulture),
+            "-i", "-",
+            "-c:v", "libx264",
+            "-pix_fmt yuv420p",
+            $"\"{outputPath}\""
+        ]);
+
+        return new ExternalProcess("ffmpeg.exe", args, redirectStandardInput: true);
     }
 }
