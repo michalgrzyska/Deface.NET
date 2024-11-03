@@ -20,8 +20,7 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
         ApplyScopedSettings(customSettings);
 
         var (videoInfo, processedFrames, time) = await GetProcessedFrames(inputPath);
-
-        SaveVideo(processedFrames, videoInfo, outputPath);
+        VideoWriter.WriteVideo(processedFrames, videoInfo, outputPath, Settings);
 
         _logger.Log(DefaceLoggingLevel.Basic, "Video {InputPath} processed in {Time} and saved to {OutputPath}", inputPath, time, outputPath);
 
@@ -59,14 +58,5 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
 
         Frame processedFrame = ShapeDrawer.DrawShapes(frame, _lastDetectedObjects, Settings);
         return processedFrame;
-    }
-
-    private void SaveVideo(List<Frame> processedFrames, VideoInfo videoInfo, string outputPath)
-    {
-        var framesAsBytesArray = processedFrames
-            .Select(x => x.ToByteArray())
-            .ToList();
-
-        VideoWriter.WriteVideo(framesAsBytesArray, videoInfo, outputPath, Settings);
     }
 }

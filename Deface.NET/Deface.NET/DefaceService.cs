@@ -3,29 +3,24 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Deface.NET;
 
-internal sealed class DefaceService : IDefaceService
+internal sealed class DefaceService(IServiceProvider serviceProvider) : IDefaceService
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceProvider _serviceProvider = serviceProvider;
 
-    public DefaceService(IServiceProvider serviceProvider)
+    public async Task<ProcessingResult> ProcessVideo(string inputPath, string outputPath, Action<Settings>? customSettings = default)
     {
-        _serviceProvider = serviceProvider;
-    }
-
-    public async Task<ProcessingResult> ProcessVideo(string inputVideoFilePath, string outputVideoFilePath, Action<Settings>? customSettings = default)
-    {
-        ValidateFileInput(inputVideoFilePath, outputVideoFilePath);
+        ValidateFileInput(inputPath, outputPath);
 
         using var processor = _serviceProvider.GetRequiredService<VideoProcessor>();
-        return await processor.Process(inputVideoFilePath, outputVideoFilePath, customSettings);
+        return await processor.Process(inputPath, outputPath, customSettings);
     }
 
-    public ProcessingResult ProcessImage(string inputPhotoFilePath, string outputPhotoFilePath, Action<Settings>? customSettings = default)
+    public ProcessingResult ProcessImage(string inputPath, string outputPath, Action<Settings>? customSettings = default)
     {
-        ValidateFileInput(inputPhotoFilePath, outputPhotoFilePath);
+        ValidateFileInput(inputPath, outputPath);
 
         using var processor = _serviceProvider.GetRequiredService<ImageProcessor>();
-        return processor.Process(inputPhotoFilePath, outputPhotoFilePath, customSettings);
+        return processor.Process(inputPath, outputPath, customSettings);
     }
 
     public IEnumerable<ProcessingResult> ProcessImages(string inputDirectory, string outputDirectory, Action<Settings>? customSettings = null)

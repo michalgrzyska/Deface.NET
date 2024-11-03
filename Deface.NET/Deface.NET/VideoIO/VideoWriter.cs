@@ -1,20 +1,22 @@
 ﻿using Deface.NET;
+using Deface.NET.Graphics;
 using Deface.NET.Utils;
 using Deface.NET.VideoIO;
 using System.Globalization;
 
 internal static class VideoWriter
 {
-    public static void WriteVideo(List<byte[]> frames, VideoInfo videoInfo, string outputPath, Settings settings)
+    public static void WriteVideo(List<Frame> frames, VideoInfo videoInfo, string outputPath, Settings settings)
     {
         using ExternalProcess ffmpegProcess = GetFfmpegProcess(videoInfo, outputPath, settings);
         ffmpegProcess.Start();
 
         using var ffmpegInput = ffmpegProcess.InputStream;
 
-        foreach (var frame in frames)
+        foreach (var frame in frames) using (frame)
         {
-            ffmpegInput.Write(frame);
+            var bytes = frame.ToByteArray();
+            ffmpegInput.Write(bytes);
         }
     }
 
