@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Deface.NET;
+namespace Deface.NET.Utils;
 
 internal class ExternalProcess : IDisposable
 {

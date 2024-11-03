@@ -1,4 +1,5 @@
 ﻿using Deface.NET.Graphics;
+using Deface.NET.Utils;
 using SkiaSharp;
 
 namespace Deface.NET.VideoIO;
@@ -8,6 +9,8 @@ internal class VideoReader : IDisposable
     private readonly Func<SKBitmap, int, int, Task> _frameProcess;
     private readonly ExternalProcess _ffmpegProcess;
     private readonly string _videoFilePath;
+    private readonly Settings _settings;
+
 
     private VideoInfo _videoInfo = default!;
     private byte[] _buffer = [];
@@ -15,10 +18,11 @@ internal class VideoReader : IDisposable
     private int _totalBytesRead = 0;
     private int _frameSize = 0;
 
-    public VideoReader(string videoFilePath, Func<SKBitmap, int, int, Task> frameProcess)
+    public VideoReader(string videoFilePath, Settings settings, Func<SKBitmap, int, int, Task> frameProcess)
     {
         _frameProcess = frameProcess;
         _videoFilePath = videoFilePath;
+        _settings = settings;
 
         _ffmpegProcess = GetFfmpegProcess();
     }
@@ -60,7 +64,7 @@ internal class VideoReader : IDisposable
 
     private async Task SetupFields()
     {
-        _videoInfo = await VideoInfo.GetInfo(_videoFilePath);
+        _videoInfo = await VideoInfo.GetInfo(_videoFilePath, _settings);
 
         _frameSize = _videoInfo.Width * _videoInfo.Height * 3;
         _buffer = new byte[_frameSize];
@@ -90,6 +94,8 @@ internal class VideoReader : IDisposable
 
     private ExternalProcess GetFfmpegProcess()
     {
+        string ffmpegPath = _settings.FFMpegConfig.GetCurrentConfig().FFMpegPath;
+
         string args = string.Join(" ",
         [
             "-i", $"\"{_videoFilePath}\"",
@@ -99,6 +105,6 @@ internal class VideoReader : IDisposable
             "-"
         ]);
 
-        return new ExternalProcess("ffmpeg.exe", args);
+        return new ExternalProcess(ffmpegPath, args);
     }
 }

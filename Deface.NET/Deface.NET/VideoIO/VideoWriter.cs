@@ -1,12 +1,13 @@
 ﻿using Deface.NET;
+using Deface.NET.Utils;
 using Deface.NET.VideoIO;
 using System.Globalization;
 
 internal static class VideoWriter
 {
-    public static void WriteVideo(List<byte[]> frames, VideoInfo videoInfo, string outputPath)
+    public static void WriteVideo(List<byte[]> frames, VideoInfo videoInfo, string outputPath, Settings settings)
     {
-        using ExternalProcess ffmpegProcess = GetFfmpegProcess(videoInfo, outputPath);
+        using ExternalProcess ffmpegProcess = GetFfmpegProcess(videoInfo, outputPath, settings);
         ffmpegProcess.Start();
 
         using var ffmpegInput = ffmpegProcess.InputStream;
@@ -17,8 +18,10 @@ internal static class VideoWriter
         }
     }
 
-    private static ExternalProcess GetFfmpegProcess(VideoInfo videoInfo, string outputPath)
+    private static ExternalProcess GetFfmpegProcess(VideoInfo videoInfo, string outputPath, Settings settings)
     {
+        string ffmpegPath = settings.FFMpegConfig.GetCurrentConfig().FFMpegPath;
+
         string args = string.Join(" ",
         [
             "-y",
@@ -32,6 +35,6 @@ internal static class VideoWriter
             $"\"{outputPath}\""
         ]);
 
-        return new ExternalProcess("ffmpeg.exe", args, redirectStandardInput: true);
+        return new ExternalProcess(ffmpegPath, args, redirectStandardInput: true);
     }
 }

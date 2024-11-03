@@ -12,7 +12,7 @@ public class VideoReaderUnitTests
     {
         var video = TestResources.TestResources.Video_Short_HD_1280_720_24fps;
 
-        using VideoReader videoReader = new(video, Process);
+        using VideoReader videoReader = new(video, null!, Process);
         await videoReader.Start();
     }
 

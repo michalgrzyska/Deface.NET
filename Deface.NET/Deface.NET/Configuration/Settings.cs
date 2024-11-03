@@ -1,4 +1,7 @@
-﻿namespace Deface.NET;
+﻿using Deface.NET.Configuration.FFMpeg;
+using System.Runtime.InteropServices;
+
+namespace Deface.NET;
 
 /// <summary>
 /// Deface settings.
@@ -45,6 +48,11 @@ public class Settings
     /// </summary>
     public float MaskScale { get; set; } = 1.2f;
 
+    /// <summary>
+    /// Configuration settings for FFMpeg and FFProbe for all platforms. Multiple platforms can be configured, if the target platform is not known.
+    /// </summary>
+    public FFMpegConfig FFMpegConfig { get; set; } = new();
+
     internal Settings(Action<Settings>? builderAction)
     {
         ApplyAction(builderAction);
@@ -78,7 +86,9 @@ public class Settings
 
         if (MaskScale < 1)
         {
-            throw new InvalidDataException($"{nameof(MaskScale)} must at least 1.0");
+            throw new InvalidDataException($"{nameof(MaskScale)} must at least 1.0.");
         }
+
+        FFMpegConfigValidator.Validate(FFMpegConfig, nameof(FFMpegConfig));
     }
 }

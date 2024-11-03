@@ -38,7 +38,7 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
 
         List<SKBitmap> processedFrames = [];
 
-        using VideoReader videoReader = new(inputPath, (frame, index, totalFrames) =>
+        using VideoReader videoReader = new(inputPath, Settings, (frame, index, totalFrames) =>
         {
             SKBitmap processedFrame = ProcessFrame(frame, index);
             processedFrames.Add(processedFrame);
@@ -64,12 +64,12 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
         return processedFrame;
     }
 
-    private static void SaveVideo(List<SKBitmap> processedFrames, VideoInfo videoInfo, string outputPath)
+    private void SaveVideo(List<SKBitmap> processedFrames, VideoInfo videoInfo, string outputPath)
     {
         var framesAsBytesArray = processedFrames
             .Select(GraphicsHelper.ConvertSKBitmapToRgbByteArray)
             .ToList();
 
-        VideoWriter.WriteVideo(framesAsBytesArray, videoInfo, outputPath);
+        VideoWriter.WriteVideo(framesAsBytesArray, videoInfo, outputPath, Settings);
     }
 }
