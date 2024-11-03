@@ -8,7 +8,7 @@ IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
     options.AnonimizationMethod = AnonimizationMethod.Color(255, 0, 0);
 });
 
-var result = await defaceService.ProcessVideo(TestResources.Video_Short_HD_1280_720_24fps, "C://DefaceTest//testt.mp4");
+var result = await defaceService.ProcessVideo(TestResources.Video_Short_640_360_24fps, "C://DefaceTest//testt.mp4");
 
 //var result = defaceService.ProcessImage(TestResources.Photo1, "1.png");
 

@@ -34,4 +34,12 @@ internal static class GraphicsHelper
         bitmap.InstallPixels(new SKImageInfo(width, height, SKColorType.Bgra8888), pixelPointer, width * 4);
         return bitmap;
     }
+
+    public static byte[] ConvertSKBitmapToByteArray(SKBitmap bitmap)
+    {
+        using var image = SKImage.FromBitmap(bitmap);
+        using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+        Console.WriteLine("Processed to bytes");
+        return data.ToArray();
+    }
 }
