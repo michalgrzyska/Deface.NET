@@ -7,12 +7,14 @@ internal class ColorShapeDrawer : IShapeDrawer
 {
     public SKBitmap Draw(SKBitmap bitmap, List<DetectedObject> objects, Settings settings)
     {
+        var color = settings.AnonimizationMethod.ColorValue!;
+
         using SKCanvas canvas = new(bitmap);
 
         using SKPaint paint = new()
         {
             Style = SKPaintStyle.Fill,
-            Color = new SKColor(255, 0, 0) // TODO
+            Color = new SKColor(color.R, color.G, color.B)
         };
 
         foreach (var obj in objects)

@@ -1,5 +1,4 @@
 ﻿using Deface.NET.Configuration;
-using OpenCvSharp;
 
 namespace Deface.NET;
 
@@ -10,9 +9,9 @@ public sealed class AnonimizationMethod
 {
 
     internal AnonimizationType Type { get; private set; }
-    internal Scalar? ColorValue { get; private set; }
+    internal Color? ColorValue { get; private set; }
 
-    private AnonimizationMethod(AnonimizationType type, Scalar? color = default)
+    private AnonimizationMethod(AnonimizationType type, Color? color = default)
     {
         Type = type;
         ColorValue = color;
@@ -38,7 +37,9 @@ public sealed class AnonimizationMethod
     /// <returns></returns>
     public static AnonimizationMethod Color(byte r, byte g, byte b)
     {
-        Scalar color = new(b, g, r);
+        Color color = new(r, g, b);
         return new(AnonimizationType.Color, color);
     }
 }
+
+internal record Color(byte R, byte G, byte B);
