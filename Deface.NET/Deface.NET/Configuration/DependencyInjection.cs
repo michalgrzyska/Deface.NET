@@ -12,7 +12,7 @@ public static class DependencyInjection
     /// <summary>
     /// Adds Deface module to DI container
     /// </summary>
-    public static IServiceCollection AddDeface(this IServiceCollection services, Action<Settings>? builder = null)
+    public static IServiceCollection AddDeface(this IServiceCollection services, Action<Settings> builder)
     {
         Settings settings = new(builder);
 

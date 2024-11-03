@@ -5,7 +5,7 @@ public abstract class VideoTestScenarioBase(string videoPath)
 
     public async Task<ProcessingResult> Run(Action<Settings>? action = default)
     {
-        var defaceService = DefaceProvider.GetDefaceService();
+        var defaceService = DefaceProvider.GetDefaceService(null);
         var output = $"{Guid.NewGuid()}.mp4";
         var result = await defaceService.ProcessVideo(VideoPath, "test.mp4");
 

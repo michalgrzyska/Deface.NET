@@ -24,12 +24,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="ffmpeg.exe">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="ffprobe.exe">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 		<None Update="_Files\ultraface.onnx">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

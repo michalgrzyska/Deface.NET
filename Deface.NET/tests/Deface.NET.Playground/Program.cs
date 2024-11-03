@@ -4,7 +4,7 @@ using Deface.NET.TestResources;
 IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
 {
     options.AnonimizationShape = AnonimizationShape.Ellipse;
-    options.AnonimizationMethod = AnonimizationMethod.GaussianBlur; ;
+    options.AnonimizationMethod = AnonimizationMethod.GaussianBlur;
     options.RunDetectionEachNFrames = 2;
 
     options.FFMpegConfig.Windows.FFMpegPath = "C://ffmpeg//ffmpeg.exe";
