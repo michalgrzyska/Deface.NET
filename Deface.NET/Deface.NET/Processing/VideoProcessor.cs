@@ -22,11 +22,9 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
 
         var (videoInfo, processedFrames, time) = await GetProcessedFrames(inputPath);
 
-        _logger.Log(DefaceLoggingLevel.Basic, "Saving video...");
-
         SaveVideo(processedFrames, videoInfo, outputPath);
 
-        _logger.Log(DefaceLoggingLevel.Basic, "Video saved");
+        _logger.Log(DefaceLoggingLevel.Basic, "Video {InputPath} processed in {Time} and saved to {OutputPath}", inputPath, time, outputPath);
 
         return new ProcessingResult(inputPath, outputPath, time, Settings.Threshold, videoInfo.AverageFps);
     }
@@ -60,7 +58,7 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
             _lastDetectedObjects = _ultraFaceDetector.Detect(frame);
         }
 
-        SKBitmap processedFrame = Graphics.ShapeDrawer.DrawShapes(frame, _lastDetectedObjects, Settings);
+        SKBitmap processedFrame = ShapeDrawer.DrawShapes(frame, _lastDetectedObjects, Settings);
         return processedFrame;
     }
 
