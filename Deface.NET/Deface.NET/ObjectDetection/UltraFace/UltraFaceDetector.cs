@@ -5,11 +5,11 @@ using Microsoft.ML.Transforms.Onnx;
 
 namespace Deface.NET.ObjectDetection.UltraFace;
 
-internal class UltraFaceDetector : IObjectDetector
+internal class UltraFaceDetector : IObjectDetector, IDisposable
 {
-    private readonly MLContext mlContext;
-    private readonly OnnxScoringEstimator pipeline;
-    private readonly PredictionEngine<Input, Output> predictionEngine;
+    private readonly MLContext _mlContext;
+    private readonly OnnxScoringEstimator _pipeline;
+    private readonly PredictionEngine<Input, Output> _predictionEngine;
 
     private const int Width = 640;
     private const int Height = 480;
@@ -17,23 +17,25 @@ internal class UltraFaceDetector : IObjectDetector
 
     public UltraFaceDetector()
     {
-        mlContext = new();
-        pipeline = GetPipeline();
-        predictionEngine = GetPredictionEngine();
+        _mlContext = new();
+        _pipeline = GetPipeline();
+        _predictionEngine = GetPredictionEngine();
     }
 
     public List<DetectedObject> Detect(Frame frame)
     {
         float[] preprocessedImage = PreprocessImage(frame);
         Input input = new(preprocessedImage);
-        Output output = predictionEngine.Predict(input);
+        Output output = _predictionEngine.Predict(input);
 
         return PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height);
     }
 
+    public void Dispose() => _predictionEngine.Dispose();
+
     private OnnxScoringEstimator GetPipeline()
     {
-        return mlContext.Transforms.ApplyOnnxModel(
+        return _mlContext.Transforms.ApplyOnnxModel(
             modelFile: AppFiles.UltraFaceONNX,
             outputColumnNames: ["scores", "boxes"],
             inputColumnNames: ["input"]
@@ -42,8 +44,8 @@ internal class UltraFaceDetector : IObjectDetector
 
     private PredictionEngine<Input, Output> GetPredictionEngine()
     {
-        OnnxTransformer model = pipeline.Fit(mlContext.Data.LoadFromEnumerable(new List<Input>()));
-        return mlContext.Model.CreatePredictionEngine<Input, Output>(model);
+        OnnxTransformer model = _pipeline.Fit(_mlContext.Data.LoadFromEnumerable(new List<Input>()));
+        return _mlContext.Model.CreatePredictionEngine<Input, Output>(model);
     }
 
     private static float[] PreprocessImage(Frame frame)

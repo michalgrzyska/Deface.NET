@@ -13,7 +13,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
 
     private readonly static string[] ImageExtensions = [".jpg", ".jpeg", ".png"];
 
-    public void Dispose() { }
+    public void Dispose() => _detector.Dispose();
 
     public ProcessingResult Process(string inputPath, string outputPath, Action<Settings>? customSettings)
     {

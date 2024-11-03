@@ -9,11 +9,11 @@ namespace Deface.NET.Processing;
 internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> logger) : ProcessorBase(settings), IDisposable
 {
     private readonly DLogger<IDefaceService> _logger = logger;
-    private readonly UltraFaceDetector _ultraFaceDetector = new();
+    private readonly UltraFaceDetector _detector = new();
 
     private List<DetectedObject> _lastDetectedObjects = [];
 
-    public void Dispose() { }
+    public void Dispose() => _detector.Dispose();
 
     public async Task<ProcessingResult> Process(string inputPath, string outputPath, Action<Settings>? customSettings)
     {
@@ -53,7 +53,7 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
     {
         if (i % Settings.RunDetectionEachNFrames == 0)
         {
-            _lastDetectedObjects = _ultraFaceDetector.Detect(frame);
+            _lastDetectedObjects = _detector.Detect(frame);
         }
 
         Frame processedFrame = ShapeDrawer.DrawShapes(frame, _lastDetectedObjects, Settings);
