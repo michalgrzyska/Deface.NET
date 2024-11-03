@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deface.NET.UnitTests", "tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deface.NET.Playground", "tests\Deface.NET.Playground\Deface.NET.Playground.csproj", "{C1938B95-F609-4F9B-B92D-3A718D520870}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltrafaceConcept", "UltrafaceConcept\UltrafaceConcept.csproj", "{0B87E7B7-D534-44F9-8D10-8F7C3D6992D0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,14 +63,6 @@ Global
 		{C1938B95-F609-4F9B-B92D-3A718D520870}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C1938B95-F609-4F9B-B92D-3A718D520870}.Release|x64.ActiveCfg = Release|Any CPU
 		{C1938B95-F609-4F9B-B92D-3A718D520870}.Release|x64.Build.0 = Release|Any CPU
-		{0B87E7B7-D534-44F9-8D10-8F7C3D6992D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B87E7B7-D534-44F9-8D10-8F7C3D6992D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B87E7B7-D534-44F9-8D10-8F7C3D6992D0}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0B87E7B7-D534-44F9-8D10-8F7C3D6992D0}.Debug|x64.Build.0 = Debug|Any CPU
-		{0B87E7B7-D534-44F9-8D10-8F7C3D6992D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B87E7B7-D534-44F9-8D10-8F7C3D6992D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0B87E7B7-D534-44F9-8D10-8F7C3D6992D0}.Release|x64.ActiveCfg = Release|Any CPU
-		{0B87E7B7-D534-44F9-8D10-8F7C3D6992D0}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
