@@ -1,4 +1,5 @@
-﻿using Microsoft.ML;
+﻿using Deface.NET.Graphics;
+using Microsoft.ML;
 using Microsoft.ML.Transforms.Onnx;
 using SkiaSharp;
 
@@ -12,6 +13,7 @@ internal class UltraFaceDetector : IObjectDetector
 
     private const int Width = 640;
     private const int Height = 480;
+    private const float IouThreshold = 0.5f;
 
     public UltraFaceDetector()
     {
@@ -22,12 +24,11 @@ internal class UltraFaceDetector : IObjectDetector
 
     public List<DetectedObject> Detect(SKBitmap bitmap)
     {
-        var (scaleW, scaleH) = GetScale(bitmap);
         float[] preprocessedImage = PreprocessImage(bitmap);
         Input input = new(preprocessedImage);
         Output output = predictionEngine.Predict(input);
 
-        return PostProcess(output.Scores, output.Boxes, scaleW, scaleH);
+        return PostProcess(output.Scores, output.Boxes, bitmap.Width, bitmap.Height);
     }
 
     private OnnxScoringEstimator GetPipeline()
@@ -45,17 +46,9 @@ internal class UltraFaceDetector : IObjectDetector
         return mlContext.Model.CreatePredictionEngine<Input, Output>(model);
     }
 
-    private (float ScaleW, float ScaleH) GetScale(SKBitmap bitmap)
-    {
-        var scaleW = bitmap.Width / (Width + 0.0);
-        var scaleH = bitmap.Height / (Height + 0.0);
-
-        return ((float)scaleW, (float)scaleH);
-    }
-
     private static float[] PreprocessImage(SKBitmap bitmap)
     {
-        SKBitmap resized = bitmap.Resize(new SKSizeI(Width, Height), SKFilterQuality.High);
+        SKBitmap resized = GraphicsHelper.ScaleBitmapWithPadding(bitmap, Width, Height);
         float[] imageData = new float[1 * 3 * Height * Width];
         int index = 0;
 
@@ -76,7 +69,7 @@ internal class UltraFaceDetector : IObjectDetector
         return imageData;
     }
 
-    private static List<DetectedObject> PostProcess(float[] scores, float[] boxes, float scaleW, float scaleH, float confidenceThreshold = 0.5f, float iouThreshold = 0.5f)
+    private static List<DetectedObject> PostProcess(float[] scores, float[] boxes, int originalW, int originalH, float confidenceThreshold = 0.5f)
     {
         List<DetectedObject> faces = [];
         int numBoxes = scores.Length / 2;
@@ -87,16 +80,19 @@ internal class UltraFaceDetector : IObjectDetector
 
             if (score > confidenceThreshold)
             {
-                float x1 = boxes[i * 4] * Width * scaleW;
-                float y1 = boxes[i * 4 + 1] * Height * scaleH;
-                float x2 = boxes[i * 4 + 2] * Width * scaleW;
-                float y2 = boxes[i * 4 + 3] * Height * scaleH;
+                float x1 = boxes[i * 4] * Width;
+                float y1 = boxes[i * 4 + 1] * Height;
+                float x2 = boxes[i * 4 + 2] * Width;
+                float y2 = boxes[i * 4 + 3] * Height;
 
                 faces.Add(new((int)x1, (int)y1, (int)x2, (int)y2, score));
             }
         }
 
-        return NMS(faces, iouThreshold);
+        var boxesNms = NMS(faces, IouThreshold);
+        var rescaledBoxes = RescaleBoundingBoxes(boxesNms, originalW, originalH);
+
+        return rescaledBoxes;
     }
 
     private static List<DetectedObject> NMS(List<DetectedObject> faces, float iouThreshold)
@@ -130,5 +126,27 @@ internal class UltraFaceDetector : IObjectDetector
         int unionArea = box1Area + box2Area - intersectionArea;
 
         return (float)intersectionArea / unionArea;
+    }
+
+    private static List<DetectedObject> RescaleBoundingBoxes(List<DetectedObject> scaledBoxes, int originalWidth, int originalHeight)
+    {
+        float scale = Math.Min((float)Width / originalWidth, (float)Height / originalHeight);
+
+        int offsetX = (Width - (int)(originalWidth * scale)) / 2;
+        int offsetY = (Height - (int)(originalHeight * scale)) / 2;
+
+        List<DetectedObject> originalBoxes = [];
+
+        foreach (var box in scaledBoxes)
+        {
+            float x1 = (box.X1 - offsetX) / scale;
+            float y1 = (box.Y1 - offsetY) / scale;
+            float x2 = (box.X2 - offsetX) / scale;
+            float y2 = (box.Y2 - offsetY) / scale;
+
+            originalBoxes.Add(new DetectedObject((int)x1, (int)y1, (int)x2, (int)y2, box.Confidence));
+        }
+
+        return originalBoxes;
     }
 }

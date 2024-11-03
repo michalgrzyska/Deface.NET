@@ -70,4 +70,27 @@ internal static class GraphicsHelper
 
         return rgbData;
     }
+
+    public static SKBitmap ScaleBitmapWithPadding(SKBitmap originalBitmap, int targetWidth, int targetHeight)
+    {
+        int originalWidth = originalBitmap.Width;
+        int originalHeight = originalBitmap.Height;
+
+        float scale = Math.Min((float)targetWidth / originalWidth, (float)targetHeight / originalHeight);
+
+        int scaledWidth = (int)(originalWidth * scale);
+        int scaledHeight = (int)(originalHeight * scale);
+
+        int offsetX = (targetWidth - scaledWidth) / 2;
+        int offsetY = (targetHeight - scaledHeight) / 2;
+
+        SKBitmap outputBitmap = new(targetWidth, targetHeight);
+
+        using SKCanvas canvas = new(outputBitmap);
+        
+        canvas.Clear(SKColors.Black);
+        canvas.DrawBitmap(originalBitmap, new SKRect(offsetX, offsetY, offsetX + scaledWidth, offsetY + scaledHeight));
+        
+        return outputBitmap;
+    }
 }
