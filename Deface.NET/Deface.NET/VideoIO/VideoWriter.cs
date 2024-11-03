@@ -1,7 +1,7 @@
-﻿using SkiaSharp;
+﻿using Deface.NET.Graphics;
+using SkiaSharp;
 using System.Diagnostics;
 using System.Globalization;
-using System.Runtime.InteropServices;
 
 internal class VideoWriter
 {
@@ -39,7 +39,7 @@ internal class VideoWriter
                     throw new ArgumentException("Bitmap size does not match the specified width and height.");
                 }
 
-                byte[] rgbData = BitmapToRgb(bitmap);
+                byte[] rgbData = GraphicsHelper.ConvertSKBitmapToRgbByteArray(bitmap);
 
                 if (rgbData.Length != width * height * 3)
                 {
@@ -63,49 +63,5 @@ internal class VideoWriter
         {
             Console.WriteLine($"Error: {ex.Message}");
         }
-    }
-
-    private static byte[] BitmapToRgb(SKBitmap bitmap)
-    {
-        int width = bitmap.Width;
-        int height = bitmap.Height;
-        int bytesPerPixel = 3;
-        byte[] rgbData = new byte[width * height * bytesPerPixel];
-
-        using SKImage image = SKImage.FromBitmap(bitmap);
-        using SKPixmap pixmap = image.PeekPixels();
-        
-        if (pixmap == null)
-            throw new Exception("Failed to access pixels from SKImage.");
-
-        if (pixmap.ColorType != SKColorType.Bgra8888)
-            throw new Exception("The pixel format is not BGRA8888, which is expected.");
-
-        byte[] bgraData = new byte[width * height * 4]; 
-
-        var handle = GCHandle.Alloc(bgraData, GCHandleType.Pinned);
-
-        try
-        {
-            IntPtr bgraDataPtr = handle.AddrOfPinnedObject();
-
-            if (!pixmap.ReadPixels(new SKImageInfo(width, height, SKColorType.Bgra8888, SKAlphaType.Premul), bgraDataPtr, width * 4))
-            {
-                throw new Exception("Failed to read BGRA pixels into data array.");
-            }
-
-            for (int i = 0, j = 0; i < bgraData.Length; i += 4, j += 3)
-            {
-                rgbData[j] = bgraData[i + 2];
-                rgbData[j + 1] = bgraData[i + 1];
-                rgbData[j + 2] = bgraData[i];
-            }
-        }
-        finally
-        {
-            handle.Free();
-        }
-        
-        return rgbData;
     }
 }
