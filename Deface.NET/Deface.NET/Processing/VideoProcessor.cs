@@ -1,5 +1,4 @@
-﻿using Deface.NET.Graphics;
-using Deface.NET.Logging;
+﻿using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.ObjectDetection.UltraFace;
 using Deface.NET.VideoIO;
