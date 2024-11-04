@@ -23,7 +23,6 @@ internal class ColorShapeDrawer : IShapeDrawer
             DrawObject(canvas, paint, obj, settings);
         }
 
-        frame.UpdateNativeElement(bitmap);
         return frame;
     }
 

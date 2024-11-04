@@ -1,4 +1,5 @@
 ﻿using Deface.NET.ObjectDetection;
+using Microsoft.ML.Transforms;
 using SkiaSharp;
 
 namespace Deface.NET.Graphics.Drawers;
@@ -8,6 +9,7 @@ internal class GaussianBlurShapeDrawer : IShapeDrawer
     public Frame Draw(Frame frame, List<DetectedObject> objects, Settings settings)
     {
         var bitmap = frame.GetNativeElement();
+        float blurFactor = CalculateBlurFactor(frame);
 
         SKImageInfo imageInfo = new(bitmap.Width, bitmap.Height);
         using SKSurface surface = SKSurface.Create(imageInfo);
@@ -15,7 +17,7 @@ internal class GaussianBlurShapeDrawer : IShapeDrawer
 
         canvas.DrawBitmap(bitmap, 0, 0);
 
-        using SKImageFilter blurFilter = SKImageFilter.CreateBlur(10.0f, 10.0f); // TODO
+        using SKImageFilter blurFilter = SKImageFilter.CreateBlur(blurFactor, blurFactor);
         using SKPaint paint = new() { ImageFilter = blurFilter };
 
         foreach (DetectedObject obj in objects)
@@ -34,6 +36,12 @@ internal class GaussianBlurShapeDrawer : IShapeDrawer
 
         frame.UpdateNativeElement(resultBitmap);
         return frame;
+    }
+
+    private static float CalculateBlurFactor(Frame frame)
+    {
+        var longerSide = Math.Max(frame.Width, frame.Height);
+        return longerSide / 100;
     }
 
     private static void DrawShape(SKBitmap bitmap, SKPaint paint, Settings settings, DetectedObject obj, SKCanvas canvas)
