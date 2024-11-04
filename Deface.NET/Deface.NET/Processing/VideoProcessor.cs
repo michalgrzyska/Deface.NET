@@ -53,7 +53,7 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
     {
         if (i % Settings.RunDetectionEachNFrames == 0)
         {
-            _lastDetectedObjects = _detector.Detect(frame);
+            _lastDetectedObjects = _detector.Detect(frame, Settings.Threshold);
         }
 
         Frame processedFrame = ShapeDrawer.DrawShapes(frame, _lastDetectedObjects, Settings);

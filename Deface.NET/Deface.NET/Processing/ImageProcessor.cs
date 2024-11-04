@@ -73,7 +73,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
 
     private void ProcessImage(Frame image, string outputPath)
     {
-        List<DetectedObject> detectedObjects = _detector.Detect(image);
+        List<DetectedObject> detectedObjects = _detector.Detect(image, Settings.Threshold);
         Frame result = ShapeDrawer.DrawShapes(image, detectedObjects, Settings);
 
         result.SaveTo(outputPath);

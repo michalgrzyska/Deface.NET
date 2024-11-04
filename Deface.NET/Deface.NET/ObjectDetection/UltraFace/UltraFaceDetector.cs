@@ -22,13 +22,14 @@ internal class UltraFaceDetector : IObjectDetector, IDisposable
         _predictionEngine = GetPredictionEngine();
     }
 
-    public List<DetectedObject> Detect(Frame frame)
+    public List<DetectedObject> Detect(Frame frame, float threshold)
     {
         float[] preprocessedImage = PreprocessImage(frame);
+
         Input input = new(preprocessedImage);
         Output output = _predictionEngine.Predict(input);
 
-        return PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height);
+        return PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height, threshold);
     }
 
     public void Dispose() => _predictionEngine.Dispose();
@@ -71,7 +72,7 @@ internal class UltraFaceDetector : IObjectDetector, IDisposable
         return imageData;
     }
 
-    private static List<DetectedObject> PostProcess(float[] scores, float[] boxes, int originalW, int originalH, float confidenceThreshold = 0.5f)
+    private static List<DetectedObject> PostProcess(float[] scores, float[] boxes, int originalW, int originalH, float confidenceThreshold)
     {
         List<DetectedObject> faces = [];
         int numBoxes = scores.Length / 2;
