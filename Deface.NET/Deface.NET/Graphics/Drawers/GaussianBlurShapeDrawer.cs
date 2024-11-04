@@ -1,5 +1,4 @@
 ﻿using Deface.NET.ObjectDetection;
-using Microsoft.ML.Transforms;
 using SkiaSharp;
 
 namespace Deface.NET.Graphics.Drawers;

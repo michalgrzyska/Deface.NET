@@ -2,7 +2,7 @@
 
 namespace Deface.NET.ObjectDetection;
 
-internal interface IObjectDetector
+internal interface IDetector
 {
     public List<DetectedObject> Detect(Frame frame, float threshold);
 }

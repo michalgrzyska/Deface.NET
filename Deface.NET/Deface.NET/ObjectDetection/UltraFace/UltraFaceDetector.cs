@@ -5,7 +5,7 @@ using Microsoft.ML.Transforms.Onnx;
 
 namespace Deface.NET.ObjectDetection.UltraFace;
 
-internal class UltraFaceDetector : IObjectDetector, IDisposable
+internal class UltraFaceDetector : IDetector, IDisposable
 {
     private readonly MLContext _mlContext;
     private readonly OnnxScoringEstimator _pipeline;

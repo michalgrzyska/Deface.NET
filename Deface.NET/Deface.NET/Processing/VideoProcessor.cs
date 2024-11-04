@@ -1,15 +1,15 @@
 ﻿using Deface.NET.Graphics;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
-using Deface.NET.ObjectDetection.UltraFace;
 using Deface.NET.VideoIO;
 
 namespace Deface.NET.Processing;
 
-internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> logger) : ProcessorBase(settings), IDisposable
+internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> logger, ObjectDetector detector) 
+    : ProcessorBase(settings), IDisposable
 {
     private readonly DLogger<IDefaceService> _logger = logger;
-    private readonly UltraFaceDetector _detector = new();
+    private readonly ObjectDetector _detector = detector;
 
     private List<DetectedObject> _lastDetectedObjects = [];
 
@@ -53,7 +53,7 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
     {
         if (i % Settings.RunDetectionEachNFrames == 0)
         {
-            _lastDetectedObjects = _detector.Detect(frame, Settings.Threshold);
+            _lastDetectedObjects = _detector.Detect(frame, Settings);
         }
 
         Frame processedFrame = ShapeDrawer.DrawShapes(frame, _lastDetectedObjects, Settings);

@@ -1,15 +1,15 @@
 ﻿using Deface.NET.Graphics;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
-using Deface.NET.ObjectDetection.UltraFace;
 using System.Diagnostics;
 
 namespace Deface.NET.Processing;
 
-internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> logger) : ProcessorBase(settings), IDisposable
+internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> logger, ObjectDetector detector) 
+    : ProcessorBase(settings), IDisposable
 {
     private readonly DLogger<IDefaceService> _logger = logger;
-    private readonly UltraFaceDetector _detector = new();
+    private readonly ObjectDetector _detector = detector;
 
     private readonly static string[] ImageExtensions = [".jpg", ".jpeg", ".png"];
 
@@ -73,7 +73,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
 
     private void ProcessImage(Frame image, string outputPath)
     {
-        List<DetectedObject> detectedObjects = _detector.Detect(image, Settings.Threshold);
+        List<DetectedObject> detectedObjects = _detector.Detect(image, Settings);
         Frame result = ShapeDrawer.DrawShapes(image, detectedObjects, Settings);
 
         result.SaveTo(outputPath);

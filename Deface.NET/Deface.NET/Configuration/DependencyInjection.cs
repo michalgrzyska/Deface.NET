@@ -1,4 +1,5 @@
 ﻿using Deface.NET.Logging;
+using Deface.NET.ObjectDetection;
 using Deface.NET.Processing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +23,7 @@ public static class DependencyInjection
         services.AddDefaultLoggerIfNeeded();
         services.AddTransient<VideoProcessor>();
         services.AddTransient<ImageProcessor>();
+        services.AddSingleton<ObjectDetector>();
 
         return services;
     }

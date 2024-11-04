@@ -16,8 +16,6 @@ internal static class ShapeDrawer
             _ => throw new NotImplementedException()
         };
 
-        objects = objects.Select(x => x.GetResized(settings.MaskScale)).ToList();
-
         return drawer.Draw(frame, objects, settings);
     }
 }
