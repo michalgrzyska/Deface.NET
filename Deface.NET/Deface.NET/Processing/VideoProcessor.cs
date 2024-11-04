@@ -19,10 +19,15 @@ internal sealed class VideoProcessor(Settings settings, DLogger<IDefaceService> 
     {
         ApplyScopedSettings(customSettings);
 
+        _logger.Log(DefaceLoggingLevel.Basic, "Video processing started for \"{InputPath}\"", inputPath);
+
         var (videoInfo, processedFrames, time) = await GetProcessedFrames(inputPath);
+
+        _logger.Log(DefaceLoggingLevel.Detailed, "Saving processed video \"{InputPath}\" to a destinate location", inputPath);
+
         VideoWriter.WriteVideo(processedFrames, videoInfo, outputPath, Settings);
 
-        _logger.Log(DefaceLoggingLevel.Basic, "Video {InputPath} processed in {Time} and saved to {OutputPath}", inputPath, time, outputPath);
+        _logger.Log(DefaceLoggingLevel.Basic, "Video \"{InputPath}\" processed in {Time} and saved to \"{OutputPath}\"", inputPath, time, outputPath);
 
         return new ProcessingResult(inputPath, outputPath, time, Settings.Threshold, videoInfo.AverageFps);
     }
