@@ -40,7 +40,7 @@ internal class UltraFaceDetector : IObjectDetector, IDisposable
             outputColumnNames: ["scores", "boxes"],
             inputColumnNames: ["input"]
         );
-    }
+    } 
 
     private PredictionEngine<Input, Output> GetPredictionEngine()
     {
