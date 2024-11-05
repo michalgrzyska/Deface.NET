@@ -18,7 +18,7 @@ internal static class SettingsValidator
     private static void ValidateThreshold(float threshold)
     {
         ValidationHelper.MustBeGreaterOrEqualTo(threshold, 0, nameof(Settings.Threshold));
-        ValidationHelper.MustBeLessThan(threshold, 1, nameof(Settings.Threshold));
+        ValidationHelper.MustBeLessThanOrEqualTo(threshold, 1, nameof(Settings.Threshold));
     }
 
     private static void ValidateRunDetectionEachNFrames(int runDetectionEachNFrames)
