@@ -6,8 +6,7 @@
 public enum AnonimizationShape
 {
     /// <summary>
-    /// Anonimization filter will be shaped as ellipse. Does not work with <see cref="AnonimizationMethod.Mosaic"></see>
-    /// </summary>
+    /// Anonimization filter will be shaped as ellipse.
     Ellipse = 1,
 
     /// <summary>

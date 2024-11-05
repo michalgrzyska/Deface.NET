@@ -48,6 +48,15 @@ public class Settings
     public float MaskScale { get; set; } = 1.2f;
 
     /// <summary>
+    /// Represents a file format of image if image processing is used.
+    /// Does not affect the extension provided in output filename.
+    /// For example, if <see cref="ImageFormat.Jpeg(int)"/> is provided,
+    /// but output path points to ".png" file, an image will be saved with
+    /// ".png" extension but with JPEG compression.
+    /// </summary>
+    public ImageFormat ImageFormat { get; set; } = ImageFormat.Png;
+
+    /// <summary>
     /// Configuration settings for FFMpeg and FFProbe for all platforms. Multiple platforms can be configured, if the target platform is not known.
     /// </summary>
     public FFMpegConfig FFMpegConfig { get; set; } = new();

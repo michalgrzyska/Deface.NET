@@ -76,7 +76,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         List<DetectedObject> detectedObjects = _detector.Detect(image, Settings);
         Frame result = ShapeDrawer.DrawShapes(image, detectedObjects, Settings);
 
-        result.SaveTo(outputPath);
+        result.SaveTo(outputPath, Settings.ImageFormat);
     }
 
     private static string GetOutputPath(string inputPath, string outputDirPath)

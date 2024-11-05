@@ -9,10 +9,11 @@ IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
     options.AnonimizationMethod = AnonimizationMethod.GaussianBlur;
     options.RunDetectionEachNFrames = 3;
     options.AnonimizationShape = AnonimizationShape.Ellipse;
+    options.ImageFormat = ImageFormat.Jpeg(10);
 });
 
-var result = await defaceService.ProcessVideo(TestResources.Video_Short_640_360_24fps, "C://DefaceTest//testt.mp4");
+//var result = await defaceService.ProcessVideo(TestResources.Video_Short_640_360_24fps, "C://DefaceTest//testt.mp4");
 
-//var result = defaceService.ProcessImage(TestResources.Photo1, "C://DefaceTest//1.png");
+var result = defaceService.ProcessImage(TestResources.Photo1, "C://DefaceTest//1.png");
 
 var x = 5;

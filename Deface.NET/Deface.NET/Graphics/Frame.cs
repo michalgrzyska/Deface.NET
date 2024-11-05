@@ -42,10 +42,10 @@ internal class Frame : IDisposable
         _bitmap = bitmap;
     }
 
-    public void SaveTo(string path)
+    public void SaveTo(string path, ImageFormat imageFormat)
     {
         using SKImage resultImage = SKImage.FromBitmap(_bitmap);
-        using SKData data = resultImage.Encode(SKEncodedImageFormat.Png, 100);
+        using SKData data = resultImage.Encode(imageFormat.Format, imageFormat.Quality);
         using FileStream stream = File.OpenWrite(path);
 
         data.SaveTo(stream);

@@ -5,10 +5,10 @@ namespace Deface.NET;
 /// <summary>
 /// Specifies the method of object anonimization.
 /// </summary>
-public sealed class AnonimizationMethod
+public readonly struct AnonimizationMethod
 {
-    internal AnonimizationType Type { get; private set; }
-    internal Color? ColorValue { get; private set; }
+    internal AnonimizationType Type { get; private init; }
+    internal Color? ColorValue { get; private init; }
 
     private AnonimizationMethod(AnonimizationType type, Color? color = default)
     {
@@ -40,5 +40,3 @@ public sealed class AnonimizationMethod
         return new(AnonimizationType.Color, color);
     }
 }
-
-internal record Color(byte R, byte G, byte B);
