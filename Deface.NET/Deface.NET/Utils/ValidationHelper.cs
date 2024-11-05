@@ -25,9 +25,17 @@ internal static class ValidationHelper
 
     public static void MustBeLessThan<T>(T prop, T value, string nameOfProp) where T : INumber<T>
     {
-        if (prop > value)
+        if (prop >= value)
         {
             throw new ArgumentOutOfRangeException(nameOfProp, $"Value must be less than {value}");
+        }
+    }
+
+    public static void MustBeLessThanOrEqualTo<T>(T prop, T value, string nameOfProp) where T : INumber<T>
+    {
+        if (prop > value)
+        {
+            throw new ArgumentOutOfRangeException(nameOfProp, $"Value must be less than or equal to {value}");
         }
     }
 
