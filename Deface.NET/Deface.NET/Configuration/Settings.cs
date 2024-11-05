@@ -1,4 +1,5 @@
 ﻿using Deface.NET.Configuration.FFMpeg;
+using Deface.NET.Utils;
 
 namespace Deface.NET;
 
@@ -82,20 +83,12 @@ public class Settings
 
     private void Validate()
     {
-        if (Threshold < 0 || Threshold > 1)
-        {
-            throw new InvalidDataException($"{nameof(Threshold)} must be in range from 0 to 1.");
-        }
+        ValidationHelper.MustBeGreaterOrEqualTo(Threshold, 0, nameof(Threshold));
+        ValidationHelper.MustBeLessThan(Threshold, 1, nameof(Threshold));
 
-        if (RunDetectionEachNFrames <= 0)
-        {
-            throw new InvalidDataException($"{nameof(RunDetectionEachNFrames)} must be 1 or greater.");
-        }
+        ValidationHelper.MustBeGreaterOrEqualTo(RunDetectionEachNFrames, 1, nameof(RunDetectionEachNFrames));
 
-        if (MaskScale < 1)
-        {
-            throw new InvalidDataException($"{nameof(MaskScale)} must at least 1.0.");
-        }
+        ValidationHelper.MustBeGreaterOrEqualTo(MaskScale, 1, nameof(MaskScale));
 
         FFMpegConfigValidator.Validate(FFMpegConfig, nameof(FFMpegConfig));
     }
