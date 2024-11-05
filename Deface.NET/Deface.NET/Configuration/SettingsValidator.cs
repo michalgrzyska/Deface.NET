@@ -1,4 +1,4 @@
-﻿
+﻿using Deface.NET.Configuration.FFMpeg;
 using Deface.NET.Utils;
 
 namespace Deface.NET.Configuration;
@@ -10,6 +10,8 @@ internal static class SettingsValidator
         ValidateThreshold(settings.Threshold);
         ValidateRunDetectionEachNFrames(settings.RunDetectionEachNFrames);
         ValidateMaskScale(settings.MaskScale);
+
+        FFMpegConfigValidator.Validate(settings.FFMpegConfig, nameof(Settings.FFMpegConfig));
     }
 
     private static void ValidateThreshold(float threshold)

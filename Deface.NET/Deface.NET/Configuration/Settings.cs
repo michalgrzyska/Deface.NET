@@ -1,5 +1,4 @@
-﻿using Deface.NET.Configuration.FFMpeg;
-using Deface.NET.Utils;
+﻿using Deface.NET.Configuration;
 
 namespace Deface.NET;
 
@@ -72,24 +71,12 @@ public class Settings
         if (builderAction is not null)
         {
             builderAction(this);
-            Validate();
+            SettingsValidator.Validate(this);
         }
     }
 
     internal Settings ShallowCopy()
     {
         return (Settings)MemberwiseClone();
-    }
-
-    private void Validate()
-    {
-        ValidationHelper.MustBeGreaterOrEqualTo(Threshold, 0, nameof(Threshold));
-        ValidationHelper.MustBeLessThan(Threshold, 1, nameof(Threshold));
-
-        ValidationHelper.MustBeGreaterOrEqualTo(RunDetectionEachNFrames, 1, nameof(RunDetectionEachNFrames));
-
-        ValidationHelper.MustBeGreaterOrEqualTo(MaskScale, 1, nameof(MaskScale));
-
-        FFMpegConfigValidator.Validate(FFMpegConfig, nameof(FFMpegConfig));
     }
 }

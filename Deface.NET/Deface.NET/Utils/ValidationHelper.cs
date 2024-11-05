@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace Deface.NET.Utils;
 
@@ -21,14 +20,6 @@ internal static class ValidationHelper
         if (prop < value)
         {
             throw new ArgumentOutOfRangeException(nameOfProp, $"Value must be greater or equal to {value}");
-        }
-    }
-
-    public static void MustBeGreaterThan<T>(T prop, T value, string nameOfProp) where T : INumber<T>
-    {
-        if (prop <= value)
-        {
-            throw new ArgumentOutOfRangeException(nameOfProp, $"Value must be greater than {value}");
         }
     }
 
