@@ -1,4 +1,5 @@
 ﻿using Deface.NET.Configuration;
+using Deface.NET.Utils;
 
 namespace Deface.NET;
 
@@ -59,10 +60,12 @@ public class Settings
     /// <summary>
     /// Configuration settings for FFMpeg and FFProbe for all platforms. Multiple platforms can be configured, if the target platform is not known.
     /// </summary>
-    public FFMpegConfig FFMpegConfig { get; set; } = new();
+    public FFMpegConfig FFMpegConfig { get; set; }
 
-    internal Settings(Action<Settings>? builderAction)
+    internal Settings(Action<Settings>? builderAction, Platform platform)
     {
+        FFMpegConfig = new(platform);
+
         ApplyAction(builderAction);
     }
 

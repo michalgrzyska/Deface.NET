@@ -1,6 +1,7 @@
 ﻿using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.Processing;
+using Deface.NET.Utils;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Deface.NET;
@@ -15,7 +16,8 @@ public static class DependencyInjection
     /// </summary>
     public static IServiceCollection AddDeface(this IServiceCollection services, Action<Settings> builder)
     {
-        Settings settings = new(builder);
+        Platform platform = PlatformChecker.GetPlatform();
+        Settings settings = new(builder, platform);
 
         services.AddSingleton(settings);
         services.AddSingleton<IDefaceService, DefaceService>();

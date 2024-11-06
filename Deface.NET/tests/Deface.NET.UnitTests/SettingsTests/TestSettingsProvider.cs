@@ -1,6 +1,8 @@
-﻿namespace Deface.NET.UnitTests.SettingsTests;
+﻿using Deface.NET.Utils;
 
-public sealed class TestSettingsProvider : IDisposable
+namespace Deface.NET.UnitTests.SettingsTests;
+
+internal sealed class TestSettingsProvider : IDisposable
 {
     private readonly string _testFFMpegFile;
     private readonly string _testFFProbeFile;
@@ -11,15 +13,18 @@ public sealed class TestSettingsProvider : IDisposable
         _testFFProbeFile = Path.GetTempFileName();
     }
 
-    public Settings GetSettings()
+    public Settings GetSettings(Platform platform = Platform.Windows)
     {
         Action<Settings> action = settings =>
         {
             settings.FFMpegConfig.Windows.FFMpegPath = _testFFMpegFile;
             settings.FFMpegConfig.Windows.FFProbePath = _testFFProbeFile;
+
+            settings.FFMpegConfig.Linux.FFMpegPath = _testFFMpegFile;
+            settings.FFMpegConfig.Linux.FFProbePath = _testFFProbeFile;
         };
 
-        return new(action);
+        return new(action, platform);
     }
 
     public void Dispose()

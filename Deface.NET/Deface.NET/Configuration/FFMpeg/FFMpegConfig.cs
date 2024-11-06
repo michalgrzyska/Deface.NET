@@ -7,6 +7,8 @@ namespace Deface.NET;
 /// </summary>
 public class FFMpegConfig
 {
+    private readonly Platform _platform;
+
     /// <summary>
     /// FFMpeg and FFProbe configuration for Windows platform.
     /// </summary>
@@ -17,11 +19,14 @@ public class FFMpegConfig
     /// </summary>
     public FFMpegPlatformConfig Linux { get; set; } = new();
 
+    internal FFMpegConfig(Platform platform)
+    {
+        _platform = platform;
+    }
+
     internal FFMpegPlatformConfig GetCurrentConfig()
     {
-        var currentPlatform = PlatformChecker.GetPlatform();
-
-        return currentPlatform switch
+        return _platform switch
         {
             Platform.Windows => Windows,
             Platform.Linux => Linux,
