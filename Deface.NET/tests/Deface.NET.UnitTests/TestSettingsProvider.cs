@@ -1,6 +1,6 @@
 ﻿using Deface.NET.Utils;
 
-namespace Deface.NET.UnitTests.SettingsTests;
+namespace Deface.NET.UnitTests;
 
 internal sealed class TestSettingsProvider : IDisposable
 {
