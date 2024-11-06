@@ -12,7 +12,6 @@ internal static class SettingsValidator
         ValidateMaskScale(settings.MaskScale);
 
         FFMpegConfigValidator.Validate(settings.FFMpegConfig, nameof(Settings.FFMpegConfig));
-        ImageFormatValidator.Validate(settings.ImageFormat);
     }
 
     private static void ValidateThreshold(float threshold)

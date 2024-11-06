@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using Deface.NET.Configuration;
+using SkiaSharp;
 
 namespace Deface.NET;
 
@@ -18,6 +19,8 @@ public readonly struct ImageFormat
     {
         Format = format;
         Quality = quality;
+
+        ImageFormatValidator.Validate(this);
     }
 
     /// <summary>
@@ -26,11 +29,6 @@ public readonly struct ImageFormat
     /// <param name="quality">Image quality. Accepted values: 1 - 100.</param>
     public static ImageFormat Jpeg(int quality = 85)
     {
-        if (quality < 1 || quality > 100)
-        {
-            throw new ArgumentOutOfRangeException(nameof(quality), $"Value must be in range 1-100");
-        }
-
         return new(SKEncodedImageFormat.Jpeg, quality);
     }
 

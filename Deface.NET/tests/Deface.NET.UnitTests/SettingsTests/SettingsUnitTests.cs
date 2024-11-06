@@ -85,6 +85,44 @@ public class SettingsUnitTests : IDisposable
         settings.ApplyAction(settingsAction);
     }
 
+    [Theory]
+    [InlineData(0.99999)]
+    [InlineData(0)]
+    [InlineData(0.9)]
+    [InlineData(0.1)]
+    [InlineData(-1)]
+    [InlineData(-100)]
+    public void MaskScale_IncorrectData_ThrowsArgumentOutOfRangeException(float maskScale)
+    {
+        var settings = _settingsProvider.GetSettings();
+
+        Action<Settings> settingsAction = settings =>
+        {
+            settings.MaskScale = maskScale;
+        };
+
+        var action = () => settings.ApplyAction(settingsAction);
+
+        action.Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [Theory]
+    [InlineData(1.0f)]
+    [InlineData(1.1f)]
+    [InlineData(2f)]
+    [InlineData(500f)]
+    public void MaskScale_CorrectData_NoExceptionThrown(float maskScale)
+    {
+        var settings = _settingsProvider.GetSettings();
+
+        Action<Settings> settingsAction = settings =>
+        {
+            settings.MaskScale = maskScale;
+        };
+
+        settings.ApplyAction(settingsAction);
+    }
+
     public void Dispose()
     {
         _settingsProvider.Dispose();
