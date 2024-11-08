@@ -5,20 +5,22 @@ using Deface.NET.ObjectDetection;
 
 namespace Deface.NET.Graphics;
 
-internal class ShapeDrawingService(ScopedSettingsProvider settingsProvider)
+internal class ShapeDrawingService
 {
-    private readonly Settings _settings = settingsProvider.Settings;
+    private readonly IShapeDrawer _shapeDrawer;
 
-    public Frame DrawShapes(Frame frame, List<DetectedObject> objects)
+    public ShapeDrawingService(ScopedSettingsProvider settingsProvider)
     {
-        IShapeDrawer drawer = _settings.AnonimizationMethod.Type switch
+        var settings = settingsProvider.Settings;
+
+        _shapeDrawer = settings.AnonimizationMethod.Type switch
         {
-            AnonimizationType.Color => new ColorShapeDrawer(_settings),
-            AnonimizationType.GaussianBlur => new GaussianBlurShapeDrawer(_settings),
-            AnonimizationType.Mosaic => new MosaicShapeDrawer(_settings),
+            AnonimizationType.Color => new ColorShapeDrawer(settings),
+            AnonimizationType.GaussianBlur => new GaussianBlurShapeDrawer(settings),
+            AnonimizationType.Mosaic => new MosaicShapeDrawer(settings),
             _ => throw new NotImplementedException()
         };
-
-        return drawer.Draw(frame, objects);
     }
+
+    public Frame DrawShapes(Frame frame, List<DetectedObject> objects) => _shapeDrawer.Draw(frame, objects);
 }

@@ -8,8 +8,8 @@ namespace Deface.NET.Processing;
 
 internal sealed class ImageProcessor
 (
-    ScopedSettingsProvider settingsProvider, 
-    DLogger<IDefaceService> logger, 
+    ScopedSettingsProvider settingsProvider,
+    DLogger<IDefaceService> logger,
     ObjectDetector detector,
     ShapeDrawingService shapeDrawingService
     ) : IDisposable

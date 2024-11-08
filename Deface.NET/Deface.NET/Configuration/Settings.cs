@@ -1,5 +1,4 @@
-﻿using Deface.NET.Configuration;
-using Deface.NET.Utils;
+﻿using Deface.NET.Utils;
 
 namespace Deface.NET;
 

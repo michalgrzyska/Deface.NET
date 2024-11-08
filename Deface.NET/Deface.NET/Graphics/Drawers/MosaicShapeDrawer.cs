@@ -20,9 +20,9 @@ internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
 
             using SKBitmap roiBitmap = new(rect.Width, rect.Height);
             using SKCanvas roiCanvas = new(roiBitmap);
-                
+
             roiCanvas.DrawBitmap(bitmap, rect, new SKRect(0, 0, roiBitmap.Width, roiBitmap.Height));
-                
+
             SKBitmap mosaicBitmap = CreateMosaic(roiBitmap, mosaicSize);
 
             if (_settings.AnonimizationShape == AnonimizationShape.Rectangle)

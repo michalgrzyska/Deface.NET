@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Google.Protobuf.WellKnownTypes;
 
 namespace Deface.NET.UnitTests.SettingsTests;
 

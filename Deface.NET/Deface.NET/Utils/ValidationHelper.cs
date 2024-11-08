@@ -7,27 +7,11 @@ namespace Deface.NET.Utils;
 /// </summary>
 internal static class ValidationHelper
 {
-    public static void MustNotBeNull<T>(T prop, string nameOfProp) where T : class
-    {
-        if (prop is null)
-        {
-            throw new ArgumentNullException(nameOfProp);
-        }
-    }
-
     public static void MustBeGreaterOrEqualTo<T>(T prop, T value, string nameOfProp) where T : INumber<T>
     {
         if (prop < value)
         {
             throw new ArgumentOutOfRangeException(nameOfProp, $"Value must be greater or equal to {value}");
-        }
-    }
-
-    public static void MustBeLessThan<T>(T prop, T value, string nameOfProp) where T : INumber<T>
-    {
-        if (prop >= value)
-        {
-            throw new ArgumentOutOfRangeException(nameOfProp, $"Value must be less than {value}");
         }
     }
 

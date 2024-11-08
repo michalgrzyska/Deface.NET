@@ -9,8 +9,8 @@ namespace Deface.NET.Processing;
 
 internal sealed class VideoProcessor
 (
-    ScopedSettingsProvider settingsProvider, 
-    DLogger<IDefaceService> logger, 
+    ScopedSettingsProvider settingsProvider,
+    DLogger<IDefaceService> logger,
     ObjectDetector detector,
     VideoWriterService videoWriterService,
     VideoReaderService videoReaderService,

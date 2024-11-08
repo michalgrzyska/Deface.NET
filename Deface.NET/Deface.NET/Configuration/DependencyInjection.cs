@@ -29,12 +29,12 @@ public static class DependencyInjection
         services.AddTransient(typeof(DLogger<>));
         services.AddDefaultLoggerIfNeeded();
 
-        services.AddTransient<VideoProcessor>();
-        services.AddTransient<ImageProcessor>();
-        services.AddTransient<VideoWriterService>();
-        services.AddTransient<VideoReaderService>();
-        services.AddTransient<VideoInfoService>();
-        services.AddTransient<ShapeDrawingService>();
+        services.AddScoped<VideoProcessor>();
+        services.AddScoped<ImageProcessor>();
+        services.AddScoped<VideoWriterService>();
+        services.AddScoped<VideoReaderService>();
+        services.AddScoped<VideoInfoService>();
+        services.AddScoped<ShapeDrawingService>();
 
         services.AddSingleton<ObjectDetector>();
 

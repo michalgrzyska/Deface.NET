@@ -15,7 +15,7 @@ internal class VideoReaderService(ScopedSettingsProvider settingsProvider, Video
 
         using VideoReader videoReader = new(videoFilePath, frameProcess, _settings.FFMpegPath, videoInfo);
         await videoReader.ProcessVideo();
-        
+
         return videoInfo;
     }
 }
