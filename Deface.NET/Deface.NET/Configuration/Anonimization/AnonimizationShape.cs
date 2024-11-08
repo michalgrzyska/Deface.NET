@@ -7,6 +7,7 @@ public enum AnonimizationShape
 {
     /// <summary>
     /// Anonimization filter will be shaped as ellipse.
+    /// </summary>
     Ellipse = 1,
 
     /// <summary>

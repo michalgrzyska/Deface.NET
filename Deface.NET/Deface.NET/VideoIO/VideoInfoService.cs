@@ -1,14 +1,17 @@
-﻿using Deface.NET.Utils;
+﻿using Deface.NET.Configuration.Provider;
+using Deface.NET.Utils;
 using Deface.NET.VideoIO.Models;
 using System.Text.Json;
 
 namespace Deface.NET.VideoIO;
 
-internal record VideoInfo(int Width, int Height, int TotalFrames, float TargetFps, float AverageFps)
+internal class VideoInfoService(ScopedSettingsProvider settingsProvider)
 {
-    public static async Task<VideoInfo> GetInfo(string filePath, Settings settings)
+    private readonly Settings _settings = settingsProvider.Settings;
+
+    public async Task<VideoInfo> GetInfo(string filePath)
     {
-        using ExternalProcess process = GetProcess(filePath, settings);
+        using ExternalProcess process = GetProcess(filePath);
 
         var processOutput = await process.ExecuteWithOutput();
         var output = JsonSerializer.Deserialize<VideoInfoOutput>(processOutput)!;
@@ -16,9 +19,9 @@ internal record VideoInfo(int Width, int Height, int TotalFrames, float TargetFp
         return ConvertOutputToVideoInfo(output);
     }
 
-    private static ExternalProcess GetProcess(string filePath, Settings settings)
+    private ExternalProcess GetProcess(string filePath)
     {
-        string ffProbePath = settings.FFMpegConfig.GetCurrentConfig().FFProbePath;
+        string ffProbePath = _settings.FFProbePath;
 
         string args = string.Join(" ",
         [

@@ -3,9 +3,11 @@ using SkiaSharp;
 
 namespace Deface.NET.Graphics.Drawers;
 
-internal class GaussianBlurShapeDrawer : IShapeDrawer
+internal class GaussianBlurShapeDrawer(Settings settings) : IShapeDrawer
 {
-    public Frame Draw(Frame frame, List<DetectedObject> objects, Settings settings)
+    private readonly Settings _settings = settings;
+
+    public Frame Draw(Frame frame, List<DetectedObject> objects)
     {
         var bitmap = frame.GetNativeElement();
         float blurFactor = CalculateBlurFactor(frame);
@@ -23,7 +25,7 @@ internal class GaussianBlurShapeDrawer : IShapeDrawer
         {
             canvas.Save();
 
-            DrawShape(bitmap, paint, settings, obj, canvas);
+            DrawShape(bitmap, paint, obj, canvas);
 
             canvas.Restore();
         }
@@ -43,16 +45,16 @@ internal class GaussianBlurShapeDrawer : IShapeDrawer
         return longerSide / 100;
     }
 
-    private static void DrawShape(SKBitmap bitmap, SKPaint paint, Settings settings, DetectedObject obj, SKCanvas canvas)
+    private void DrawShape(SKBitmap bitmap, SKPaint paint, DetectedObject obj, SKCanvas canvas)
     {
         SKRect blurRect = new(obj.X1, obj.Y1, obj.X2, obj.Y2);
 
-        if (settings.AnonimizationShape == AnonimizationShape.Rectangle)
+        if (_settings.AnonimizationShape == AnonimizationShape.Rectangle)
         {
             canvas.ClipRect(blurRect);
             canvas.DrawBitmap(bitmap, 0, 0, paint);
         }
-        else if (settings.AnonimizationShape == AnonimizationShape.Ellipse)
+        else if (_settings.AnonimizationShape == AnonimizationShape.Ellipse)
         {
             using SKPath path = new();
 

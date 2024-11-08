@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Deface.NET.UnitTests.SettingsTests;
 
@@ -121,6 +122,70 @@ public class SettingsUnitTests : IDisposable
         };
 
         settings.ApplyAction(settingsAction);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void FFMpegPath_NullOrWhitespace_ArgumentNullExceptionThrown(string? value)
+    {
+        var settings = _settingsProvider.GetSettings();
+
+        Action<Settings> settingsAction = settings =>
+        {
+            settings.FFMpegPath = value!;
+        };
+
+        var action = () => settings.ApplyAction(settingsAction);
+        action.Should().Throw<ArgumentNullException>();
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void FFProbePath_NullOrWhitespace_ArgumentNullExceptionThrown(string? value)
+    {
+        var settings = _settingsProvider.GetSettings();
+
+        Action<Settings> settingsAction = settings =>
+        {
+            settings.FFProbePath = value!;
+        };
+
+        var action = () => settings.ApplyAction(settingsAction);
+        action.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void FFMpegPath_NonExistingFilePath_FileNotFoundExceptionThrow()
+    {
+        var filePath = $"{Path.GetTempPath()}/{Guid.NewGuid()}";
+        var settings = _settingsProvider.GetSettings();
+
+        Action<Settings> settingsAction = settings =>
+        {
+            settings.FFMpegPath = filePath;
+        };
+
+        var action = () => settings.ApplyAction(settingsAction);
+        action.Should().Throw<FileNotFoundException>();
+    }
+
+    [Fact]
+    public void FFProbePath_NonExistingFilePath_FileNotFoundExceptionThrow()
+    {
+        var filePath = $"{Path.GetTempPath()}/{Guid.NewGuid()}";
+        var settings = _settingsProvider.GetSettings();
+
+        Action<Settings> settingsAction = settings =>
+        {
+            settings.FFProbePath = filePath;
+        };
+
+        var action = () => settings.ApplyAction(settingsAction);
+        action.Should().Throw<FileNotFoundException>();
     }
 
     public void Dispose()

@@ -39,32 +39,39 @@ internal static class ValidationHelper
         }
     }
 
-    public static void MustNotBeNullOrWhiteSpace(string prop, string nameOfProp, string prefix = "")
+    public static void MustNotBeNullOrWhiteSpace(string prop, string nameOfProp)
     {
-        var message = BuildPrefix(prefix);
-
         if (string.IsNullOrWhiteSpace(prop))
         {
-            message += $"{nameOfProp} must not be null or whitespace/empty";
-            throw new ArgumentNullException(nameOfProp, message);
+            throw new ArgumentNullException(nameOfProp, $"{nameOfProp} must not be null or whitespace/empty");
         }
     }
 
-    public static void FileMustExist(string prop, string nameOfProp, string prefix = "")
+    public static void FileMustExist(string path, string nameOfProp)
     {
-        var message = BuildPrefix(prefix);
-
-        if (!File.Exists(prop))
+        if (!File.Exists(path))
         {
-            message += $"{nameOfProp} does not contain a name of existing file";
-            throw new FileNotFoundException(message);
+            throw new FileNotFoundException($"{nameOfProp} does not contain a name of existing file");
         }
     }
 
-    private static string BuildPrefix(string prefix)
+    public static void DirectoryMustExist(string path, string nameOfProp)
     {
-        return string.IsNullOrWhiteSpace(prefix)
-            ? ""
-            : $"{prefix}: ";
+        if (!Directory.Exists(path))
+        {
+            throw new DirectoryNotFoundException($"{nameOfProp} does not contain a name of existing directory");
+        }
+    }
+
+    public static void ValidateFilePath(string path, string nameOfProp)
+    {
+        MustNotBeNullOrWhiteSpace(path, nameOfProp);
+        FileMustExist(path, nameOfProp);
+    }
+
+    public static void ValidateDirectoryPath(string path, string nameOfProp)
+    {
+        MustNotBeNullOrWhiteSpace(path, nameOfProp);
+        DirectoryMustExist(path, nameOfProp);
     }
 }

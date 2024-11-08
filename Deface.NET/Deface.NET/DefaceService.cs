@@ -1,60 +1,44 @@
-﻿using Deface.NET.Processing;
+﻿using Deface.NET.Configuration.Provider;
+using Deface.NET.Processing;
+using Deface.NET.Utils;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Deface.NET;
 
-internal sealed class DefaceService(IServiceProvider serviceProvider) : IDefaceService
+internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDefaceService
 {
-    private readonly IServiceProvider _serviceProvider = serviceProvider;
+    private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
 
     public async Task<ProcessingResult> ProcessVideo(string inputPath, string outputPath, Action<Settings>? customSettings = default)
     {
-        ValidateFileInput(inputPath, outputPath);
+        ValidationHelper.ValidateFilePath(inputPath, nameof(inputPath));
+        ValidationHelper.MustNotBeNullOrWhiteSpace(outputPath, nameof(outputPath));
 
-        using var processor = _serviceProvider.GetRequiredService<VideoProcessor>();
-        return await processor.Process(inputPath, outputPath, customSettings);
+        using var scope = _scopeFactory.CreateUserScope(customSettings);
+        using var processor = scope.ServiceProvider.GetRequiredService<VideoProcessor>();
+
+        return await processor.Process(inputPath, outputPath);
     }
 
     public ProcessingResult ProcessImage(string inputPath, string outputPath, Action<Settings>? customSettings = default)
     {
-        ValidateFileInput(inputPath, outputPath);
+        ValidationHelper.ValidateFilePath(inputPath, nameof(inputPath));
+        ValidationHelper.MustNotBeNullOrWhiteSpace(outputPath, nameof(outputPath));
 
-        using var processor = _serviceProvider.GetRequiredService<ImageProcessor>();
-        return processor.Process(inputPath, outputPath, customSettings);
+        using var scope = _scopeFactory.CreateUserScope(customSettings);
+        using var processor = scope.ServiceProvider.GetRequiredService<ImageProcessor>();
+
+        return processor.Process(inputPath, outputPath);
     }
 
     public IEnumerable<ProcessingResult> ProcessImages(string inputDirectory, string outputDirectory, Action<Settings>? customSettings = null)
     {
-        ValidateDirectoryInput(inputDirectory, outputDirectory);
+        ValidationHelper.ValidateDirectoryPath(inputDirectory, nameof(inputDirectory));
+        ValidationHelper.ValidateDirectoryPath(outputDirectory, nameof(outputDirectory));
 
-        using var processor = _serviceProvider.GetRequiredService<ImageProcessor>();
-        return processor.ProcessMany(inputDirectory, outputDirectory, customSettings);
-    }
+        using var scope = _scopeFactory.CreateUserScope(customSettings);
+        using var processor = scope.ServiceProvider.GetRequiredService<ImageProcessor>();
 
-    private static void ValidateFileInput(string inputFilePath, string outputFilePath)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(inputFilePath, nameof(inputFilePath));
-        ArgumentException.ThrowIfNullOrWhiteSpace(outputFilePath, nameof(outputFilePath));
-
-        if (!File.Exists(inputFilePath))
-        {
-            throw new FileNotFoundException($"File {inputFilePath} does not exist.");
-        }
-    }
-
-    private static void ValidateDirectoryInput(string inputDirectory, string outputDirectory)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(inputDirectory, nameof(inputDirectory));
-        ArgumentException.ThrowIfNullOrWhiteSpace(outputDirectory, nameof(outputDirectory));
-
-        if (!Directory.Exists(inputDirectory))
-        {
-            throw new DirectoryNotFoundException($"Directory {inputDirectory} does not exist.");
-        }
-
-        if (!Directory.Exists(outputDirectory))
-        {
-            Directory.CreateDirectory(outputDirectory);
-        }
+        return processor.ProcessMany(inputDirectory, outputDirectory);
     }
 }

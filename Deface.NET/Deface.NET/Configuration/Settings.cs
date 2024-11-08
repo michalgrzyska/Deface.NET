@@ -6,7 +6,7 @@ namespace Deface.NET;
 /// <summary>
 /// Deface settings.
 /// </summary>
-public class Settings
+public class Settings : IValidable
 {
     /// <summary>
     /// Specifies amount of information provided via logging mechanism. 
@@ -58,14 +58,17 @@ public class Settings
     public ImageFormat ImageFormat { get; set; } = ImageFormat.Png;
 
     /// <summary>
-    /// Configuration settings for FFMpeg and FFProbe for all platforms. Multiple platforms can be configured, if the target platform is not known.
+    /// Location of FFMpeg executable file.
     /// </summary>
-    public FFMpegConfig FFMpegConfig { get; set; }
+    public string FFMpegPath { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Location of FFProbe executable file.
+    /// </summary>
+    public string FFProbePath { get; set; } = string.Empty;
 
     internal Settings(Action<Settings>? builderAction, Platform platform)
     {
-        FFMpegConfig = new(platform);
-
         ApplyAction(builderAction);
     }
 
@@ -74,12 +77,28 @@ public class Settings
         if (builderAction is not null)
         {
             builderAction(this);
-            SettingsValidator.Validate(this);
+            Validate();
         }
     }
 
-    internal Settings ShallowCopy()
+    internal Settings Clone()
     {
         return (Settings)MemberwiseClone();
+    }
+
+    /// <inheritdoc/>
+    public void Validate()
+    {
+        ValidationHelper.MustBeGreaterOrEqualTo(Threshold, 0, nameof(Threshold));
+        ValidationHelper.MustBeLessThanOrEqualTo(Threshold, 1, nameof(Threshold));
+
+        ValidationHelper.MustBeGreaterOrEqualTo(RunDetectionEachNFrames, 1, nameof(RunDetectionEachNFrames));
+
+        ValidationHelper.MustBeGreaterOrEqualTo(MaskScale, 1, nameof(MaskScale));
+
+        ValidationHelper.ValidateFilePath(FFMpegPath, nameof(FFMpegPath));
+        ValidationHelper.ValidateFilePath(FFProbePath, nameof(FFProbePath));
+
+        ImageFormat.Validate();
     }
 }

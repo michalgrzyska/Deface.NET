@@ -1,5 +1,6 @@
 ﻿using Deface.NET.Graphics;
 using Deface.NET.Utils;
+using Deface.NET.VideoIO.Models;
 
 namespace Deface.NET.VideoIO;
 
@@ -8,32 +9,28 @@ internal class VideoReader : IDisposable
     private readonly Func<Frame, int, int, Task> _frameProcess;
     private readonly ExternalProcess _ffmpegProcess;
     private readonly string _videoFilePath;
-    private readonly Settings _settings;
+    private readonly VideoInfo _videoInfo = default!;
 
-
-    private VideoInfo _videoInfo = default!;
     private byte[] _buffer = [];
     private byte[] _rolloverBuffer = [];
     private int _totalBytesRead = 0;
     private int _frameSize = 0;
 
-    public VideoReader(string videoFilePath, Settings settings, Func<Frame, int, int, Task> frameProcess)
+    public VideoReader(string videoFilePath, Func<Frame, int, int, Task> frameProcess, string ffmpegPath, VideoInfo videoInfo)
     {
         _frameProcess = frameProcess;
         _videoFilePath = videoFilePath;
-        _settings = settings;
-
-        _ffmpegProcess = GetFfmpegProcess();
+        _ffmpegProcess = GetFfmpegProcess(ffmpegPath);
+        _videoInfo = videoInfo;
     }
 
-    public async Task<VideoInfo> Start()
+    public async Task ProcessVideo()
     {
-        await SetupFields();
+        SetupFields();
 
         _ffmpegProcess.Start();
-        await ProcessStream();
 
-        return _videoInfo;
+        await ProcessStream();
     }
 
     public void Dispose() => _ffmpegProcess?.Dispose();
@@ -61,10 +58,8 @@ internal class VideoReader : IDisposable
         }
     }
 
-    private async Task SetupFields()
+    private void SetupFields()
     {
-        _videoInfo = await VideoInfo.GetInfo(_videoFilePath, _settings);
-
         _frameSize = _videoInfo.Width * _videoInfo.Height * 3;
         _buffer = new byte[_frameSize];
         _rolloverBuffer = new byte[_frameSize];
@@ -89,10 +84,8 @@ internal class VideoReader : IDisposable
         _totalBytesRead = excessBytes;
     }
 
-    private ExternalProcess GetFfmpegProcess()
+    private ExternalProcess GetFfmpegProcess(string ffmpegPath)
     {
-        string ffmpegPath = _settings.FFMpegConfig.GetCurrentConfig().FFMpegPath;
-
         string args = string.Join(" ",
         [
             "-i", $"\"{_videoFilePath}\"",

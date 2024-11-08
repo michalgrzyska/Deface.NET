@@ -3,9 +3,11 @@ using SkiaSharp;
 
 namespace Deface.NET.Graphics.Drawers;
 
-internal class MosaicShapeDrawer : IShapeDrawer
+internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
 {
-    public Frame Draw(Frame frame, List<DetectedObject> objects, Settings settings)
+    private readonly Settings _settings = settings;
+
+    public Frame Draw(Frame frame, List<DetectedObject> objects)
     {
         var bitmap = frame.GetNativeElement();
         int mosaicSize = GetMosaicSize(frame);
@@ -23,14 +25,14 @@ internal class MosaicShapeDrawer : IShapeDrawer
                 
             SKBitmap mosaicBitmap = CreateMosaic(roiBitmap, mosaicSize);
 
-            if (settings.AnonimizationShape == AnonimizationShape.Rectangle)
+            if (_settings.AnonimizationShape == AnonimizationShape.Rectangle)
             {
                 canvas.Save();
                 canvas.ClipRect(rect);
                 canvas.DrawBitmap(mosaicBitmap, rect);
                 canvas.Restore();
             }
-            else if (settings.AnonimizationShape == AnonimizationShape.Ellipse)
+            else if (_settings.AnonimizationShape == AnonimizationShape.Ellipse)
             {
                 var path = new SKPath();
                 path.AddOval(new SKRect(obj.X1, obj.Y1, obj.X2, obj.Y2));

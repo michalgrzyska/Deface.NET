@@ -1,4 +1,5 @@
 ﻿using Deface.NET.Configuration;
+using Deface.NET.Utils;
 using SkiaSharp;
 
 namespace Deface.NET;
@@ -10,7 +11,7 @@ namespace Deface.NET;
 /// but output path points to ".png" file, an image will be saved with
 /// ".png" extension but with JPEG compression.
 /// </summary>
-public readonly struct ImageFormat
+public readonly struct ImageFormat : IValidable
 {
     internal SKEncodedImageFormat Format { get; private init; }
     internal int Quality { get; private init; }
@@ -19,8 +20,6 @@ public readonly struct ImageFormat
     {
         Format = format;
         Quality = quality;
-
-        ImageFormatValidator.Validate(this);
     }
 
     /// <summary>
@@ -36,4 +35,11 @@ public readonly struct ImageFormat
     /// Represents PNG image type.
     /// </summary>
     public static ImageFormat Png => new(SKEncodedImageFormat.Png, 100);
+
+    /// <inheritdoc/>
+    public void Validate()
+    {
+        ValidationHelper.MustBeGreaterOrEqualTo(Quality, 1, nameof(Quality));
+        ValidationHelper.MustBeLessThanOrEqualTo(Quality, 100, nameof(Quality));
+    }
 }

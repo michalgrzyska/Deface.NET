@@ -1,24 +1,30 @@
-﻿using Deface.NET.Graphics;
+﻿using Deface.NET.Configuration.Provider;
+using Deface.NET.Graphics;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using System.Diagnostics;
 
 namespace Deface.NET.Processing;
 
-internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> logger, ObjectDetector detector) 
-    : ProcessorBase(settings), IDisposable
+internal sealed class ImageProcessor
+(
+    ScopedSettingsProvider settingsProvider, 
+    DLogger<IDefaceService> logger, 
+    ObjectDetector detector,
+    ShapeDrawingService shapeDrawingService
+    ) : IDisposable
 {
     private readonly DLogger<IDefaceService> _logger = logger;
     private readonly ObjectDetector _detector = detector;
+    private readonly ShapeDrawingService _shapeDrawingService = shapeDrawingService;
+    private readonly Settings _settings = settingsProvider.Settings;
 
     private readonly static string[] ImageExtensions = [".jpg", ".jpeg", ".png"];
 
     public void Dispose() => _detector.Dispose();
 
-    public ProcessingResult Process(string inputPath, string outputPath, Action<Settings>? customSettings)
+    public ProcessingResult Process(string inputPath, string outputPath)
     {
-        ApplyScopedSettings(customSettings);
-
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
@@ -28,13 +34,11 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         stopwatch.Stop();
 
         _logger.Log(DefaceLoggingLevel.Basic, "Processed {Input} and saved to {Output}", inputPath, outputPath);
-        return new(inputPath, outputPath, stopwatch.Elapsed, Settings.Threshold, 1);
+        return new(inputPath, outputPath, stopwatch.Elapsed, _settings.Threshold, 1);
     }
 
-    public List<ProcessingResult> ProcessMany(string inputDirectory, string outputDirectory, Action<Settings>? customSettings)
+    public List<ProcessingResult> ProcessMany(string inputDirectory, string outputDirectory)
     {
-        ApplyScopedSettings(customSettings);
-
         var imageFilenames = Directory
             .GetFiles(inputDirectory)
             .Where(file => ImageExtensions.Contains(Path.GetExtension(file)))
@@ -45,7 +49,7 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
         foreach (var imageFilename in imageFilenames)
         {
             var outputPath = GetOutputPath(imageFilename, outputDirectory);
-            var result = Process(imageFilename, outputPath, default); // We don't pass settings so we don't apply them in loop
+            var result = Process(imageFilename, outputPath);
 
             results.Add(result);
         }
@@ -73,10 +77,10 @@ internal sealed class ImageProcessor(Settings settings, DLogger<IDefaceService> 
 
     private void ProcessImage(Frame image, string outputPath)
     {
-        List<DetectedObject> detectedObjects = _detector.Detect(image, Settings);
-        Frame result = ShapeDrawer.DrawShapes(image, detectedObjects, Settings);
+        List<DetectedObject> detectedObjects = _detector.Detect(image, _settings);
+        Frame result = _shapeDrawingService.DrawShapes(image, detectedObjects);
 
-        result.SaveTo(outputPath, Settings.ImageFormat);
+        result.SaveTo(outputPath, _settings.ImageFormat);
     }
 
     private static string GetOutputPath(string inputPath, string outputDirPath)

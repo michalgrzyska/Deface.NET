@@ -1,28 +1,32 @@
-﻿using Deface.NET;
+﻿using Deface.NET.Configuration.Provider;
 using Deface.NET.Graphics;
 using Deface.NET.Utils;
-using Deface.NET.VideoIO;
+using Deface.NET.VideoIO.Models;
 using System.Globalization;
 
-internal static class VideoWriter
+namespace Deface.NET.VideoIO;
+
+internal class VideoWriterService(ScopedSettingsProvider settingsProvider)
 {
-    public static void WriteVideo(List<Frame> frames, VideoInfo videoInfo, string outputPath, Settings settings)
+    private readonly Settings _settings = settingsProvider.Settings;
+
+    public void WriteVideo(List<Frame> frames, VideoInfo videoInfo, string outputPath)
     {
-        using ExternalProcess ffmpegProcess = GetFfmpegProcess(videoInfo, outputPath, settings);
+        using ExternalProcess ffmpegProcess = GetFfmpegProcess(videoInfo, outputPath);
         ffmpegProcess.Start();
 
         using var ffmpegInput = ffmpegProcess.InputStream;
 
         foreach (var frame in frames) using (frame)
-        {
-            var bytes = frame.ToByteArray();
-            ffmpegInput.Write(bytes);
-        }
+            {
+                var bytes = frame.ToByteArray();
+                ffmpegInput.Write(bytes);
+            }
     }
 
-    private static ExternalProcess GetFfmpegProcess(VideoInfo videoInfo, string outputPath, Settings settings)
+    private ExternalProcess GetFfmpegProcess(VideoInfo videoInfo, string outputPath)
     {
-        string ffmpegPath = settings.FFMpegConfig.GetCurrentConfig().FFMpegPath;
+        string ffmpegPath = _settings.FFMpegPath;
 
         string args = string.Join(" ",
         [

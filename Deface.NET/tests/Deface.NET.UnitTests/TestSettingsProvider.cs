@@ -17,11 +17,8 @@ internal sealed class TestSettingsProvider : IDisposable
     {
         Action<Settings> action = settings =>
         {
-            settings.FFMpegConfig.Windows.FFMpegPath = _testFFMpegFile;
-            settings.FFMpegConfig.Windows.FFProbePath = _testFFProbeFile;
-
-            settings.FFMpegConfig.Linux.FFMpegPath = _testFFMpegFile;
-            settings.FFMpegConfig.Linux.FFProbePath = _testFFProbeFile;
+            settings.FFMpegPath = _testFFMpegFile;
+            settings.FFProbePath = _testFFProbeFile;
         };
 
         return new(action, platform);

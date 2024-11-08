@@ -3,12 +3,14 @@ using SkiaSharp;
 
 namespace Deface.NET.Graphics.Drawers;
 
-internal class ColorShapeDrawer : IShapeDrawer
+internal class ColorShapeDrawer(Settings settings) : IShapeDrawer
 {
-    public Frame Draw(Frame frame, List<DetectedObject> objects, Settings settings)
+    private readonly Settings _settings = settings;
+
+    public Frame Draw(Frame frame, List<DetectedObject> objects)
     {
         var bitmap = frame.GetNativeElement();
-        var color = settings.AnonimizationMethod.ColorValue!;
+        var color = _settings.AnonimizationMethod.ColorValue!;
 
         using SKCanvas canvas = new(bitmap);
 
@@ -20,21 +22,21 @@ internal class ColorShapeDrawer : IShapeDrawer
 
         foreach (var obj in objects)
         {
-            DrawObject(canvas, paint, obj, settings);
+            DrawObject(canvas, paint, obj);
         }
 
         return frame;
     }
 
-    private static void DrawObject(SKCanvas canvas, SKPaint paint, DetectedObject obj, Settings settings)
+    private void DrawObject(SKCanvas canvas, SKPaint paint, DetectedObject obj)
     {
         SKRect rect = new(obj.X1, obj.Y1, obj.X2, obj.Y2);
 
-        if (settings.AnonimizationShape == AnonimizationShape.Rectangle)
+        if (_settings.AnonimizationShape == AnonimizationShape.Rectangle)
         {
             canvas.DrawRect(rect, paint);
         }
-        else if (settings.AnonimizationShape == AnonimizationShape.Ellipse)
+        else if (_settings.AnonimizationShape == AnonimizationShape.Ellipse)
         {
             canvas.DrawOval(rect, paint);
         }
