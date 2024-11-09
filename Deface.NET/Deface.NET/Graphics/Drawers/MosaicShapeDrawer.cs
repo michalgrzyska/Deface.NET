@@ -65,7 +65,10 @@ internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
         using SKCanvas canvas = new(mosaicBitmap);
         using var smallBitmap = bitmap.Resize(new SKImageInfo(mosaicWidth, mosaicHeight), SKFilterQuality.None);
 
-        canvas.DrawBitmap(smallBitmap, new SKRect(0, 0, width, height));
+        if (smallBitmap != null)
+        {
+            canvas.DrawBitmap(smallBitmap, new SKRect(0, 0, width, height));
+        }
 
         return mosaicBitmap;
     }

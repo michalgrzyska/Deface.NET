@@ -2,18 +2,22 @@
 
 namespace Deface.NET.PerformanceTestRunner.Config;
 
-public class PerformanceTestRunner
+public class PerformanceTestRunner(string ffMpegPath, string ffProbePath)
 {
-    private List<ScenarioMethodToRun> scenarioMethodToRun = [];
+    private readonly string _ffMpegPath = ffMpegPath;
+    private readonly string _ffProbePath = ffProbePath;
 
-    public PerformanceTestRunner AddScenariosFrom<T>() where T : class, new()
+    private readonly List<ScenarioMethodToRun> scenarioMethodToRun = [];
+
+    public PerformanceTestRunner AddScenariosFrom<T>() where T : VideoTestScenarioBase, new()
     {
         var methods = typeof(T)
             .GetMethods(BindingFlags.Public | BindingFlags.Instance)
             .Where(x => x.GetCustomAttribute<ScenarioAttribute>() != null)
             .ToArray();
 
-        var testObj = new T();
+        T testObj = new();
+        testObj.SetFilesPaths(_ffMpegPath, _ffProbePath);
 
         var preparedMethods = methods.Select(x =>
         {
@@ -25,14 +29,17 @@ public class PerformanceTestRunner
         return this;
     }
 
-    public List<TestResult> Run()
+    public async Task<List<TestResult>> Run()
     {
         List<TestResult> results = [];
 
         foreach (var s in scenarioMethodToRun)
         {
             Console.WriteLine($"Running {s.TestObj.GetType().Name}: {s.Method.Name}");
-            ProcessingResult result = (ProcessingResult)s.Method.Invoke(s.TestObj, null)!;
+
+            Task<ProcessingResult> resultTask = (Task<ProcessingResult>)s.Method.Invoke(s.TestObj, null)!;
+            ProcessingResult result = await resultTask;
+
             results.Add(new(s.Method.Name, result));
         }
 

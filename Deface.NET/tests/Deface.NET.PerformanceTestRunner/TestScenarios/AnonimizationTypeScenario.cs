@@ -4,7 +4,7 @@ namespace Deface.NET.PerformanceTestRunner.TestScenarios;
 
 public class AnonimizationTypeScenario : VideoTestScenarioBase
 {
-    public AnonimizationTypeScenario() : base(TestResources.TestResources.Video_Short_HD_1280_720_24fps)
+    public AnonimizationTypeScenario() : base(TestResources.TestResources.Video_Short_640_360_24fps)
     { }
 
     [Scenario("Ellipse GaussianBlur")]
@@ -44,6 +44,26 @@ public class AnonimizationTypeScenario : VideoTestScenarioBase
         {
             x.AnonimizationMethod = AnonimizationMethod.Color(255, 0, 0);
             x.AnonimizationShape = AnonimizationShape.Rectangle;
+        });
+    }
+
+    [Scenario("Rectangle Mosaic")]
+    public async Task<ProcessingResult> Rectangle_Mosaic()
+    {
+        return await Run(x =>
+        {
+            x.AnonimizationMethod = AnonimizationMethod.Mosaic;
+            x.AnonimizationShape = AnonimizationShape.Rectangle;
+        });
+    }
+
+    [Scenario("Ellipse Mosaic")]
+    public async Task<ProcessingResult> Ellipse_Mosaic()
+    {
+        return await Run(x =>
+        {
+            x.AnonimizationMethod = AnonimizationMethod.Mosaic;
+            x.AnonimizationShape = AnonimizationShape.Ellipse;
         });
     }
 }
