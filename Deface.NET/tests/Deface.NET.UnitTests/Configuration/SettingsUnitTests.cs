@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 
-namespace Deface.NET.UnitTests.SettingsTests;
+namespace Deface.NET.UnitTests.Configuration;
 
 public class SettingsUnitTests : IDisposable
 {

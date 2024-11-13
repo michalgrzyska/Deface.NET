@@ -1,7 +1,7 @@
 ﻿using Deface.NET.Configuration;
 using FluentAssertions;
 
-namespace Deface.NET.UnitTests.SettingsTests;
+namespace Deface.NET.UnitTests.Configuration;
 
 public class AnonimizationMethodUnitTests
 {

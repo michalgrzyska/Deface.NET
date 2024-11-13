@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using SkiaSharp;
 
-namespace Deface.NET.UnitTests.SettingsTests;
+namespace Deface.NET.UnitTests.Configuration;
 
 public class ImageFormatUnitTests
 {
