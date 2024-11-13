@@ -28,8 +28,4 @@
 		<ProjectReference Include="..\Deface.NET.TestResources\Deface.NET.TestResources.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="GraphicsTests\" />
-	</ItemGroup>
-
 </Project>

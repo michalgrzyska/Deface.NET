@@ -3,7 +3,6 @@ using Deface.NET.Graphics;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.Processing;
-using Deface.NET.Utils;
 using Deface.NET.VideoIO;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,8 +18,7 @@ public static class DependencyInjection
     /// </summary>
     public static IServiceCollection AddDeface(this IServiceCollection services, Action<Settings> builder)
     {
-        Platform platform = PlatformChecker.GetPlatform();
-        Settings settings = new(builder, platform);
+        Settings settings = new(builder);
 
         services.AddSingleton(settings);
         services.AddScoped(typeof(ScopedSettingsProvider));

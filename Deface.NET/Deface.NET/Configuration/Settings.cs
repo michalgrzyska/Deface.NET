@@ -66,7 +66,7 @@ public class Settings : IValidable
     /// </summary>
     public string FFProbePath { get; set; } = string.Empty;
 
-    internal Settings(Action<Settings>? builderAction, Platform platform)
+    internal Settings(Action<Settings>? builderAction)
     {
         ApplyAction(builderAction);
     }

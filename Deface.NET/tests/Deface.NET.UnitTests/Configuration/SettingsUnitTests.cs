@@ -1,15 +1,12 @@
-﻿using FluentAssertions;
+﻿using Deface.NET.UnitTests._TestsConfig;
+using FluentAssertions;
 
 namespace Deface.NET.UnitTests.Configuration;
 
-public class SettingsUnitTests : IDisposable
+[Collection(nameof(SettingsCollection))]
+public class SettingsUnitTests(SettingsFixture settingsProvider)
 {
-    private readonly TestSettingsProvider _settingsProvider;
-
-    public SettingsUnitTests()
-    {
-        _settingsProvider = new();
-    }
+    private readonly SettingsFixture _settingsProvider = settingsProvider;
 
     [Theory]
     [InlineData(-1)]
@@ -18,7 +15,7 @@ public class SettingsUnitTests : IDisposable
     [InlineData(101)]
     public void Threshold_IncorrectValues_ThrowsArgumentOutOfRangeException(float threshold)
     {
-        var settings = _settingsProvider.GetSettings();
+        var settings = _settingsProvider.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -38,7 +35,7 @@ public class SettingsUnitTests : IDisposable
     [InlineData(1)]
     public void Threshold_CorrectValues_NoExceptionThrown(float threshold)
     {
-        var settings = _settingsProvider.GetSettings();
+        var settings = _settingsProvider.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -54,7 +51,7 @@ public class SettingsUnitTests : IDisposable
     [InlineData(-1000)]
     public void RunDetectionEachNFrames_IncorrectData_ThrowsArgumentOutOfRangeException(int runDetectionEachNFrames)
     {
-        var settings = _settingsProvider.GetSettings();
+        var settings = _settingsProvider.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -75,7 +72,7 @@ public class SettingsUnitTests : IDisposable
     [InlineData(1000)]
     public void RunDetectionEachNFrames_CorrectData_NoExceptionThrown(int runDetectionEachNFrames)
     {
-        var settings = _settingsProvider.GetSettings();
+        var settings = _settingsProvider.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -94,7 +91,7 @@ public class SettingsUnitTests : IDisposable
     [InlineData(-100)]
     public void MaskScale_IncorrectData_ThrowsArgumentOutOfRangeException(float maskScale)
     {
-        var settings = _settingsProvider.GetSettings();
+        var settings = _settingsProvider.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -113,7 +110,7 @@ public class SettingsUnitTests : IDisposable
     [InlineData(500f)]
     public void MaskScale_CorrectData_NoExceptionThrown(float maskScale)
     {
-        var settings = _settingsProvider.GetSettings();
+        var settings = _settingsProvider.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -129,7 +126,7 @@ public class SettingsUnitTests : IDisposable
     [InlineData(" ")]
     public void FFMpegPath_NullOrWhitespace_ArgumentNullExceptionThrown(string? value)
     {
-        var settings = _settingsProvider.GetSettings();
+        var settings = _settingsProvider.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -146,7 +143,7 @@ public class SettingsUnitTests : IDisposable
     [InlineData(" ")]
     public void FFProbePath_NullOrWhitespace_ArgumentNullExceptionThrown(string? value)
     {
-        var settings = _settingsProvider.GetSettings();
+        var settings = _settingsProvider.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -161,7 +158,7 @@ public class SettingsUnitTests : IDisposable
     public void FFMpegPath_NonExistingFilePath_FileNotFoundExceptionThrow()
     {
         var filePath = $"{Path.GetTempPath()}/{Guid.NewGuid()}";
-        var settings = _settingsProvider.GetSettings();
+        var settings = _settingsProvider.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -176,7 +173,7 @@ public class SettingsUnitTests : IDisposable
     public void FFProbePath_NonExistingFilePath_FileNotFoundExceptionThrow()
     {
         var filePath = $"{Path.GetTempPath()}/{Guid.NewGuid()}";
-        var settings = _settingsProvider.GetSettings();
+        var settings = _settingsProvider.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -185,10 +182,5 @@ public class SettingsUnitTests : IDisposable
 
         var action = () => settings.ApplyAction(settingsAction);
         action.Should().Throw<FileNotFoundException>();
-    }
-
-    public void Dispose()
-    {
-        _settingsProvider.Dispose();
     }
 }
