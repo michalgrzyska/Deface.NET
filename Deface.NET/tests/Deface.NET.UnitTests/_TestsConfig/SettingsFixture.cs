@@ -20,6 +20,14 @@ public sealed class SettingsFixture : IDisposable
         };
     }
 
+    public Settings WithAction(Action<Settings> action)
+    {
+        var settings = Settings;
+        settings.ApplyAction(action);
+
+        return settings;
+    }
+
     public void Dispose()
     {
         File.Delete(_ffMpegPath);

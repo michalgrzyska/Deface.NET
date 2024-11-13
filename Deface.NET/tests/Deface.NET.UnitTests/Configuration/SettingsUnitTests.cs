@@ -4,9 +4,9 @@ using FluentAssertions;
 namespace Deface.NET.UnitTests.Configuration;
 
 [Collection(nameof(SettingsCollection))]
-public class SettingsUnitTests(SettingsFixture settingsProvider)
+public class SettingsUnitTests(SettingsFixture settingsFixture)
 {
-    private readonly SettingsFixture _settingsProvider = settingsProvider;
+    private readonly SettingsFixture _settingsFixture = settingsFixture;
 
     [Theory]
     [InlineData(-1)]
@@ -15,7 +15,7 @@ public class SettingsUnitTests(SettingsFixture settingsProvider)
     [InlineData(101)]
     public void Threshold_IncorrectValues_ThrowsArgumentOutOfRangeException(float threshold)
     {
-        var settings = _settingsProvider.Settings;
+        var settings = _settingsFixture.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -35,7 +35,7 @@ public class SettingsUnitTests(SettingsFixture settingsProvider)
     [InlineData(1)]
     public void Threshold_CorrectValues_NoExceptionThrown(float threshold)
     {
-        var settings = _settingsProvider.Settings;
+        var settings = _settingsFixture.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -51,7 +51,7 @@ public class SettingsUnitTests(SettingsFixture settingsProvider)
     [InlineData(-1000)]
     public void RunDetectionEachNFrames_IncorrectData_ThrowsArgumentOutOfRangeException(int runDetectionEachNFrames)
     {
-        var settings = _settingsProvider.Settings;
+        var settings = _settingsFixture.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -72,7 +72,7 @@ public class SettingsUnitTests(SettingsFixture settingsProvider)
     [InlineData(1000)]
     public void RunDetectionEachNFrames_CorrectData_NoExceptionThrown(int runDetectionEachNFrames)
     {
-        var settings = _settingsProvider.Settings;
+        var settings = _settingsFixture.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -91,7 +91,7 @@ public class SettingsUnitTests(SettingsFixture settingsProvider)
     [InlineData(-100)]
     public void MaskScale_IncorrectData_ThrowsArgumentOutOfRangeException(float maskScale)
     {
-        var settings = _settingsProvider.Settings;
+        var settings = _settingsFixture.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -110,7 +110,7 @@ public class SettingsUnitTests(SettingsFixture settingsProvider)
     [InlineData(500f)]
     public void MaskScale_CorrectData_NoExceptionThrown(float maskScale)
     {
-        var settings = _settingsProvider.Settings;
+        var settings = _settingsFixture.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -126,7 +126,7 @@ public class SettingsUnitTests(SettingsFixture settingsProvider)
     [InlineData(" ")]
     public void FFMpegPath_NullOrWhitespace_ArgumentNullExceptionThrown(string? value)
     {
-        var settings = _settingsProvider.Settings;
+        var settings = _settingsFixture.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -143,7 +143,7 @@ public class SettingsUnitTests(SettingsFixture settingsProvider)
     [InlineData(" ")]
     public void FFProbePath_NullOrWhitespace_ArgumentNullExceptionThrown(string? value)
     {
-        var settings = _settingsProvider.Settings;
+        var settings = _settingsFixture.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -158,7 +158,7 @@ public class SettingsUnitTests(SettingsFixture settingsProvider)
     public void FFMpegPath_NonExistingFilePath_FileNotFoundExceptionThrow()
     {
         var filePath = $"{Path.GetTempPath()}/{Guid.NewGuid()}";
-        var settings = _settingsProvider.Settings;
+        var settings = _settingsFixture.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
@@ -173,7 +173,7 @@ public class SettingsUnitTests(SettingsFixture settingsProvider)
     public void FFProbePath_NonExistingFilePath_FileNotFoundExceptionThrow()
     {
         var filePath = $"{Path.GetTempPath()}/{Guid.NewGuid()}";
-        var settings = _settingsProvider.Settings;
+        var settings = _settingsFixture.Settings;
 
         Action<Settings> settingsAction = settings =>
         {
