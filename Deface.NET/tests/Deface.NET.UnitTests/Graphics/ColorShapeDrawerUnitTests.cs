@@ -11,38 +11,71 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
 {
     private readonly SettingsFixture _settingsFixture = settingsFixture;
 
+    private readonly DetectedObject Object1 = new(10, 10, 100, 100, 1, IsEnlarged: true);
+    private readonly DetectedObject Object2 = new(110, 110, 200, 200, 1, IsEnlarged: true);
+    private readonly DetectedObject Object3 = new(210, 210, 400, 400, 1, IsEnlarged: true);
+
+    private readonly AnonimizationMethod TestAnomizationMethod = AnonimizationMethod.Color(255, 0, 0);
+
     [Fact]
-    public void DrawObject_Rectangle_DrawnCorrectly()
+    public void DrawObject_NoObjects_DrawnCorrectly()
     {
         var settings = _settingsFixture.WithAction(x =>
         {
             x.AnonimizationShape = AnonimizationShape.Rectangle;
-            x.AnonimizationMethod = AnonimizationMethod.Color(255, 0, 0);
+            x.AnonimizationMethod = TestAnomizationMethod;
         });
 
-        var x1 = 10;
-        var y1 = 10;
-        var x2 = 100;
-        var y2 = 100;
+        Frame frame = TestFrameHelper.GetTestFrame();
+        ColorShapeDrawer drawer = new(settings);
+        Frame result = drawer.Draw(frame, []);
 
-        DetectedObject detectedObject = new(x1, y1, x2, y2, 1, IsEnlarged: true);
+        var nativeElement = frame.GetNativeElement();
+
+        for (int y = 0; y < frame.Height; y++) 
+        {
+            for (int x = 0; x < frame.Width; x++) 
+            {
+                var pixel = nativeElement.GetPixel(x, y);
+
+                pixel.Red.Should().Be(255);
+                pixel.Green.Should().Be(255);
+                pixel.Blue.Should().Be(255);
+            }
+        }
+    }
+
+    [Fact]
+    public void DrawObject_SingleRectangle_DrawnCorrectly()
+    {
+        var settings = _settingsFixture.WithAction(x =>
+        {
+            x.AnonimizationShape = AnonimizationShape.Rectangle;
+            x.AnonimizationMethod = TestAnomizationMethod;
+        });
+
         Frame frame = TestFrameHelper.GetTestFrame();
 
         ColorShapeDrawer drawer = new(settings);
-        Frame result = drawer.Draw(frame, [detectedObject]);
+        Frame result = drawer.Draw(frame, [Object1]);
 
-        var nativeElement = result.GetNativeElement();
+        ShapeTestHelper.ValidateRectangle(result, Object1, settings.AnonimizationMethod.ColorValue!);
+    }
 
-        for (int i = y1; i < y2; i++)
+    [Fact]
+    public void DrawObject_SingleEllipse_DrawnCorrectly()
+    {
+        var settings = _settingsFixture.WithAction(x =>
         {
-            for (int j = x1; j < x2; j++)
-            {
-                var pixel = nativeElement.GetPixel(j, i);
-                
-                pixel.Red.Should().Be(255);
-                pixel.Green.Should().Be(0);
-                pixel.Blue.Should().Be(0);
-            }
-        }
+            x.AnonimizationShape = AnonimizationShape.Ellipse;
+            x.AnonimizationMethod = TestAnomizationMethod;
+        });
+
+        Frame frame = TestFrameHelper.GetTestFrame();
+
+        ColorShapeDrawer drawer = new(settings);
+        Frame result = drawer.Draw(frame, [Object1]);
+
+        ShapeTestHelper.ValidateEllipse(result, Object1, settings.AnonimizationMethod.ColorValue!);
     }
 }
