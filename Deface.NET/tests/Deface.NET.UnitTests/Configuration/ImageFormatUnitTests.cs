@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using SkiaSharp;
+﻿using SkiaSharp;
 
 namespace Deface.NET.UnitTests.Configuration;
 

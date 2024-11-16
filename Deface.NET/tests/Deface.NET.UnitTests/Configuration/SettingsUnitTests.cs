@@ -1,5 +1,4 @@
 ﻿using Deface.NET.UnitTests._TestsConfig;
-using FluentAssertions;
 
 namespace Deface.NET.UnitTests.Configuration;
 

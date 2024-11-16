@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-
-namespace Deface.NET.UnitTests;
+﻿namespace Deface.NET.UnitTests;
 
 public class PublicMembersTests
 {

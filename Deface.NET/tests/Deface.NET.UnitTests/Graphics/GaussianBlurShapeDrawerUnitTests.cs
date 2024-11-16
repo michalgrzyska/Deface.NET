@@ -3,7 +3,6 @@ using Deface.NET.Graphics.Drawers;
 using Deface.NET.ObjectDetection;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
-using FluentAssertions;
 
 namespace Deface.NET.UnitTests.Graphics;
 
