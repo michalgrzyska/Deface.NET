@@ -1,17 +1,15 @@
-﻿using Deface.NET.Configuration;
-using Deface.NET.Graphics;
+﻿using Deface.NET.Graphics;
 using Deface.NET.ObjectDetection;
-using FluentAssertions;
 using SkiaSharp;
 
-namespace Deface.NET.UnitTests.Graphics;
+namespace Deface.NET.UnitTests.Graphics.Helpers;
 
 internal static class ShapeTestHelper
 {
     // Ellipse drawn by library may have slightly different edges so we need to allow some tolerance.
     private const double EllipseShrinkFactor = 2.0;
 
-    public static void ValidateRectangle(Frame frame, DetectedObject detectedObject, Color color)
+    public static void ValidateRectangle(Frame frame, DetectedObject detectedObject, Action<PixelData> action)
     {
         var nativeElement = frame.GetNativeElement();
 
@@ -19,21 +17,19 @@ internal static class ShapeTestHelper
         {
             for (int x = detectedObject.X1; x < detectedObject.X2; x++)
             {
-                var pixel = nativeElement.GetPixel(x, y);
-                ValidatePixelColor(pixel, color);
+                ValidatePixel(x, y, action, nativeElement);
             }
         }
     }
 
-    public static void ValidateEllipse(Frame frame, DetectedObject detectedObject, Color color)
+    public static void ValidateEllipse(Frame frame, DetectedObject detectedObject, Action<PixelData> action)
     {
         var nativeElement = frame.GetNativeElement();
         var pixelsInEllipse = GetPointsInsideEllipse(detectedObject);
 
-        foreach (var (X, Y) in pixelsInEllipse) 
+        foreach (var (x, y) in pixelsInEllipse)
         {
-            var pixel = nativeElement.GetPixel(X, Y);
-            ValidatePixelColor(pixel, color);
+            ValidatePixel(x, y, action, nativeElement);
         }
     }
 
@@ -81,10 +77,11 @@ internal static class ShapeTestHelper
         return Math.Pow((x - xc) / a, 2) + Math.Pow((y - yc) / b, 2) <= 1;
     }
 
-    private static void ValidatePixelColor(SKColor pixel, Color color)
+    private static void ValidatePixel(int x, int y, Action<PixelData> action, SKBitmap nativeElement)
     {
-        pixel.Red.Should().Be(color.R);
-        pixel.Green.Should().Be(color.G);
-        pixel.Blue.Should().Be(color.B);
+        var pixel = nativeElement.GetPixel(x, y);
+        PixelData pixelData = new(x, y, pixel.Red, pixel.Green, pixel.Blue);
+
+        action(pixelData);
     }
 }

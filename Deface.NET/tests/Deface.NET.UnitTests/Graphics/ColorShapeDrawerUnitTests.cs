@@ -1,8 +1,11 @@
-﻿using Deface.NET.Graphics;
+﻿using Deface.NET.Configuration;
+using Deface.NET.Graphics;
 using Deface.NET.Graphics.Drawers;
 using Deface.NET.ObjectDetection;
 using Deface.NET.UnitTests._TestsConfig;
+using Deface.NET.UnitTests.Graphics.Helpers;
 using FluentAssertions;
+using SkiaSharp;
 
 namespace Deface.NET.UnitTests.Graphics;
 
@@ -49,7 +52,10 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
         ColorShapeDrawer drawer = new(settings);
         Frame result = drawer.Draw(frame, [Object1]);
 
-        ShapeTestHelper.ValidateRectangle(result, Object1, settings.AnonimizationMethod.ColorValue!);
+        ShapeTestHelper.ValidateRectangle(result, Object1, pixel =>
+        {
+            ValidatePixelColor(pixel, settings.AnonimizationMethod.ColorValue!);
+        });
     }
 
     [Fact]
@@ -61,7 +67,10 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
         ColorShapeDrawer drawer = new(settings);
         Frame result = drawer.Draw(frame, [Object1]);
 
-        ShapeTestHelper.ValidateEllipse(result, Object1, settings.AnonimizationMethod.ColorValue!);
+        ShapeTestHelper.ValidateEllipse(result, Object1, pixel =>
+        {
+            ValidatePixelColor(pixel, settings.AnonimizationMethod.ColorValue!);
+        });
     }
 
     [Fact]
@@ -76,7 +85,10 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
 
         foreach (var obj in objects)
         {
-            ShapeTestHelper.ValidateEllipse(result, obj, settings.AnonimizationMethod.ColorValue!);
+            ShapeTestHelper.ValidateEllipse(result, obj, pixel =>
+            {
+                ValidatePixelColor(pixel, settings.AnonimizationMethod.ColorValue!);
+            });
         }
     }
 
@@ -92,7 +104,10 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
 
         foreach (var obj in objects)
         {
-            ShapeTestHelper.ValidateRectangle(result, obj, settings.AnonimizationMethod.ColorValue!);
+            ShapeTestHelper.ValidateRectangle(result, obj, pixel =>
+            {
+                ValidatePixelColor(pixel, settings.AnonimizationMethod.ColorValue!);
+            });
         }
     }
 
@@ -103,5 +118,12 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
             x.AnonimizationShape = shape;
             x.AnonimizationMethod = TestAnomizationMethod;
         });
+    }
+
+    private static void ValidatePixelColor(PixelData pixel, Color color)
+    {
+        pixel.R.Should().Be(color.R);
+        pixel.G.Should().Be(color.G);
+        pixel.B.Should().Be(color.B);
     }
 }

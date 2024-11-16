@@ -35,7 +35,9 @@ public class ImageFormatUnitTests
     [InlineData(200)]
     public void Jpeg_InvalidQuality_ThrowsArgumentOutOfRangeException(int quality)
     {
-        var action = () => ImageFormat.Jpeg(quality);
+        ImageFormat imageFormat = ImageFormat.Jpeg(quality);
+
+        var action = () => imageFormat.Validate();
 
         action.Should().Throw<ArgumentOutOfRangeException>();
 
