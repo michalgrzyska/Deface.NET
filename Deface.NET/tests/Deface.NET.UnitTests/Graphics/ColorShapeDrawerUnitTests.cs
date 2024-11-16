@@ -20,12 +20,7 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
     [Fact]
     public void DrawObject_NoObjects_DrawnCorrectly()
     {
-        var settings = _settingsFixture.WithAction(x =>
-        {
-            x.AnonimizationShape = AnonimizationShape.Rectangle;
-            x.AnonimizationMethod = TestAnomizationMethod;
-        });
-
+        Settings settings = GetSettings(AnonimizationShape.Rectangle);
         Frame frame = TestFrameHelper.GetTestFrame();
         ColorShapeDrawer drawer = new(settings);
         Frame result = drawer.Draw(frame, []);
@@ -48,12 +43,7 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
     [Fact]
     public void DrawObject_SingleRectangle_DrawnCorrectly()
     {
-        var settings = _settingsFixture.WithAction(x =>
-        {
-            x.AnonimizationShape = AnonimizationShape.Rectangle;
-            x.AnonimizationMethod = TestAnomizationMethod;
-        });
-
+        Settings settings = GetSettings(AnonimizationShape.Rectangle);
         Frame frame = TestFrameHelper.GetTestFrame();
 
         ColorShapeDrawer drawer = new(settings);
@@ -65,17 +55,53 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
     [Fact]
     public void DrawObject_SingleEllipse_DrawnCorrectly()
     {
-        var settings = _settingsFixture.WithAction(x =>
-        {
-            x.AnonimizationShape = AnonimizationShape.Ellipse;
-            x.AnonimizationMethod = TestAnomizationMethod;
-        });
-
+        Settings settings = GetSettings(AnonimizationShape.Ellipse);
         Frame frame = TestFrameHelper.GetTestFrame();
 
         ColorShapeDrawer drawer = new(settings);
         Frame result = drawer.Draw(frame, [Object1]);
 
         ShapeTestHelper.ValidateEllipse(result, Object1, settings.AnonimizationMethod.ColorValue!);
+    }
+
+    [Fact]
+    public void DrawObject_MultipleEllipses_DrawnCorrectly()
+    {
+        Settings settings = GetSettings(AnonimizationShape.Ellipse);
+        Frame frame = TestFrameHelper.GetTestFrame();
+        List<DetectedObject> objects = [Object1, Object2, Object3];
+
+        ColorShapeDrawer drawer = new(settings);
+        Frame result = drawer.Draw(frame, objects);
+
+        foreach (var obj in objects)
+        {
+            ShapeTestHelper.ValidateEllipse(result, obj, settings.AnonimizationMethod.ColorValue!);
+        }
+    }
+
+    [Fact]
+    public void DrawObject_MultipleRectangles_DrawnCorrectly()
+    {
+        Settings settings = GetSettings(AnonimizationShape.Rectangle);
+        Frame frame = TestFrameHelper.GetTestFrame();
+        List<DetectedObject> objects = [Object1, Object2, Object3];
+
+        ColorShapeDrawer drawer = new(settings);
+        Frame result = drawer.Draw(frame, objects);
+
+        foreach (var obj in objects)
+        {
+            ShapeTestHelper.ValidateRectangle(result, obj, settings.AnonimizationMethod.ColorValue!);
+        }
+    }
+
+    private Settings GetSettings(AnonimizationShape shape)
+    {
+        return _settingsFixture.WithAction(x =>
+        {
+            x.AnonimizationShape = shape;
+            x.AnonimizationMethod = TestAnomizationMethod;
+        });
     }
 }
