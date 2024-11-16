@@ -28,19 +28,12 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
         ColorShapeDrawer drawer = new(settings);
         Frame result = drawer.Draw(frame, []);
 
-        var nativeElement = frame.GetNativeElement();
-
-        for (int y = 0; y < frame.Height; y++) 
+        ShapeTestHelper.ValidateWholeFrame(frame, pixel =>
         {
-            for (int x = 0; x < frame.Width; x++) 
-            {
-                var pixel = nativeElement.GetPixel(x, y);
-
-                pixel.Red.Should().Be(255);
-                pixel.Green.Should().Be(255);
-                pixel.Blue.Should().Be(255);
-            }
-        }
+            pixel.R.Should().Be(255);
+            pixel.G.Should().Be(255);
+            pixel.B.Should().Be(255);
+        });
     }
 
     [Fact]

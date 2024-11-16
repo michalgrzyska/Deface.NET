@@ -9,6 +9,19 @@ internal static class ShapeTestHelper
     // Ellipse drawn by library may have slightly different edges so we need to allow some tolerance.
     private const double EllipseShrinkFactor = 2.0;
 
+    public static void ValidateWholeFrame(Frame frame, Action<PixelData> action)
+    {
+        var nativeElement = frame.GetNativeElement();
+
+        for (int y = 0; y < frame.Height; y++)
+        {
+            for (int x = 0; x < frame.Width; x++) 
+            {
+                ValidatePixel(x, y, action, nativeElement);
+            }
+        }
+    }
+
     public static void ValidateRectangle(Frame frame, DetectedObject detectedObject, Action<PixelData> action)
     {
         var nativeElement = frame.GetNativeElement();
