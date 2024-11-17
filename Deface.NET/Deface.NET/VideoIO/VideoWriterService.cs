@@ -30,6 +30,7 @@ internal class VideoWriterService(ScopedSettingsProvider settingsProvider)
 
         string args = string.Join(" ",
         [
+            "-loglevel", "panic",
             "-y",
             "-f", "rawvideo",
             "-pixel_format", "rgb24",

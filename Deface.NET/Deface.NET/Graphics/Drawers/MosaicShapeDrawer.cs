@@ -7,10 +7,12 @@ internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
 {
     private readonly Settings _settings = settings;
 
+    private const int MosaicDivisionFactor = 50;
+
     public Frame Draw(Frame frame, List<DetectedObject> objects)
     {
         var bitmap = frame.GetNativeElement();
-        int mosaicSize = GetMosaicSize(frame);
+        var (mosaicW, mosaicH) = GetMosaicSize(frame);
 
         using SKCanvas canvas = new(bitmap);
 
@@ -23,7 +25,7 @@ internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
 
             roiCanvas.DrawBitmap(bitmap, rect, new SKRect(0, 0, roiBitmap.Width, roiBitmap.Height));
 
-            SKBitmap mosaicBitmap = CreateMosaic(roiBitmap, mosaicSize);
+            SKBitmap mosaicBitmap = CreateMosaic(roiBitmap, mosaicW, mosaicH);
 
             if (_settings.AnonimizationShape == AnonimizationShape.Rectangle)
             {
@@ -47,23 +49,25 @@ internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
         return frame;
     }
 
-    private static int GetMosaicSize(Frame frame)
+    internal static (int SizeW, int SizeH) GetMosaicSize(Frame frame)
     {
         var longerSide = Math.Max(frame.Width, frame.Height);
-        return longerSide / 50;
+        var mosaicSize = longerSide / MosaicDivisionFactor;
+
+        int mosaicWidth = frame.Width / mosaicSize;
+        int mosaicHeight = frame.Height / mosaicSize;
+
+        return (mosaicWidth, mosaicHeight);
     }
 
-    private static SKBitmap CreateMosaic(SKBitmap bitmap, int mosaicSize)
+    private static SKBitmap CreateMosaic(SKBitmap bitmap, int mosaicW, int mosaicH)
     {
         int width = bitmap.Width;
         int height = bitmap.Height;
 
-        int mosaicWidth = width / mosaicSize;
-        int mosaicHeight = height / mosaicSize;
-
         SKBitmap mosaicBitmap = new(width, height);
         using SKCanvas canvas = new(mosaicBitmap);
-        using var smallBitmap = bitmap.Resize(new SKImageInfo(mosaicWidth, mosaicHeight), SKFilterQuality.None);
+        using var smallBitmap = bitmap.Resize(new SKImageInfo(mosaicW, mosaicH), SKFilterQuality.None);
 
         if (smallBitmap != null)
         {

@@ -88,6 +88,7 @@ internal class VideoReader : IDisposable
     {
         string args = string.Join(" ",
         [
+            "-loglevel", "panic",
             "-i", $"\"{_videoFilePath}\"",
             "-f", "image2pipe",
             "-pix_fmt", "rgb24",
