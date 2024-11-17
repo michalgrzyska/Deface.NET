@@ -15,4 +15,8 @@ public static class TestResources
 
     public const string Photo1 = $"{PhotosDir}/photo1.jpg";
     public const string Photo2 = $"{PhotosDir}/photo2.jpg";
+    public const string Photo3 = $"{PhotosDir}/photo3.jpg";
+    public const string Photo4 = $"{PhotosDir}/photo4.jpg";
+    public const string Photo5 = $"{PhotosDir}/photo5.jpg";
+    public const string Photo6 = $"{PhotosDir}/photo6.jpg";
 }

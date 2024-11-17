@@ -11,13 +11,12 @@ IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
     //options.FFMpegPath = "/usr/bin/ffmpeg";
     //options.FFProbePath = "/usr/bin/ffprobe";
 
-    options.AnonimizationMethod = AnonimizationMethod.Mosaic;
+    options.AnonimizationMethod = AnonimizationMethod.Color(255, 0, 0);
     options.AnonimizationShape = AnonimizationShape.Ellipse;
-    options.ImageFormat = ImageFormat.Jpeg(10);
 });
 
-var result = await defaceService.ProcessVideo(TestResources.Video_Short_640_360_24fps, "testt.mp4");
+//var result = await defaceService.ProcessVideo(TestResources.Video_Short_640_360_24fps, "testt.mp4");
 
-//var result = defaceService.ProcessImage(TestResources.Photo1, "C://DefaceTest//1.png", x => { x.AnonimizationShape = AnonimizationShape.Rectangle; });
+var result = defaceService.ProcessImage(TestResources.Photo3, "C://DefaceTest//4.png");
 
 var x = 5;

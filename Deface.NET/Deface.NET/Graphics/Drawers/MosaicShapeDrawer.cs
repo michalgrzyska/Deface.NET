@@ -7,7 +7,7 @@ internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
 {
     private readonly Settings _settings = settings;
 
-    private const int MosaicDivisionFactor = 50;
+    private const int MosaicDivisionFactor = 20;
 
     public Frame Draw(Frame frame, List<DetectedObject> objects)
     {
