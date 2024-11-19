@@ -1,6 +1,6 @@
 ﻿using Deface.NET.Configuration;
-using Deface.NET.Graphics;
-using Deface.NET.Graphics.Drawers;
+using Deface.NET.Graphics.Effects;
+using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
@@ -23,7 +23,7 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
     {
         Settings settings = GetSettings(AnonimizationShape.Rectangle);
         Frame frame = TestFrameHelper.GetTestFrame();
-        ColorShapeDrawer drawer = new(settings);
+        ColorShapeEffect drawer = new(settings);
         Frame result = drawer.Draw(frame, []);
 
         ShapeTestHelper.ValidateWholeFrame(frame, pixel =>
@@ -40,7 +40,7 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
         Settings settings = GetSettings(AnonimizationShape.Rectangle);
         Frame frame = TestFrameHelper.GetTestFrame();
 
-        ColorShapeDrawer drawer = new(settings);
+        ColorShapeEffect drawer = new(settings);
         Frame result = drawer.Draw(frame, [Object1]);
 
         ShapeTestHelper.ValidateRectangle(result, Object1, pixel =>
@@ -55,7 +55,7 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
         Settings settings = GetSettings(AnonimizationShape.Ellipse);
         Frame frame = TestFrameHelper.GetTestFrame();
 
-        ColorShapeDrawer drawer = new(settings);
+        ColorShapeEffect drawer = new(settings);
         Frame result = drawer.Draw(frame, [Object1]);
 
         ShapeTestHelper.ValidateEllipse(result, Object1, pixel =>
@@ -71,7 +71,7 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
         Frame frame = TestFrameHelper.GetTestFrame();
         List<DetectedObject> objects = [Object1, Object2, Object3];
 
-        ColorShapeDrawer drawer = new(settings);
+        ColorShapeEffect drawer = new(settings);
         Frame result = drawer.Draw(frame, objects);
 
         foreach (var obj in objects)
@@ -90,7 +90,7 @@ public class ColorShapeDrawerUnitTests(SettingsFixture settingsFixture)
         Frame frame = TestFrameHelper.GetTestFrame();
         List<DetectedObject> objects = [Object1, Object2, Object3];
 
-        ColorShapeDrawer drawer = new(settings);
+        ColorShapeEffect drawer = new(settings);
         Frame result = drawer.Draw(frame, objects);
 
         foreach (var obj in objects)

@@ -1,4 +1,4 @@
-﻿using Deface.NET.Graphics;
+﻿using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection.UltraFace;
 
 namespace Deface.NET.ObjectDetection;
@@ -6,7 +6,7 @@ namespace Deface.NET.ObjectDetection;
 /// <summary>
 /// This is the foundation for multiple models if needed (which is planned).
 /// </summary>
-internal class ObjectDetector : IDisposable
+internal class ObjectDetector : IObjectDetector
 {
     private UltraFaceDetector _ultraface = default!;
     private UltraFaceDetector Ultraface => _ultraface ??= new();

@@ -1,5 +1,6 @@
 ﻿using Deface.NET.Configuration.Provider;
 using Deface.NET.Graphics;
+using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.Processing;
@@ -32,11 +33,11 @@ public static class DependencyInjection
         services.AddScoped<VideoWriterService>();
         services.AddScoped<VideoReaderService>();
         services.AddScoped<VideoInfoService>();
-        services.AddScoped<ShapeDrawingService>();
+        services.AddScoped<IShapeDrawer, ShapeDrawer>();
 
-        services.AddSingleton<ObjectDetector>();
+        services.AddSingleton<IObjectDetector, ObjectDetector>();
         services.AddSingleton<FileSystem>();
-        services.AddSingleton<FrameCreator>();
+        services.AddSingleton<IFrameCreator, FrameCreator>();
 
         return services;
     }

@@ -1,5 +1,6 @@
 ﻿using Deface.NET.Configuration.Provider;
-using Deface.NET.Graphics;
+using Deface.NET.Graphics.Interfaces;
+using Deface.NET.Graphics.Models;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.VideoIO;
@@ -11,17 +12,17 @@ internal sealed class VideoProcessor
 (
     IScopedSettingsProvider settingsProvider,
     IDLogger<IDefaceService> logger,
-    ObjectDetector detector,
+    IObjectDetector detector,
     VideoWriterService videoWriterService,
     VideoReaderService videoReaderService,
-    ShapeDrawingService shapeDrawingService
+    IShapeDrawer shapeDrawer
 ) : IDisposable
 {
     private readonly IDLogger<IDefaceService> _logger = logger;
-    private readonly ObjectDetector _detector = detector;
+    private readonly IObjectDetector _detector = detector;
     private readonly VideoWriterService _videoWriterService = videoWriterService;
     private readonly VideoReaderService _videoReaderService = videoReaderService;
-    private readonly ShapeDrawingService _shapeDrawingService = shapeDrawingService;
+    private readonly IShapeDrawer _shapeDrawer = shapeDrawer;
     private readonly Settings _settings = settingsProvider.Settings;
 
     private List<DetectedObject> _lastDetectedObjects = [];
@@ -71,7 +72,7 @@ internal sealed class VideoProcessor
             _lastDetectedObjects = _detector.Detect(frame, _settings);
         }
 
-        Frame processedFrame = _shapeDrawingService.DrawShapes(frame, _lastDetectedObjects);
+        Frame processedFrame = _shapeDrawer.DrawShapes(frame, _lastDetectedObjects);
         return processedFrame;
     }
 }

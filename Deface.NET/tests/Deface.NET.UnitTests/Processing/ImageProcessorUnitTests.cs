@@ -1,5 +1,6 @@
 ﻿using Deface.NET.Configuration.Provider;
 using Deface.NET.Graphics;
+using Deface.NET.Graphics.Models;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.Processing;
@@ -16,9 +17,9 @@ public class ImageProcessorUnitTests
     private readonly IScopedSettingsProvider _settingsProvider;
     private readonly IDLogger<IDefaceService> _logger;
     private readonly ObjectDetector _detector;
-    private readonly ShapeDrawingService _shapeDrawingService;
+    private readonly IShapeDrawer _shapeDrawer;
     private readonly FileSystem _fileSystem;
-    private readonly FrameCreator _frameCreator;
+    private readonly IFrameCreator _frameCreator;
 
     private readonly ImageProcessor _imageProcessor;
 
@@ -29,11 +30,11 @@ public class ImageProcessorUnitTests
         _settingsProvider = Substitute.For<IScopedSettingsProvider>();
         _logger = Substitute.For<IDLogger<IDefaceService>>();
         _detector = Substitute.For<ObjectDetector>();
-        _shapeDrawingService = Substitute.For<ShapeDrawingService>();
+        _shapeDrawer = Substitute.For<IShapeDrawer>();
         _fileSystem = Substitute.For<FileSystem>();
-        _frameCreator = Substitute.For<FrameCreator>();
+        _frameCreator = Substitute.For<IFrameCreator>();
 
-        _imageProcessor = new(_settingsProvider, _logger, _detector, _shapeDrawingService, _fileSystem, _frameCreator);
+        _imageProcessor = new(_settingsProvider, _logger, _detector, _shapeDrawer, _fileSystem, _frameCreator);
     }
 
     [Fact]
@@ -56,7 +57,7 @@ public class ImageProcessorUnitTests
         // Assert
 
         _detector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
-        _shapeDrawingService.Received(1).DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
+        _shapeDrawer.Received(1).DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
         _fileSystem.Received(1).Save(Arg.Any<string>(), Arg.Any<byte[]>());
     }
 }

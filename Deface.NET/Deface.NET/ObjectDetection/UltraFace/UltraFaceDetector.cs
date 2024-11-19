@@ -1,4 +1,4 @@
-﻿using Deface.NET.Graphics;
+﻿using Deface.NET.Graphics.Models;
 using Deface.NET.Utils;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.Onnx;

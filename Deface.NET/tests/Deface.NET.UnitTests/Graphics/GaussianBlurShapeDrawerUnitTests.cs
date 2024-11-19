@@ -1,5 +1,5 @@
-﻿using Deface.NET.Graphics;
-using Deface.NET.Graphics.Drawers;
+﻿using Deface.NET.Graphics.Effects;
+using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
@@ -20,7 +20,7 @@ public class GaussianBlurShapeDrawerUnitTests(SettingsFixture settingsFixture)
     {
         Settings settings = GetSettings(AnonimizationShape.Rectangle);
         Frame frame = TestFrameHelper.GetTestFrameWithMesh();
-        GaussianBlurShapeDrawer drawer = new(settings);
+        GaussianBlurShapeEffect drawer = new(settings);
         Frame result = drawer.Draw(frame, []);
 
         ShapeTestHelper.ValidateWholeFrame(frame, pixel =>
@@ -36,7 +36,7 @@ public class GaussianBlurShapeDrawerUnitTests(SettingsFixture settingsFixture)
     {
         Settings settings = GetSettings(AnonimizationShape.Rectangle);
         Frame frame = TestFrameHelper.GetTestFrameWithMesh();
-        GaussianBlurShapeDrawer drawer = new(settings);
+        GaussianBlurShapeEffect drawer = new(settings);
 
         Frame result = drawer.Draw(frame, [Object1]);
 
@@ -48,7 +48,7 @@ public class GaussianBlurShapeDrawerUnitTests(SettingsFixture settingsFixture)
     {
         Settings settings = GetSettings(AnonimizationShape.Ellipse);
         Frame frame = TestFrameHelper.GetTestFrameWithMesh();
-        GaussianBlurShapeDrawer drawer = new(settings);
+        GaussianBlurShapeEffect drawer = new(settings);
 
         Frame result = drawer.Draw(frame, [Object1]);
 
@@ -60,7 +60,7 @@ public class GaussianBlurShapeDrawerUnitTests(SettingsFixture settingsFixture)
     {
         Settings settings = GetSettings(AnonimizationShape.Ellipse);
         Frame frame = TestFrameHelper.GetTestFrameWithMesh();
-        GaussianBlurShapeDrawer drawer = new(settings);
+        GaussianBlurShapeEffect drawer = new(settings);
         List<DetectedObject> objects = [Object1, Object2, Object3];
 
         Frame result = drawer.Draw(frame, objects);
@@ -76,7 +76,7 @@ public class GaussianBlurShapeDrawerUnitTests(SettingsFixture settingsFixture)
     {
         Settings settings = GetSettings(AnonimizationShape.Rectangle);
         Frame frame = TestFrameHelper.GetTestFrameWithMesh();
-        GaussianBlurShapeDrawer drawer = new(settings);
+        GaussianBlurShapeEffect drawer = new(settings);
         List<DetectedObject> objects = [Object1, Object2, Object3];
 
         Frame result = drawer.Draw(frame, objects);

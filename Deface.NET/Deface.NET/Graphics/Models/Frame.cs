@@ -1,7 +1,7 @@
 ﻿using SkiaSharp;
 using System.Runtime.InteropServices;
 
-namespace Deface.NET.Graphics;
+namespace Deface.NET.Graphics.Models;
 
 internal class Frame : IDisposable
 {
@@ -65,7 +65,7 @@ internal class Frame : IDisposable
 
         try
         {
-            IntPtr bgraDataPtr = handle.AddrOfPinnedObject();
+            nint bgraDataPtr = handle.AddrOfPinnedObject();
             pixmap.ReadPixels(new SKImageInfo(width, height, SKColorType.Bgra8888, SKAlphaType.Premul), bgraDataPtr, width * 4);
 
             for (int i = 0, j = 0; i < bgraData.Length; i += 4, j += 3)

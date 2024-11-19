@@ -1,5 +1,5 @@
 ﻿using Deface.NET.Configuration.Provider;
-using Deface.NET.Graphics;
+using Deface.NET.Graphics.Models;
 using Deface.NET.VideoIO.Models;
 
 namespace Deface.NET.VideoIO;

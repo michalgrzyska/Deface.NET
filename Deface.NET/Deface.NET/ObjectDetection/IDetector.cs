@@ -1,4 +1,4 @@
-﻿using Deface.NET.Graphics;
+﻿using Deface.NET.Graphics.Models;
 
 namespace Deface.NET.ObjectDetection;
 

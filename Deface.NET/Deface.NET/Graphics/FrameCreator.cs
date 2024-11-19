@@ -1,8 +1,10 @@
-﻿using Deface.NET.Processing;
+﻿using Deface.NET.Graphics.Interfaces;
+using Deface.NET.Graphics.Models;
+using Deface.NET.Processing;
 
 namespace Deface.NET.Graphics;
 
-internal class FrameCreator(FileSystem fileSystem)
+internal class FrameCreator(FileSystem fileSystem) : IFrameCreator
 {
     private readonly FileSystem _fileSystem = fileSystem;
 

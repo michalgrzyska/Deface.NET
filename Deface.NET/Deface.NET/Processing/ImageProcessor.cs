@@ -1,5 +1,6 @@
 ﻿using Deface.NET.Configuration.Provider;
 using Deface.NET.Graphics;
+using Deface.NET.Graphics.Models;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using System.Diagnostics;
@@ -10,17 +11,17 @@ internal sealed class ImageProcessor
 (
     IScopedSettingsProvider settingsProvider,
     IDLogger<IDefaceService> logger,
-    ObjectDetector detector,
-    ShapeDrawingService shapeDrawingService,
+    IObjectDetector detector,
+    IShapeDrawer shapeDrawingService,
     FileSystem fileSystem,
-    FrameCreator frameCreator
+    IFrameCreator frameCreator
 ) : IDisposable
 {
     private readonly IDLogger<IDefaceService> _logger = logger;
-    private readonly ObjectDetector _detector = detector;
-    private readonly ShapeDrawingService _shapeDrawingService = shapeDrawingService;
+    private readonly IObjectDetector _detector = detector;
+    private readonly IShapeDrawer _shapeDrawingService = shapeDrawingService;
     private readonly FileSystem _fileSystem = fileSystem;
-    private readonly FrameCreator _frameCreator = frameCreator;
+    private readonly IFrameCreator _frameCreator = frameCreator;
     private readonly Settings _settings = settingsProvider.Settings;
 
     private readonly static string[] ImageExtensions = [".jpg", ".jpeg", ".png"];

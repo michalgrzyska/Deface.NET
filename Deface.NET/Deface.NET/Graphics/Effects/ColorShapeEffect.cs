@@ -1,9 +1,11 @@
-﻿using Deface.NET.ObjectDetection;
+﻿using Deface.NET.Graphics.Interfaces;
+using Deface.NET.Graphics.Models;
+using Deface.NET.ObjectDetection;
 using SkiaSharp;
 
-namespace Deface.NET.Graphics.Drawers;
+namespace Deface.NET.Graphics.Effects;
 
-internal class ColorShapeDrawer(Settings settings) : IShapeDrawer
+internal class ColorShapeEffect(Settings settings) : IEffectShape
 {
     private readonly Settings _settings = settings;
 
