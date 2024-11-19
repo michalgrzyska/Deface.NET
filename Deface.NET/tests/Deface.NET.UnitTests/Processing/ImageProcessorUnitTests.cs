@@ -17,10 +17,12 @@ public class ImageProcessorUnitTests
 
     private readonly IScopedSettingsProvider _settingsProvider;
     private readonly IDLogger<IDefaceService> _logger;
-    private readonly ObjectDetector _detector;
+    private readonly IObjectDetector _detector;
     private readonly IShapeDrawer _shapeDrawer;
-    private readonly FileSystem _fileSystem;
+    private readonly IFileSystem _fileSystem;
     private readonly IFrameCreator _frameCreator;
+
+    private readonly Frame _testFrame;
 
     private readonly ImageProcessor _imageProcessor;
 
@@ -30,10 +32,14 @@ public class ImageProcessorUnitTests
 
         _settingsProvider = Substitute.For<IScopedSettingsProvider>();
         _logger = Substitute.For<IDLogger<IDefaceService>>();
-        _detector = Substitute.For<ObjectDetector>();
+        _detector = Substitute.For<IObjectDetector>();
         _shapeDrawer = Substitute.For<IShapeDrawer>();
-        _fileSystem = Substitute.For<FileSystem>();
+        _fileSystem = Substitute.For<IFileSystem>();
         _frameCreator = Substitute.For<IFrameCreator>();
+
+        _testFrame = GetTestFrame();
+
+        _settingsProvider.Settings.Returns(_settingsFixture.Settings);
 
         _imageProcessor = new(_settingsProvider, _logger, _detector, _shapeDrawer, _fileSystem, _frameCreator);
     }
@@ -45,11 +51,15 @@ public class ImageProcessorUnitTests
 
         _frameCreator
             .FromFile(Arg.Any<string>())
-            .Returns(Arg.Any<Frame>());
+            .Returns(_testFrame);
 
         _detector
             .Detect(Arg.Any<Frame>(), Arg.Any<Settings>())
             .Returns([]);
+
+        _shapeDrawer
+            .DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>())
+            .Returns(_testFrame);
 
         // Act
 
@@ -60,5 +70,11 @@ public class ImageProcessorUnitTests
         _detector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
         _shapeDrawer.Received(1).DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
         _fileSystem.Received(1).Save(Arg.Any<string>(), Arg.Any<byte[]>());
+    }
+
+    private static Frame GetTestFrame()
+    {
+        using FileStream fs = File.OpenRead(TestResources.TestResources.Photo1);
+        return new(fs);
     }
 }
