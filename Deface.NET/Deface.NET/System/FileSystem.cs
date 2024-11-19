@@ -1,6 +1,6 @@
-﻿namespace Deface.NET.Processing;
+﻿namespace Deface.NET.System;
 
-internal class FileSystem
+internal class FileSystem : IFileSystem
 {
     public FileStream OpenRead(string path)
     {

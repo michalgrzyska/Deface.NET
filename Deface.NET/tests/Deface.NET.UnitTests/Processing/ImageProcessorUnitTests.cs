@@ -1,9 +1,10 @@
 ﻿using Deface.NET.Configuration.Provider;
-using Deface.NET.Graphics;
+using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.Processing;
+using Deface.NET.System;
 using Deface.NET.UnitTests._TestsConfig;
 using NSubstitute;
 

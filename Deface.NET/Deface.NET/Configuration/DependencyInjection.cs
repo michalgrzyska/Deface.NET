@@ -4,6 +4,7 @@ using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.Processing;
+using Deface.NET.System;
 using Deface.NET.VideoIO;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -36,7 +37,7 @@ public static class DependencyInjection
         services.AddScoped<IShapeDrawer, ShapeDrawer>();
 
         services.AddSingleton<IObjectDetector, ObjectDetector>();
-        services.AddSingleton<FileSystem>();
+        services.AddSingleton<IFileSystem, FileSystem>();
         services.AddSingleton<IFrameCreator, FrameCreator>();
 
         return services;

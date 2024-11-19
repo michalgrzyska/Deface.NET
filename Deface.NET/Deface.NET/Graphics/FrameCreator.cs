@@ -1,12 +1,12 @@
 ﻿using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.Models;
-using Deface.NET.Processing;
+using Deface.NET.System;
 
 namespace Deface.NET.Graphics;
 
-internal class FrameCreator(FileSystem fileSystem) : IFrameCreator
+internal class FrameCreator(IFileSystem fileSystem) : IFrameCreator
 {
-    private readonly FileSystem _fileSystem = fileSystem;
+    private readonly IFileSystem _fileSystem = fileSystem;
 
     public Frame FromFile(string path)
     {

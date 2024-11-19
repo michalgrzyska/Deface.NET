@@ -1,8 +1,9 @@
 ﻿using Deface.NET.Configuration.Provider;
-using Deface.NET.Graphics;
+using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
+using Deface.NET.System;
 using System.Diagnostics;
 
 namespace Deface.NET.Processing;
@@ -13,14 +14,14 @@ internal sealed class ImageProcessor
     IDLogger<IDefaceService> logger,
     IObjectDetector detector,
     IShapeDrawer shapeDrawingService,
-    FileSystem fileSystem,
+    IFileSystem fileSystem,
     IFrameCreator frameCreator
 ) : IDisposable
 {
     private readonly IDLogger<IDefaceService> _logger = logger;
     private readonly IObjectDetector _detector = detector;
     private readonly IShapeDrawer _shapeDrawingService = shapeDrawingService;
-    private readonly FileSystem _fileSystem = fileSystem;
+    private readonly IFileSystem _fileSystem = fileSystem;
     private readonly IFrameCreator _frameCreator = frameCreator;
     private readonly Settings _settings = settingsProvider.Settings;
 
