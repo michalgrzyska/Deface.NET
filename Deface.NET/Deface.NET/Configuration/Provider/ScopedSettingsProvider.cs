@@ -1,6 +1,6 @@
 ﻿namespace Deface.NET.Configuration.Provider;
 
-internal class ScopedSettingsProvider(Settings settings)
+internal class ScopedSettingsProvider(Settings settings) : IScopedSettingsProvider
 {
     private readonly Settings _settings = settings;
 

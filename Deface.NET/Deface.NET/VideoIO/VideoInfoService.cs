@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Deface.NET.VideoIO;
 
-internal class VideoInfoService(ScopedSettingsProvider settingsProvider)
+internal class VideoInfoService(IScopedSettingsProvider settingsProvider)
 {
     private readonly Settings _settings = settingsProvider.Settings;
 

@@ -21,10 +21,10 @@ public static class DependencyInjection
         Settings settings = new(builder);
 
         services.AddSingleton(settings);
-        services.AddScoped(typeof(ScopedSettingsProvider));
+        services.AddScoped<IScopedSettingsProvider, ScopedSettingsProvider>();
 
         services.AddSingleton<IDefaceService, DefaceService>();
-        services.AddTransient(typeof(DLogger<>));
+        services.AddTransient(typeof(IDLogger<>), typeof(DLogger<>));
         services.AddDefaultLoggerIfNeeded();
 
         services.AddScoped<VideoProcessor>();
@@ -35,6 +35,8 @@ public static class DependencyInjection
         services.AddScoped<ShapeDrawingService>();
 
         services.AddSingleton<ObjectDetector>();
+        services.AddSingleton<FileSystem>();
+        services.AddSingleton<FrameCreator>();
 
         return services;
     }

@@ -9,15 +9,15 @@ namespace Deface.NET.Processing;
 
 internal sealed class VideoProcessor
 (
-    ScopedSettingsProvider settingsProvider,
-    DLogger<IDefaceService> logger,
+    IScopedSettingsProvider settingsProvider,
+    IDLogger<IDefaceService> logger,
     ObjectDetector detector,
     VideoWriterService videoWriterService,
     VideoReaderService videoReaderService,
     ShapeDrawingService shapeDrawingService
 ) : IDisposable
 {
-    private readonly DLogger<IDefaceService> _logger = logger;
+    private readonly IDLogger<IDefaceService> _logger = logger;
     private readonly ObjectDetector _detector = detector;
     private readonly VideoWriterService _videoWriterService = videoWriterService;
     private readonly VideoReaderService _videoReaderService = videoReaderService;

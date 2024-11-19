@@ -42,13 +42,12 @@ internal class Frame : IDisposable
         _bitmap = bitmap;
     }
 
-    public void SaveTo(string path, ImageFormat imageFormat)
+    public byte[] ToByteArray(ImageFormat imageFormat)
     {
         using SKImage resultImage = SKImage.FromBitmap(_bitmap);
         using SKData data = resultImage.Encode(imageFormat.Format, imageFormat.Quality);
-        using FileStream stream = File.OpenWrite(path);
 
-        data.SaveTo(stream);
+        return data.ToArray();
     }
 
     public byte[] ToByteArray()

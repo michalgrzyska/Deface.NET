@@ -9,7 +9,7 @@ internal class ShapeDrawingService
 {
     private readonly IShapeDrawer _shapeDrawer;
 
-    public ShapeDrawingService(ScopedSettingsProvider settingsProvider)
+    public ShapeDrawingService(IScopedSettingsProvider settingsProvider)
     {
         var settings = settingsProvider.Settings;
 

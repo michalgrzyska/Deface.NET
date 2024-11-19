@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace Deface.NET.VideoIO;
 
-internal class VideoWriterService(ScopedSettingsProvider settingsProvider)
+internal class VideoWriterService(IScopedSettingsProvider settingsProvider)
 {
     private readonly Settings _settings = settingsProvider.Settings;
 

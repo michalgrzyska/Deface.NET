@@ -2,7 +2,7 @@
 
 namespace Deface.NET.Logging;
 
-internal class DLogger<T>(Settings settings, ILogger<T> logger)
+internal class DLogger<T>(Settings settings, ILogger<T> logger) : IDLogger<T>
 {
     private readonly ILogger<T> _logger = logger;
     private readonly DefaceLoggingLevel _loggingLevel = settings.LoggingLevel;

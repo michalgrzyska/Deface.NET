@@ -10,7 +10,7 @@ internal static class ServiceScopeFactoryExtensions
 
         if (customSettings is not null)
         {
-            var scopedSettingsProvider = scope.ServiceProvider.GetRequiredService<ScopedSettingsProvider>();
+            var scopedSettingsProvider = scope.ServiceProvider.GetRequiredService<IScopedSettingsProvider>();
             scopedSettingsProvider.Init(customSettings);
         }
 

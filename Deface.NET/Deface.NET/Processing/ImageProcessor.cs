@@ -8,15 +8,19 @@ namespace Deface.NET.Processing;
 
 internal sealed class ImageProcessor
 (
-    ScopedSettingsProvider settingsProvider,
-    DLogger<IDefaceService> logger,
+    IScopedSettingsProvider settingsProvider,
+    IDLogger<IDefaceService> logger,
     ObjectDetector detector,
-    ShapeDrawingService shapeDrawingService
-    ) : IDisposable
+    ShapeDrawingService shapeDrawingService,
+    FileSystem fileSystem,
+    FrameCreator frameCreator
+) : IDisposable
 {
-    private readonly DLogger<IDefaceService> _logger = logger;
+    private readonly IDLogger<IDefaceService> _logger = logger;
     private readonly ObjectDetector _detector = detector;
     private readonly ShapeDrawingService _shapeDrawingService = shapeDrawingService;
+    private readonly FileSystem _fileSystem = fileSystem;
+    private readonly FrameCreator _frameCreator = frameCreator;
     private readonly Settings _settings = settingsProvider.Settings;
 
     private readonly static string[] ImageExtensions = [".jpg", ".jpeg", ".png"];
@@ -28,7 +32,7 @@ internal sealed class ImageProcessor
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        using Frame image = LoadImage(inputPath);
+        using Frame image = _frameCreator.FromFile(inputPath);
         ProcessImage(image, outputPath);
 
         stopwatch.Stop();
@@ -57,30 +61,13 @@ internal sealed class ImageProcessor
         return results;
     }
 
-    private static Frame LoadImage(string path)
-    {
-        try
-        {
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException("Image file not found", path);
-            }
-
-            using FileStream stream = File.OpenRead(path);
-            return new(stream);
-        }
-        catch (Exception e)
-        {
-            throw new DefaceException($"Could not open image {path}.", e);
-        }
-    }
-
     private void ProcessImage(Frame image, string outputPath)
     {
         List<DetectedObject> detectedObjects = _detector.Detect(image, _settings);
         Frame result = _shapeDrawingService.DrawShapes(image, detectedObjects);
 
-        result.SaveTo(outputPath, _settings.ImageFormat);
+        var resultBytes = result.ToByteArray(_settings.ImageFormat);
+        _fileSystem.Save(outputPath, resultBytes);
     }
 
     private static string GetOutputPath(string inputPath, string outputDirPath)

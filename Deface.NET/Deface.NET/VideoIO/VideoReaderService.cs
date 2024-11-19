@@ -4,7 +4,7 @@ using Deface.NET.VideoIO.Models;
 
 namespace Deface.NET.VideoIO;
 
-internal class VideoReaderService(ScopedSettingsProvider settingsProvider, VideoInfoService videoInfoService)
+internal class VideoReaderService(IScopedSettingsProvider settingsProvider, VideoInfoService videoInfoService)
 {
     private readonly Settings _settings = settingsProvider.Settings;
     private readonly VideoInfoService _videoInfoService = videoInfoService;
