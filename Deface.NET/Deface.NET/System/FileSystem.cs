@@ -11,4 +11,9 @@ internal class FileSystem : IFileSystem
     {
         File.WriteAllBytes(path, data);
     }
+
+    public string[] GetFiles(string path)
+    {
+        return Directory.GetFiles(path);
+    }
 }

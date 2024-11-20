@@ -15,14 +15,12 @@ public class ImageProcessorUnitTests
 {
     private readonly SettingsFixture _settingsFixture;
 
-    private readonly IScopedSettingsProvider _settingsProvider;
-    private readonly IDLogger<IDefaceService> _logger;
-    private readonly IObjectDetector _detector;
-    private readonly IShapeDrawer _shapeDrawer;
-    private readonly IFileSystem _fileSystem;
-    private readonly IFrameCreator _frameCreator;
-
-    private readonly Frame _testFrame;
+    private readonly IScopedSettingsProvider _settingsProvider = Substitute.For<IScopedSettingsProvider>();
+    private readonly IDLogger<IDefaceService> _logger = Substitute.For<IDLogger<IDefaceService>>();
+    private readonly IObjectDetector _detector = Substitute.For<IObjectDetector>();
+    private readonly IShapeDrawer _shapeDrawer = Substitute.For<IShapeDrawer>();
+    private readonly IFileSystem _fileSystem = Substitute.For<IFileSystem>();
+    private readonly IFrameCreator _frameCreator = Substitute.For<IFrameCreator>();
 
     private readonly ImageProcessor _imageProcessor;
 
@@ -30,16 +28,7 @@ public class ImageProcessorUnitTests
     {
         _settingsFixture = settingsFixture;
 
-        _settingsProvider = Substitute.For<IScopedSettingsProvider>();
-        _logger = Substitute.For<IDLogger<IDefaceService>>();
-        _detector = Substitute.For<IObjectDetector>();
-        _shapeDrawer = Substitute.For<IShapeDrawer>();
-        _fileSystem = Substitute.For<IFileSystem>();
-        _frameCreator = Substitute.For<IFrameCreator>();
-
-        _testFrame = GetTestFrame();
-
-        _settingsProvider.Settings.Returns(_settingsFixture.Settings);
+        SetupMockMethods();
 
         _imageProcessor = new(_settingsProvider, _logger, _detector, _shapeDrawer, _fileSystem, _frameCreator);
     }
@@ -47,11 +36,56 @@ public class ImageProcessorUnitTests
     [Fact]
     public void Process_DependenciesCalledProperly()
     {
+        // Act
+        _imageProcessor.Process("input.mp4", "output.mp4");
+
+        // Assert
+        _detector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
+        _shapeDrawer.Received(1).DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
+        _fileSystem.Received(1).Save(Arg.Any<string>(), Arg.Any<byte[]>());
+    }
+
+    [Fact]
+    public void ProcessMany_DependenciesCalledProperly()
+    {
         // Arrange
+
+        string[] systemFiles =
+        [
+            "file1.jpg",
+            "file2.jpg",
+            "file3.png",
+            "file4.png",
+            "file5.jpeg",
+            "file6.exe"
+        ];
+
+        _fileSystem.GetFiles(Arg.Any<string>()).Returns(systemFiles);
+
+        // Act
+
+        _imageProcessor.ProcessMany("inputDir", "outputDir");
+
+        // Assert
+
+        _detector.Received(5).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
+        _shapeDrawer.Received(5).DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
+        _fileSystem.Received(5).Save(Arg.Any<string>(), Arg.Any<byte[]>());
+    }
+
+    private static Frame GetTestFrame()
+    {
+        using FileStream fs = File.OpenRead(TestResources.TestResources.Photo1);
+        return new(fs);
+    }
+
+    private void SetupMockMethods()
+    {
+        _settingsProvider.Settings.Returns(_settingsFixture.Settings);
 
         _frameCreator
             .FromFile(Arg.Any<string>())
-            .Returns(_testFrame);
+            .Returns(GetTestFrame());
 
         _detector
             .Detect(Arg.Any<Frame>(), Arg.Any<Settings>())
@@ -59,22 +93,6 @@ public class ImageProcessorUnitTests
 
         _shapeDrawer
             .DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>())
-            .Returns(_testFrame);
-
-        // Act
-
-        _imageProcessor.Process("input.mp4", "output.mp4");
-
-        // Assert
-
-        _detector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
-        _shapeDrawer.Received(1).DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
-        _fileSystem.Received(1).Save(Arg.Any<string>(), Arg.Any<byte[]>());
-    }
-
-    private static Frame GetTestFrame()
-    {
-        using FileStream fs = File.OpenRead(TestResources.TestResources.Photo1);
-        return new(fs);
+            .Returns(GetTestFrame());
     }
 }

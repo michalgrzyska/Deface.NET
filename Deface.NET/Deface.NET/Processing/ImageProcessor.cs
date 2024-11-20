@@ -23,6 +23,7 @@ internal sealed class ImageProcessor
     private readonly IShapeDrawer _shapeDrawer = shapeDrawer;
     private readonly IFileSystem _fileSystem = fileSystem;
     private readonly IFrameCreator _frameCreator = frameCreator;
+
     private readonly Settings _settings = settingsProvider.Settings;
 
     private readonly static string[] ImageExtensions = [".jpg", ".jpeg", ".png"];
@@ -45,8 +46,9 @@ internal sealed class ImageProcessor
 
     public List<ProcessingResult> ProcessMany(string inputDirectory, string outputDirectory)
     {
-        var imageFilenames = Directory
-            .GetFiles(inputDirectory)
+        var filenames = _fileSystem.GetFiles(inputDirectory);
+
+        var imageFilenames = filenames
             .Where(file => ImageExtensions.Contains(Path.GetExtension(file)))
             .ToArray();
 
