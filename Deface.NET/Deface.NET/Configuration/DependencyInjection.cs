@@ -6,6 +6,7 @@ using Deface.NET.ObjectDetection;
 using Deface.NET.Processing;
 using Deface.NET.System;
 using Deface.NET.VideoIO;
+using Deface.NET.VideoIO.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Deface.NET;
@@ -31,9 +32,9 @@ public static class DependencyInjection
 
         services.AddScoped<VideoProcessor>();
         services.AddScoped<ImageProcessor>();
-        services.AddScoped<VideoWriterService>();
-        services.AddScoped<VideoReaderService>();
-        services.AddScoped<VideoInfoService>();
+        services.AddScoped<IVideoWriter, VideoWriter>();
+        services.AddScoped<IVideoReader, VideoReader>();
+        services.AddScoped<IVideoInfoProvider, VideoInfoProvider>();
         services.AddScoped<IShapeDrawer, ShapeDrawer>();
 
         services.AddSingleton<IObjectDetector, ObjectDetector>();

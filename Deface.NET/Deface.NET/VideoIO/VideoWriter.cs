@@ -1,12 +1,13 @@
 ﻿using Deface.NET.Configuration.Provider;
 using Deface.NET.Graphics.Models;
 using Deface.NET.System;
+using Deface.NET.VideoIO.Interfaces;
 using Deface.NET.VideoIO.Models;
 using System.Globalization;
 
 namespace Deface.NET.VideoIO;
 
-internal class VideoWriterService(IScopedSettingsProvider settingsProvider)
+internal class VideoWriter(IScopedSettingsProvider settingsProvider) : IVideoWriter
 {
     private readonly Settings _settings = settingsProvider.Settings;
 

@@ -3,7 +3,7 @@ using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
-using Deface.NET.VideoIO;
+using Deface.NET.VideoIO.Interfaces;
 using Deface.NET.VideoIO.Models;
 
 namespace Deface.NET.Processing;
@@ -13,16 +13,17 @@ internal sealed class VideoProcessor
     IScopedSettingsProvider settingsProvider,
     IDLogger<IDefaceService> logger,
     IObjectDetector detector,
-    VideoWriterService videoWriterService,
-    VideoReaderService videoReaderService,
+    IVideoWriter videoWriter,
+    IVideoReader videoReader,
     IShapeDrawer shapeDrawer
 ) : IDisposable
 {
     private readonly IDLogger<IDefaceService> _logger = logger;
     private readonly IObjectDetector _detector = detector;
-    private readonly VideoWriterService _videoWriterService = videoWriterService;
-    private readonly VideoReaderService _videoReaderService = videoReaderService;
+    private readonly IVideoWriter _videoWriter = videoWriter;
+    private readonly IVideoReader _videoReader = videoReader;
     private readonly IShapeDrawer _shapeDrawer = shapeDrawer;
+
     private readonly Settings _settings = settingsProvider.Settings;
 
     private List<DetectedObject> _lastDetectedObjects = [];
@@ -37,7 +38,7 @@ internal sealed class VideoProcessor
 
         _logger.Log(DefaceLoggingLevel.Detailed, "Saving processed video \"{InputPath}\" to a destinate location", inputPath);
 
-        _videoWriterService.WriteVideo(processedFrames, videoInfo, outputPath);
+        _videoWriter.WriteVideo(processedFrames, videoInfo, outputPath);
 
         _logger.Log(DefaceLoggingLevel.Basic, "Video \"{InputPath}\" processed in {Time} and saved to \"{OutputPath}\"", inputPath, time, outputPath);
 
@@ -51,7 +52,7 @@ internal sealed class VideoProcessor
 
         List<Frame> processedFrames = [];
 
-        VideoInfo videoInfo = await _videoReaderService.ReadVideo((frame, index, totalFrames) =>
+        VideoInfo videoInfo = await _videoReader.ReadVideo((frame, index, totalFrames) =>
         {
             Frame processedFrame = ProcessFrame(frame, index);
             processedFrames.Add(processedFrame);

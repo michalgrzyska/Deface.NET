@@ -1,11 +1,12 @@
 ﻿using Deface.NET.Configuration.Provider;
 using Deface.NET.System;
+using Deface.NET.VideoIO.Interfaces;
 using Deface.NET.VideoIO.Models;
 using System.Text.Json;
 
 namespace Deface.NET.VideoIO;
 
-internal class VideoInfoService(IScopedSettingsProvider settingsProvider)
+internal class VideoInfoProvider(IScopedSettingsProvider settingsProvider) : IVideoInfoProvider
 {
     private readonly Settings _settings = settingsProvider.Settings;
 
