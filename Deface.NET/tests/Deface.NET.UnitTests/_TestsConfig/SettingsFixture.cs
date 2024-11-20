@@ -7,6 +7,7 @@ public sealed class SettingsFixture : IDisposable
     private readonly Action<Settings> _action;
 
     public Settings Settings => new(_action);
+    public Action<Settings> Action => (Action<Settings>)_action.Clone();
 
     public SettingsFixture()
     {
