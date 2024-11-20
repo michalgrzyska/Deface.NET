@@ -3,10 +3,10 @@ using System.Diagnostics;
 
 namespace Deface.NET.Logging;
 
-internal class DProgressLogger<T>(ILogger<T> logger, DefaceLoggingLevel loggingLevel)
+internal class DProgressLogger<T>(ILogger<T> logger, LoggingLevel loggingLevel)
 {
     private readonly ILogger<T> _logger = logger;
-    private readonly DefaceLoggingLevel _loggingLevel = loggingLevel;
+    private readonly LoggingLevel _loggingLevel = loggingLevel;
     private readonly Stopwatch _stopwatch = new();
 
     private const int MinLoggingInterval = 1_000;
@@ -28,7 +28,7 @@ internal class DProgressLogger<T>(ILogger<T> logger, DefaceLoggingLevel loggingL
 
     public void LogProgress(int currentStep, string message, int totalSteps)
     {
-        if (_loggingLevel < DefaceLoggingLevel.Detailed)
+        if (_loggingLevel < LoggingLevel.Detailed)
         {
             return;
         }

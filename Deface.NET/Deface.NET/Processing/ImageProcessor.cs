@@ -40,7 +40,7 @@ internal sealed class ImageProcessor
 
         stopwatch.Stop();
 
-        _logger.Log(DefaceLoggingLevel.Basic, "Processed {Input} and saved to {Output}", inputPath, outputPath);
+        _logger.Log(LoggingLevel.Basic, "Processed {Input} and saved to {Output}", inputPath, outputPath);
         return new(inputPath, outputPath, stopwatch.Elapsed, _settings.Threshold, 1);
     }
 

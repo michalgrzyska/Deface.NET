@@ -9,9 +9,9 @@ public class Settings : IValidable
 {
     /// <summary>
     /// Specifies amount of information provided via logging mechanism. 
-    /// Default: <see cref="DefaceLoggingLevel.Detailed"/>
+    /// Default: <see cref="LoggingLevel.Detailed"/>
     /// </summary>
-    public DefaceLoggingLevel LoggingLevel { get; set; } = DefaceLoggingLevel.Detailed;
+    public LoggingLevel LoggingLevel { get; set; } = LoggingLevel.Detailed;
 
     /// <summary>
     /// Specifies the shape of used anonimization.

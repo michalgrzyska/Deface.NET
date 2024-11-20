@@ -4,7 +4,7 @@
 /// Specifies logging level for deface logs. All logs are printed with <code>logger.LogInformation</code>,
 /// this enum specifies amount of printed logs.
 /// </summary>
-public enum DefaceLoggingLevel
+public enum LoggingLevel
 {
     /// <summary>
     /// No logs printed from Deface.

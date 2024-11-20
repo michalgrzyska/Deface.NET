@@ -3,5 +3,5 @@
 internal interface IDLogger<T>
 {
     DProgressLogger<T> GetProgressLogger();
-    void Log(DefaceLoggingLevel loggingLevel, string? message, params object[]? args);
+    void Log(LoggingLevel loggingLevel, string? message, params object[]? args);
 }

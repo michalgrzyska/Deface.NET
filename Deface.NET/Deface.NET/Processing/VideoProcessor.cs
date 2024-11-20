@@ -32,15 +32,15 @@ internal sealed class VideoProcessor
 
     public async Task<ProcessingResult> Process(string inputPath, string outputPath)
     {
-        _logger.Log(DefaceLoggingLevel.Basic, "Video processing started for \"{InputPath}\"", inputPath);
+        _logger.Log(LoggingLevel.Basic, "Video processing started for \"{InputPath}\"", inputPath);
 
         var (videoInfo, processedFrames, time) = await GetProcessedFrames(inputPath);
 
-        _logger.Log(DefaceLoggingLevel.Detailed, "Saving processed video \"{InputPath}\" to a destinate location", inputPath);
+        _logger.Log(LoggingLevel.Detailed, "Saving processed video \"{InputPath}\" to a destinate location", inputPath);
 
         _videoWriter.WriteVideo(processedFrames, videoInfo, outputPath);
 
-        _logger.Log(DefaceLoggingLevel.Basic, "Video \"{InputPath}\" processed in {Time} and saved to \"{OutputPath}\"", inputPath, time, outputPath);
+        _logger.Log(LoggingLevel.Basic, "Video \"{InputPath}\" processed in {Time} and saved to \"{OutputPath}\"", inputPath, time, outputPath);
 
         return new ProcessingResult(inputPath, outputPath, time, _settings.Threshold, videoInfo.AverageFps);
     }
