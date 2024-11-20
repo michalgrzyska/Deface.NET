@@ -73,19 +73,13 @@ public class ImageProcessorUnitTests
         _fileSystem.Received(5).Save(Arg.Any<string>(), Arg.Any<byte[]>());
     }
 
-    private static Frame GetTestFrame()
-    {
-        using FileStream fs = File.OpenRead(TestResources.TestResources.Photo1);
-        return new(fs);
-    }
-
     private void SetupMockMethods()
     {
         _settingsProvider.Settings.Returns(_settingsFixture.Settings);
 
         _frameCreator
             .FromFile(Arg.Any<string>())
-            .Returns(GetTestFrame());
+            .Returns(ProcessingTestHelper.GetTestFrame());
 
         _detector
             .Detect(Arg.Any<Frame>(), Arg.Any<Settings>())
@@ -93,6 +87,6 @@ public class ImageProcessorUnitTests
 
         _shapeDrawer
             .DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>())
-            .Returns(GetTestFrame());
+            .Returns(ProcessingTestHelper.GetTestFrame());
     }
 }

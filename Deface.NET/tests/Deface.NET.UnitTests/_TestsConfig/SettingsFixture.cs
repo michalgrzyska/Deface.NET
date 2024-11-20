@@ -20,10 +20,14 @@ public sealed class SettingsFixture : IDisposable
         };
     }
 
-    public Settings WithAction(Action<Settings> action)
+    public Settings WithAction(Action<Settings>? action = null)
     {
         var settings = Settings;
-        settings.ApplyAction(action);
+
+        if (action is not null)
+        {
+            settings.ApplyAction(action);
+        }
 
         return settings;
     }
