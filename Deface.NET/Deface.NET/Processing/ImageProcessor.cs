@@ -16,7 +16,7 @@ internal sealed class ImageProcessor
     IShapeDrawerProvider shapeDrawerProvider,
     IFileSystem fileSystem,
     IFrameCreator frameCreator
-) : IDisposable
+) : IImageProcessor
 {
     private readonly IDLogger<IDefaceService> _logger = logger;
     private readonly IObjectDetector _detector = detector;

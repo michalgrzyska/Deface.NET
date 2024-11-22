@@ -16,7 +16,7 @@ internal sealed class VideoProcessor
     IVideoWriter videoWriter,
     IVideoReader videoReader,
     IShapeDrawerProvider shapeDrawerProvider
-) : IDisposable
+) : IVideoProcessor
 {
     private readonly IDLogger<IDefaceService> _logger = logger;
     private readonly IObjectDetector _detector = detector;

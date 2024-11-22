@@ -30,8 +30,8 @@ public static class DependencyInjection
         services.AddTransient(typeof(IDLogger<>), typeof(DLogger<>));
         services.AddDefaultLoggerIfNeeded();
 
-        services.AddScoped<VideoProcessor>();
-        services.AddScoped<ImageProcessor>();
+        services.AddScoped<IVideoProcessor, VideoProcessor>();
+        services.AddScoped<IImageProcessor, ImageProcessor>();
         services.AddScoped<IVideoWriter, VideoWriter>();
         services.AddScoped<IVideoReader, VideoReader>();
         services.AddScoped<IVideoInfoProvider, VideoInfoProvider>();
