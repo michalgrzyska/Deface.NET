@@ -13,14 +13,14 @@ internal sealed class ImageProcessor
     IScopedSettingsProvider settingsProvider,
     IDLogger<IDefaceService> logger,
     IObjectDetector detector,
-    IShapeDrawer shapeDrawer,
+    IShapeDrawerProvider shapeDrawerProvider,
     IFileSystem fileSystem,
     IFrameCreator frameCreator
 ) : IDisposable
 {
     private readonly IDLogger<IDefaceService> _logger = logger;
     private readonly IObjectDetector _detector = detector;
-    private readonly IShapeDrawer _shapeDrawer = shapeDrawer;
+    private readonly IShapeDrawerProvider _shapeDrawerProvider = shapeDrawerProvider;
     private readonly IFileSystem _fileSystem = fileSystem;
     private readonly IFrameCreator _frameCreator = frameCreator;
 
@@ -68,7 +68,7 @@ internal sealed class ImageProcessor
     private void ProcessImage(Frame image, string outputPath)
     {
         List<DetectedObject> detectedObjects = _detector.Detect(image, _settings);
-        Frame result = _shapeDrawer.DrawShapes(image, detectedObjects);
+        Frame result = _shapeDrawerProvider.ShapeDrawer.Draw(image, detectedObjects);
 
         var resultBytes = result.ToByteArray(_settings.ImageFormat);
         _fileSystem.Save(outputPath, resultBytes);

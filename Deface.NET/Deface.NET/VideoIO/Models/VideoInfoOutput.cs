@@ -1,13 +1,16 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Deface.NET.VideoIO.Models;
 
+[ExcludeFromCodeCoverage]
 internal class VideoInfoOutput
 {
     [JsonPropertyName("streams")]
     public VideoInfoStreamOutput[] Streams { get; set; } = [];
 }
 
+[ExcludeFromCodeCoverage]
 internal class VideoInfoStreamOutput
 {
     [JsonPropertyName("width")]

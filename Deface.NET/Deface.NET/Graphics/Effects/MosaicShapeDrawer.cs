@@ -5,7 +5,7 @@ using SkiaSharp;
 
 namespace Deface.NET.Graphics.Effects;
 
-internal class MosaicShapeEffect(Settings settings) : IEffectShape
+internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
 {
     private readonly Settings _settings = settings;
 

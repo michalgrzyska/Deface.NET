@@ -15,14 +15,14 @@ internal sealed class VideoProcessor
     IObjectDetector detector,
     IVideoWriter videoWriter,
     IVideoReader videoReader,
-    IShapeDrawer shapeDrawer
+    IShapeDrawerProvider shapeDrawerProvider
 ) : IDisposable
 {
     private readonly IDLogger<IDefaceService> _logger = logger;
     private readonly IObjectDetector _detector = detector;
     private readonly IVideoWriter _videoWriter = videoWriter;
     private readonly IVideoReader _videoReader = videoReader;
-    private readonly IShapeDrawer _shapeDrawer = shapeDrawer;
+    private readonly IShapeDrawerProvider _shapeDrawerProvider = shapeDrawerProvider;
 
     private readonly Settings _settings = settingsProvider.Settings;
 
@@ -73,7 +73,7 @@ internal sealed class VideoProcessor
             _lastDetectedObjects = _detector.Detect(frame, _settings);
         }
 
-        Frame processedFrame = _shapeDrawer.DrawShapes(frame, _lastDetectedObjects);
+        Frame processedFrame = _shapeDrawerProvider.ShapeDrawer.Draw(frame, _lastDetectedObjects);
         return processedFrame;
     }
 }

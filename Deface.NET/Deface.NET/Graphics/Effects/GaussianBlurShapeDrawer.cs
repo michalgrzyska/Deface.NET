@@ -5,7 +5,7 @@ using SkiaSharp;
 
 namespace Deface.NET.Graphics.Effects;
 
-internal class GaussianBlurShapeEffect(Settings settings) : IEffectShape
+internal class GaussianBlurShapeDrawer(Settings settings) : IShapeDrawer
 {
     private readonly Settings _settings = settings;
 

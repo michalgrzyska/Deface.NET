@@ -5,7 +5,7 @@ using SkiaSharp;
 
 namespace Deface.NET.Graphics.Effects;
 
-internal class ColorShapeEffect(Settings settings) : IEffectShape
+internal class ColorShapeDrawer(Settings settings) : IShapeDrawer
 {
     private readonly Settings _settings = settings;
 

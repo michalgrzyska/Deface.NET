@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -37,5 +37,12 @@
 		<ProjectReference Include="..\..\Deface.NET\Deface.NET.csproj" />
 		<ProjectReference Include="..\Deface.NET.TestResources\Deface.NET.TestResources.csproj" />
 	</ItemGroup>
+
+	<PropertyGroup>
+		<CoverletSettings>
+			<ExcludeByAttribute>ExcludeFromCodeCoverage</ExcludeByAttribute>
+		</CoverletSettings>
+	</PropertyGroup>
+
 
 </Project>

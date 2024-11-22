@@ -5,5 +5,5 @@ namespace Deface.NET.Graphics.Interfaces;
 
 internal interface IShapeDrawer
 {
-    Frame DrawShapes(Frame frame, List<DetectedObject> objects);
+    Frame Draw(Frame bitmap, List<DetectedObject> objects);
 }

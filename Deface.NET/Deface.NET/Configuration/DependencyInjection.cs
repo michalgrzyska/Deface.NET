@@ -35,7 +35,7 @@ public static class DependencyInjection
         services.AddScoped<IVideoWriter, VideoWriter>();
         services.AddScoped<IVideoReader, VideoReader>();
         services.AddScoped<IVideoInfoProvider, VideoInfoProvider>();
-        services.AddScoped<IShapeDrawer, ShapeDrawer>();
+        services.AddScoped<IShapeDrawerProvider, ShapeDrawerProvider>();
 
         services.AddSingleton<IObjectDetector, ObjectDetector>();
         services.AddSingleton<IFileSystem, FileSystem>();

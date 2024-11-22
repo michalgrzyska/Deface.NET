@@ -19,7 +19,7 @@ public class VideoProcessorUnitTests
 
     private readonly IDLogger<IDefaceService> _logger = Substitute.For<IDLogger<IDefaceService>>();
     private readonly IObjectDetector _detector = Substitute.For<IObjectDetector>();
-    private readonly IShapeDrawer _shapeDrawer = Substitute.For<IShapeDrawer>();
+    private readonly IShapeDrawerProvider _shapeDrawerProvider = Substitute.For<IShapeDrawerProvider>();
     private readonly IVideoReader _videoReader = Substitute.For<IVideoReader>();
     private readonly IVideoWriter _videoWriter = Substitute.For<IVideoWriter>();
 
@@ -40,6 +40,9 @@ public class VideoProcessorUnitTests
         var processor = GetVideoProcessor();
         int framesCount = SetupVideoReader();
 
+        var shapeDrawer = Substitute.For<IShapeDrawer>();
+        _shapeDrawerProvider.ShapeDrawer.Returns(shapeDrawer);
+
         // Act
 
         var result = await processor.Process("input", "output");
@@ -47,7 +50,7 @@ public class VideoProcessorUnitTests
         // Assert
 
         _detector.Received(framesCount).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
-        _shapeDrawer.Received(framesCount).DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
+        shapeDrawer.Received(framesCount).Draw(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
         _videoWriter.Received(1).WriteVideo(Arg.Any<List<Frame>>(), Arg.Any<VideoInfo>(), Arg.Any<string>());
         await _videoReader.Received(1).ReadVideo(Arg.Any<Func<Frame, int, int, Task>>(), Arg.Any<string>());
     }
@@ -116,7 +119,7 @@ public class VideoProcessorUnitTests
         IScopedSettingsProvider settingsProvider = Substitute.For<IScopedSettingsProvider>();
         settingsProvider.Settings.Returns(settings);
 
-        return new(settingsProvider, _logger, _detector, _videoWriter, _videoReader, _shapeDrawer);
+        return new(settingsProvider, _logger, _detector, _videoWriter, _videoReader, _shapeDrawerProvider);
     }
 
     private int SetupVideoReader()

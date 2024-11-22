@@ -18,7 +18,7 @@ public class ImageProcessorUnitTests
     private readonly IScopedSettingsProvider _settingsProvider = Substitute.For<IScopedSettingsProvider>();
     private readonly IDLogger<IDefaceService> _logger = Substitute.For<IDLogger<IDefaceService>>();
     private readonly IObjectDetector _detector = Substitute.For<IObjectDetector>();
-    private readonly IShapeDrawer _shapeDrawer = Substitute.For<IShapeDrawer>();
+    private readonly IShapeDrawerProvider _shapeDrawerProvider = Substitute.For<IShapeDrawerProvider>();
     private readonly IFileSystem _fileSystem = Substitute.For<IFileSystem>();
     private readonly IFrameCreator _frameCreator = Substitute.For<IFrameCreator>();
 
@@ -30,18 +30,28 @@ public class ImageProcessorUnitTests
 
         SetupMockMethods();
 
-        _imageProcessor = new(_settingsProvider, _logger, _detector, _shapeDrawer, _fileSystem, _frameCreator);
+        _imageProcessor = new(_settingsProvider, _logger, _detector, _shapeDrawerProvider, _fileSystem, _frameCreator);
     }
 
     [Fact]
     public void Process_DependenciesCalledProperly()
     {
+        // Arrange
+        var shapeDrawer = Substitute.For<IShapeDrawer>();
+
+        shapeDrawer
+            .Draw(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>())
+            .Returns(ProcessingTestHelper.GetTestFrame());
+
+        _shapeDrawerProvider.ShapeDrawer.Returns(shapeDrawer);
+
+
         // Act
         _imageProcessor.Process("input.mp4", "output.mp4");
 
         // Assert
         _detector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
-        _shapeDrawer.Received(1).DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
+        shapeDrawer.Received(1).Draw(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
         _fileSystem.Received(1).Save(Arg.Any<string>(), Arg.Any<byte[]>());
     }
 
@@ -49,6 +59,13 @@ public class ImageProcessorUnitTests
     public void ProcessMany_DependenciesCalledProperly()
     {
         // Arrange
+        var shapeDrawer = Substitute.For<IShapeDrawer>();
+
+        shapeDrawer
+            .Draw(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>())
+            .Returns(ProcessingTestHelper.GetTestFrame());
+
+        _shapeDrawerProvider.ShapeDrawer.Returns(shapeDrawer);
 
         string[] systemFiles =
         [
@@ -69,7 +86,7 @@ public class ImageProcessorUnitTests
         // Assert
 
         _detector.Received(5).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
-        _shapeDrawer.Received(5).DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
+        shapeDrawer.Received(5).Draw(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
         _fileSystem.Received(5).Save(Arg.Any<string>(), Arg.Any<byte[]>());
     }
 
@@ -84,9 +101,5 @@ public class ImageProcessorUnitTests
         _detector
             .Detect(Arg.Any<Frame>(), Arg.Any<Settings>())
             .Returns([]);
-
-        _shapeDrawer
-            .DrawShapes(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>())
-            .Returns(ProcessingTestHelper.GetTestFrame());
     }
 }
