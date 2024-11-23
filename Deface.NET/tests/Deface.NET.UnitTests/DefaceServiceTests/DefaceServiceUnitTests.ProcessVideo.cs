@@ -1,26 +1,9 @@
-﻿using Deface.NET.Configuration.Provider;
-using Deface.NET.Processing;
-using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
+﻿using NSubstitute;
 
-namespace Deface.NET.UnitTests;
+namespace Deface.NET.UnitTests.DefaceServiceTests;
 
-public class DefaceServiceUnitTests
+public partial class DefaceServiceUnitTests
 {
-    private readonly DefaceService _service;
-    private readonly IServiceScopeFactory _scopeFactory;
-    private readonly IVideoProcessor _videoProcessor;
-    private readonly IImageProcessor _imageProcessor;
-
-    public DefaceServiceUnitTests()
-    {
-        _videoProcessor = Substitute.For<IVideoProcessor>();
-        _imageProcessor = Substitute.For<IImageProcessor>();
-        _scopeFactory = GetServiceScopeFactory();
-
-        _service = new DefaceService(_scopeFactory);
-    }
-
     [Fact]
     public async Task ProcessVideo_ProperData_DependenciesInvokedCorrectly()
     {
@@ -84,19 +67,5 @@ public class DefaceServiceUnitTests
         // Cleanup
 
         File.Delete(input);
-    }
-
-    private IServiceScopeFactory GetServiceScopeFactory()
-    {
-        var scopedSettingsProvider = Substitute.For<IScopedSettingsProvider>();
-
-        ServiceCollection serviceCollection = new();
-
-        serviceCollection.AddScoped(x => _videoProcessor);
-        serviceCollection.AddScoped(x => _imageProcessor);
-        serviceCollection.AddScoped(x => scopedSettingsProvider);
-
-        var serviceProvider = serviceCollection.BuildServiceProvider();
-        return serviceProvider.GetRequiredService<IServiceScopeFactory>();
     }
 }
