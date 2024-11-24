@@ -8,9 +8,9 @@ public class AnonimizationTypeScenario : VideoTestScenarioBase
     { }
 
     [Scenario("Ellipse GaussianBlur")]
-    public async Task<ProcessingResult> Ellipse_GaussianBlur()
+    public ProcessingResult Ellipse_GaussianBlur()
     {
-        return await Run(x =>
+        return Run(x =>
         {
             x.AnonimizationMethod = AnonimizationMethod.GaussianBlur;
             x.AnonimizationShape = AnonimizationShape.Ellipse;
@@ -18,9 +18,9 @@ public class AnonimizationTypeScenario : VideoTestScenarioBase
     }
 
     [Scenario("Ellipse Color")]
-    public async Task<ProcessingResult> Ellipse_Color()
+    public ProcessingResult Ellipse_Color()
     {
-        return await Run(x =>
+        return Run(x =>
         {
             x.AnonimizationMethod = AnonimizationMethod.Color(255, 0, 0);
             x.AnonimizationShape = AnonimizationShape.Ellipse;
@@ -28,9 +28,9 @@ public class AnonimizationTypeScenario : VideoTestScenarioBase
     }
 
     [Scenario("Rectangle GaussianBlur")]
-    public async Task<ProcessingResult> Rectangle_GaussianBlur()
+    public ProcessingResult Rectangle_GaussianBlur()
     {
-        return await Run(x =>
+        return Run(x =>
         {
             x.AnonimizationMethod = AnonimizationMethod.GaussianBlur;
             x.AnonimizationShape = AnonimizationShape.Rectangle;
@@ -38,9 +38,9 @@ public class AnonimizationTypeScenario : VideoTestScenarioBase
     }
 
     [Scenario("Rectangle Color")]
-    public async Task<ProcessingResult> Rectangle_Color()
+    public ProcessingResult Rectangle_Color()
     {
-        return await Run(x =>
+        return Run(x =>
         {
             x.AnonimizationMethod = AnonimizationMethod.Color(255, 0, 0);
             x.AnonimizationShape = AnonimizationShape.Rectangle;
@@ -48,9 +48,9 @@ public class AnonimizationTypeScenario : VideoTestScenarioBase
     }
 
     [Scenario("Rectangle Mosaic")]
-    public async Task<ProcessingResult> Rectangle_Mosaic()
+    public ProcessingResult Rectangle_Mosaic()
     {
-        return await Run(x =>
+        return Run(x =>
         {
             x.AnonimizationMethod = AnonimizationMethod.Mosaic;
             x.AnonimizationShape = AnonimizationShape.Rectangle;
@@ -58,9 +58,9 @@ public class AnonimizationTypeScenario : VideoTestScenarioBase
     }
 
     [Scenario("Ellipse Mosaic")]
-    public async Task<ProcessingResult> Ellipse_Mosaic()
+    public ProcessingResult Ellipse_Mosaic()
     {
-        return await Run(x =>
+        return Run(x =>
         {
             x.AnonimizationMethod = AnonimizationMethod.Mosaic;
             x.AnonimizationShape = AnonimizationShape.Ellipse;

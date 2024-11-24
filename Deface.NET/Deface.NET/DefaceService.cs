@@ -9,7 +9,7 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
 {
     private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
 
-    public async Task<ProcessingResult> ProcessVideo(string inputPath, string outputPath, Action<Settings>? customSettings = default)
+    public ProcessingResult ProcessVideo(string inputPath, string outputPath, Action<Settings>? customSettings = default)
     {
         ValidationHelper.ValidateFilePath(inputPath, nameof(inputPath));
         ValidationHelper.MustNotBeNullOrWhiteSpace(outputPath, nameof(outputPath));
@@ -17,7 +17,7 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
         using var scope = _scopeFactory.CreateUserScope(customSettings);
         using var processor = scope.ServiceProvider.GetRequiredService<IVideoProcessor>();
 
-        return await processor.Process(inputPath, outputPath);
+        return processor.Process(inputPath, outputPath);
     }
 
     public ProcessingResult ProcessImage(string inputPath, string outputPath, Action<Settings>? customSettings = default)

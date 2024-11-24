@@ -26,7 +26,7 @@ internal class DProgressLogger<T>(ILogger<T> logger, LoggingLevel loggingLevel)
 
     public TimeSpan GetEllapsedTime() => _stopwatch.Elapsed;
 
-    public void LogProgress(int currentStep, string message, int totalSteps)
+    public void Log(int currentStep, string message, int totalSteps)
     {
         if (_loggingLevel < LoggingLevel.Detailed)
         {

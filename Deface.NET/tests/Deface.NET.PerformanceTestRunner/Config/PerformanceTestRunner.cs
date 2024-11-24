@@ -29,7 +29,7 @@ public class PerformanceTestRunner(string ffMpegPath, string ffProbePath)
         return this;
     }
 
-    public async Task<List<TestResult>> Run()
+    public List<TestResult> Run()
     {
         List<TestResult> results = [];
 
@@ -37,9 +37,7 @@ public class PerformanceTestRunner(string ffMpegPath, string ffProbePath)
         {
             Console.WriteLine($"Running {s.TestObj.GetType().Name}: {s.Method.Name}");
 
-            Task<ProcessingResult> resultTask = (Task<ProcessingResult>)s.Method.Invoke(s.TestObj, null)!;
-            ProcessingResult result = await resultTask;
-
+            ProcessingResult result = (ProcessingResult)s.Method.Invoke(s.TestObj, null)!;
             results.Add(new(s.Method.Name, result));
         }
 

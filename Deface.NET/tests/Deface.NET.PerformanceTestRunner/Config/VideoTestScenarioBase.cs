@@ -12,12 +12,12 @@ public abstract class VideoTestScenarioBase(string videoPath)
 
     public string VideoPath { get; } = videoPath;
 
-    public async Task<ProcessingResult> Run(Action<Settings>? action = default)
+    public ProcessingResult Run(Action<Settings>? action = default)
     {
         var actionWithFileSettings = SetFilesPathsInAction(action);
         var defaceService = DefaceProvider.GetDefaceService(actionWithFileSettings);
         var output = $"{Guid.NewGuid()}.mp4";
-        var result = await defaceService.ProcessVideo(VideoPath, "test.mp4");
+        var result = defaceService.ProcessVideo(VideoPath, "test.mp4");
 
         File.Delete(output);
 

@@ -31,10 +31,10 @@ internal sealed class VideoProcessor
 
     private List<DetectedObject> _lastDetectedObjects = [];
 
-    public async Task<ProcessingResult> Process(string inputPath, string outputPath)
+    public ProcessingResult Process(string inputPath, string outputPath)
     {
         LogProcessingStarted(inputPath);
-        var processedFrames = await GetProcessedFrames(inputPath);
+        var processedFrames = GetProcessedFrames(inputPath);
 
         LogSavingVideo(inputPath);
         _videoWriter.WriteVideo(processedFrames.Frames, processedFrames.VideoInfo, outputPath);
@@ -47,20 +47,19 @@ internal sealed class VideoProcessor
 
     public void Dispose() => _detector.Dispose();
 
-    private async Task<ProcessedFrames> GetProcessedFrames(string inputPath)
+    private ProcessedFrames GetProcessedFrames(string inputPath)
     {
         var progressLogger = _logger.GetProgressLogger();
         progressLogger.Start();
 
         List<Frame> processedFrames = [];
 
-        VideoInfo videoInfo = await _videoReader.ReadVideo((frameInfo) =>
+        VideoInfo videoInfo = _videoReader.ReadVideo((frameInfo) =>
         {
-            using Frame frame = _frameCreator.FromBgrArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
-            Frame processedFrame = ProcessFrame(frame, frameInfo.Index);
+            Frame processedFrame = ProcessFrame(frameInfo);
             processedFrames.Add(processedFrame);
 
-            progressLogger.LogProgress(frameInfo.Index + 1, "Processing video frames", frameInfo.TotalFrames);
+            progressLogger.Log(frameInfo.Index + 1, "Processing video frames", frameInfo.TotalFrames);
         }, inputPath);
 
         TimeSpan processingTime = progressLogger.Stop();
@@ -68,9 +67,11 @@ internal sealed class VideoProcessor
         return new(processedFrames, videoInfo, processingTime);
     }
 
-    private Frame ProcessFrame(Frame frame, int i)
+    private Frame ProcessFrame(FrameInfo frameInfo)
     {
-        if (i % _settings.RunDetectionEachNFrames == 0)
+        using Frame frame = _frameCreator.FromBgrArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
+
+        if (frameInfo.Index % _settings.RunDetectionEachNFrames == 0)
         {
             _lastDetectedObjects = _detector.Detect(frame, _settings);
         }

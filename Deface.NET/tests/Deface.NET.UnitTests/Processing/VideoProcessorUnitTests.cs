@@ -35,7 +35,7 @@ public class VideoProcessorUnitTests
     }
 
     [Fact]
-    public async Task Process_DependenciesCalledProperly()
+    public void Process_DependenciesCalledProperly()
     {
         // Arrange 
 
@@ -47,18 +47,18 @@ public class VideoProcessorUnitTests
 
         // Act
 
-        var result = await processor.Process("input", "output");
+        var result = processor.Process("input", "output");
 
         // Assert
 
         _detector.Received(framesCount).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
         shapeDrawer.Received(framesCount).Draw(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
         _videoWriter.Received(1).WriteVideo(Arg.Any<List<Frame>>(), Arg.Any<VideoInfo>(), Arg.Any<string>());
-        await _videoReader.Received(1).ReadVideo(Arg.Any<Action<FrameInfo>>(), Arg.Any<string>());
+        _videoReader.Received(1).ReadVideo(Arg.Any<Action<FrameInfo>>(), Arg.Any<string>());
     }
 
     [Fact]
-    public async Task Process_ResultAsExpected()
+    public void Process_ResultAsExpected()
     {
         // Arrange 
 
@@ -69,7 +69,7 @@ public class VideoProcessorUnitTests
 
         // Act
 
-        var result = await processor.Process(inputFile, outputFile);
+        var result = processor.Process(inputFile, outputFile);
 
         // Assert
 
@@ -86,7 +86,7 @@ public class VideoProcessorUnitTests
     [InlineData(3)]
     [InlineData(4)]
     [InlineData(5)]
-    public async Task Process_RunDetectionEachNFrames_DependenciesCalledProperly(int runDetectionEachNFrames)
+    public void Process_RunDetectionEachNFrames_DependenciesCalledProperly(int runDetectionEachNFrames)
     {
         // Arrange 
 
@@ -100,7 +100,7 @@ public class VideoProcessorUnitTests
 
         // Act
 
-        var result = await processor.Process("input", "output");
+        var result = processor.Process("input", "output");
 
         // Assert
 

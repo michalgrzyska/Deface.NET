@@ -5,7 +5,7 @@ namespace Deface.NET.UnitTests.DefaceServiceTests;
 public partial class DefaceServiceUnitTests
 {
     [Fact]
-    public async Task ProcessVideo_ProperData_DependenciesInvokedCorrectly()
+    public void ProcessVideo_ProperData_DependenciesInvokedCorrectly()
     {
         // Arrange
 
@@ -14,11 +14,11 @@ public partial class DefaceServiceUnitTests
 
         // Act
 
-        await _service.ProcessVideo(input, output);
+        _service.ProcessVideo(input, output);
 
         // Assert
 
-        await _videoProcessor.Received(1).Process(Arg.Any<string>(), Arg.Any<string>());
+        _videoProcessor.Received(1).Process(Arg.Any<string>(), Arg.Any<string>());
 
         // Cleanup
 
@@ -26,11 +26,11 @@ public partial class DefaceServiceUnitTests
     }
 
     [Fact]
-    public async Task ProcessVideo_InputNotExisting_ThrowsFileNotFoundException()
+    public void ProcessVideo_InputNotExisting_ThrowsFileNotFoundException()
     {
-        var action = async () => await _service.ProcessVideo("test", "file");
+        var action = () => _service.ProcessVideo("test", "file");
 
-        await action.Should().ThrowAsync<FileNotFoundException>();
+        action.Should().Throw<FileNotFoundException>();
     }
 
     [Theory]
@@ -38,11 +38,11 @@ public partial class DefaceServiceUnitTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("  ")]
-    public async Task ProcessVideo_InvalidInputString_ThrowsArgumentNullException(string? inputString)
+    public void ProcessVideo_InvalidInputString_ThrowsArgumentNullException(string? inputString)
     {
-        var action = async () => await _service.ProcessVideo(inputString!, "file");
+        var action = () => _service.ProcessVideo(inputString!, "file");
 
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        action.Should().Throw<ArgumentNullException>();
     }
 
     [Theory]
@@ -50,7 +50,7 @@ public partial class DefaceServiceUnitTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("  ")]
-    public async Task ProcessVideo_InvalidOutputString_ThrowsArgumentNullException(string? outputString)
+    public void ProcessVideo_InvalidOutputString_ThrowsArgumentNullException(string? outputString)
     {
         // Arrange
 
@@ -58,11 +58,11 @@ public partial class DefaceServiceUnitTests
 
         // Act
 
-        var action = async () => await _service.ProcessVideo(input, outputString);
+        var action = () => _service.ProcessVideo(input, outputString);
 
         // Assert
 
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        action.Should().Throw<ArgumentNullException>();
 
         // Cleanup
 

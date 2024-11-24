@@ -4,5 +4,5 @@ namespace Deface.NET.VideoIO.Interfaces;
 
 internal interface IVideoReader
 {
-    Task<VideoInfo> ReadVideo(Action<FrameInfo> frameProcess, string videoFilePath);
+    VideoInfo ReadVideo(Action<FrameInfo> frameProcess, string videoFilePath);
 }

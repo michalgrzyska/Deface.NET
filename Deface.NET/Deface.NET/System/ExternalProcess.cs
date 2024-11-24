@@ -27,17 +27,18 @@ internal class ExternalProcess : IDisposable
         };
     }
 
-    public async Task<string> ExecuteWithOutput()
+    public string ExecuteWithOutput()
     {
         Start();
 
-        string output = await _process.StandardOutput.ReadToEndAsync();
+        string output = _process.StandardOutput.ReadToEnd();
 
-        await WaitForExitAsync();
+        WaitForExit();
+
         return output;
     }
 
     public void Start() => _process.Start();
-    public async Task WaitForExitAsync() => await _process.WaitForExitAsync();
+    public void WaitForExit() =>_process.WaitForExit();
     public void Dispose() => _process?.Dispose();
 }

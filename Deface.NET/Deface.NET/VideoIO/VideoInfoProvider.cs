@@ -10,11 +10,11 @@ internal class VideoInfoProvider(IScopedSettingsProvider settingsProvider) : IVi
 {
     private readonly Settings _settings = settingsProvider.Settings;
 
-    public async Task<VideoInfo> GetInfo(string filePath)
+    public VideoInfo GetInfo(string filePath)
     {
         using ExternalProcess process = GetProcess(filePath);
 
-        var processOutput = await process.ExecuteWithOutput();
+        var processOutput = process.ExecuteWithOutput();
         var output = JsonSerializer.Deserialize<VideoInfoOutput>(processOutput)!;
 
         return ConvertOutputToVideoInfo(output);

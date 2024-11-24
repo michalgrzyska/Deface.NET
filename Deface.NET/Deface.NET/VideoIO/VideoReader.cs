@@ -9,9 +9,9 @@ internal class VideoReader(IScopedSettingsProvider settingsProvider, IVideoInfoP
     private readonly Settings _settings = settingsProvider.Settings;
     private readonly IVideoInfoProvider _videoInfoService = videoInfoService;
 
-    public async Task<VideoInfo> ReadVideo(Action<FrameInfo> frameProcess, string videoFilePath)
+    public VideoInfo ReadVideo(Action<FrameInfo> frameProcess, string videoFilePath)
     {
-        VideoInfo videoInfo = await _videoInfoService.GetInfo(videoFilePath);
+        VideoInfo videoInfo = _videoInfoService.GetInfo(videoFilePath);
 
         using FFMpegVideoReader videoReader = new(videoFilePath, frameProcess, _settings.FFMpegPath, videoInfo);
         videoReader.ProcessVideo();
