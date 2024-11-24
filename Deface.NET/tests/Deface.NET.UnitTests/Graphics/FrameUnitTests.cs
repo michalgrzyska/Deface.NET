@@ -21,21 +21,11 @@ public class FrameUnitTests
     [Fact]
     public void New_FromBgrData_FrameCreatedCorrectly()
     {
-        var bgrBitmap = CreateRedBgrBitmap(200, 200);
+        var bgrBitmap = CreateRedRgbBitmap(200, 200);
 
-        Frame frame = new(bgrBitmap, 200, 200);
+        Frame frame = (Frame)GraphicsHelper.GetBgraBitmapFromRawBytes(bgrBitmap, 200, 200);
 
         frame.GetPixel(0, 0).ShouldBe(0, 0, 255);
-    }
-
-    [Fact]
-    public void New_FromBgrDataWithInvalidSize_ArgumentExceptionThrown()
-    {
-        var bgrBitmap = CreateRedBgrBitmap(200, 200);
-
-        var action = () => new Frame(bgrBitmap, 100, 100);
-
-        action.Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -62,32 +52,11 @@ public class FrameUnitTests
     {
         Frame frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
 
-        var nativeElement = frame.GetNativeElement();
+        var nativeElement = (SKBitmap)frame;
 
         nativeElement.Width.Should().Be(200);
         nativeElement.Height.Should().Be(200);
         nativeElement.GetPixel(0, 0).Red.Should().Be(255);
-    }
-
-    [Fact]
-    public void UpdateNativeElement_ElementSuccessfullyUpdated()
-    {
-        // Arrange 
-
-        var testFrame = TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo1);
-        var originalNativeElement = testFrame.GetNativeElement();
-
-        using FileStream fileStream = new(TestResources.TestResources.PhotoRed, FileMode.Open);
-        SKBitmap newNativeElement = SKBitmap.Decode(fileStream);
-
-        // Act
-
-        testFrame.UpdateNativeElement(newNativeElement);
-
-        // Assert
-
-        testFrame.GetNativeElement().Should().NotBeSameAs(originalNativeElement);
-        testFrame.GetNativeElement().Should().BeSameAs(newNativeElement);
     }
 
     [Fact]
@@ -109,7 +78,7 @@ public class FrameUnitTests
         Frame frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
 
         var byteArray = frame.ToByteArray();
-        var bitmap = GraphicsHelper.GetBgraBitmapFromBytes(byteArray, frame.Width, frame.Height);
+        var bitmap = GraphicsHelper.GetBgraBitmapFromRawBytes(byteArray, frame.Width, frame.Height);
 
         bitmap.Width.Should().Be(frame.Width);
         bitmap.Height.Should().Be(frame.Height);
@@ -133,16 +102,16 @@ public class FrameUnitTests
         bitmap.Height.Should().Be(frame.Height);
     }
 
-    private static byte[] CreateRedBgrBitmap(int width, int height)
+    private static byte[] CreateRedRgbBitmap(int width, int height)
     {
         int bytesPerPixel = 3;
         byte[] bgrData = new byte[width * height * bytesPerPixel];
 
         for (int i = 0; i < bgrData.Length; i += bytesPerPixel)
         {
-            bgrData[i] = 0;     // Blue
+            bgrData[i] = 255;     // Blue
             bgrData[i + 1] = 0; // Green
-            bgrData[i + 2] = 255; // Red
+            bgrData[i + 2] = 0; // Red
         }
 
         return bgrData;

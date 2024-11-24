@@ -11,7 +11,7 @@ internal class ColorShapeDrawer(Settings settings) : IShapeDrawer
 
     public Frame Draw(Frame frame, List<DetectedObject> objects)
     {
-        var bitmap = frame.GetNativeElement();
+        var bitmap = (SKBitmap)frame;
         var color = _settings.AnonimizationMethod.ColorValue!;
 
         using SKCanvas canvas = new(bitmap);

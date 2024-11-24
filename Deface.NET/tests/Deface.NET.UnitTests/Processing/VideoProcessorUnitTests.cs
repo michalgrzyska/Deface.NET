@@ -22,6 +22,7 @@ public class VideoProcessorUnitTests
     private readonly IShapeDrawerProvider _shapeDrawerProvider = Substitute.For<IShapeDrawerProvider>();
     private readonly IVideoReader _videoReader = Substitute.For<IVideoReader>();
     private readonly IVideoWriter _videoWriter = Substitute.For<IVideoWriter>();
+    private readonly IFrameCreator _frameCreator = Substitute.For<IFrameCreator>();
 
     private const int FrameSize = 1000;
     private const int Fps = 10;
@@ -119,7 +120,7 @@ public class VideoProcessorUnitTests
         IScopedSettingsProvider settingsProvider = Substitute.For<IScopedSettingsProvider>();
         settingsProvider.Settings.Returns(settings);
 
-        return new(settingsProvider, _logger, _detector, _videoWriter, _videoReader, _shapeDrawerProvider);
+        return new(settingsProvider, _logger, _detector, _videoWriter, _videoReader, _shapeDrawerProvider, _frameCreator);
     }
 
     private int SetupVideoReader()

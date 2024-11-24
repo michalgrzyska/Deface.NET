@@ -11,7 +11,7 @@ IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
     //options.FFMpegPath = "/usr/bin/ffmpeg";
     //options.FFProbePath = "/usr/bin/ffprobe";
 
-    options.AnonimizationMethod = AnonimizationMethod.Color(255, 0, 0);
+    options.AnonimizationMethod = AnonimizationMethod.GaussianBlur;
     options.AnonimizationShape = AnonimizationShape.Ellipse;
 });
 

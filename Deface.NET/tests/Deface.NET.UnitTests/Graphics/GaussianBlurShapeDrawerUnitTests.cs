@@ -3,6 +3,7 @@ using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
+using SkiaSharp;
 
 namespace Deface.NET.UnitTests.Graphics;
 
@@ -23,7 +24,7 @@ public class GaussianBlurShapeDrawerUnitTests(SettingsFixture settingsFixture)
         GaussianBlurShapeDrawer drawer = new(settings);
         Frame result = drawer.Draw(frame, []);
 
-        ShapeTestHelper.ValidateWholeFrame(frame, pixel =>
+        ShapeTestHelper.ValidateWholeFrame(result, pixel =>
         {
             pixel.R.Should().BeOneOf(0, 255);
             pixel.G.Should().BeOneOf(0, 255);
@@ -40,7 +41,7 @@ public class GaussianBlurShapeDrawerUnitTests(SettingsFixture settingsFixture)
 
         Frame result = drawer.Draw(frame, [Object1]);
 
-        ShapeTestHelper.ValidateRectangle(frame, Object1, ValidatePixel);
+        ShapeTestHelper.ValidateRectangle(result, Object1, ValidatePixel);
     }
 
     [Fact]
@@ -52,7 +53,7 @@ public class GaussianBlurShapeDrawerUnitTests(SettingsFixture settingsFixture)
 
         Frame result = drawer.Draw(frame, [Object1]);
 
-        ShapeTestHelper.ValidateEllipse(frame, Object1, ValidatePixel);
+        ShapeTestHelper.ValidateEllipse(result, Object1, ValidatePixel);
     }
 
     [Fact]
@@ -67,7 +68,7 @@ public class GaussianBlurShapeDrawerUnitTests(SettingsFixture settingsFixture)
 
         foreach (var obj in objects)
         {
-            ShapeTestHelper.ValidateEllipse(frame, obj, ValidatePixel);
+            ShapeTestHelper.ValidateEllipse(result, obj, ValidatePixel);
         }
     }
 
@@ -83,7 +84,7 @@ public class GaussianBlurShapeDrawerUnitTests(SettingsFixture settingsFixture)
 
         foreach (var obj in objects)
         {
-            ShapeTestHelper.ValidateEllipse(frame, obj, ValidatePixel);
+            ShapeTestHelper.ValidateEllipse(result, obj, ValidatePixel);
         }
     }
 

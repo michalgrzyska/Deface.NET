@@ -11,7 +11,7 @@ internal static class ShapeTestHelper
 
     public static void ValidateWholeFrame(Frame frame, Action<PixelData> action)
     {
-        var nativeElement = frame.GetNativeElement();
+        var nativeElement = (SKBitmap)frame;
 
         for (int y = 0; y < frame.Height; y++)
         {
@@ -24,7 +24,7 @@ internal static class ShapeTestHelper
 
     public static void ValidateRectangle(Frame frame, DetectedObject detectedObject, Action<PixelData> action)
     {
-        var nativeElement = frame.GetNativeElement();
+        var nativeElement = (SKBitmap)frame;
 
         for (int y = detectedObject.Y1; y < detectedObject.Y2; y++)
         {
@@ -37,7 +37,7 @@ internal static class ShapeTestHelper
 
     public static void ValidateEllipse(Frame frame, DetectedObject detectedObject, Action<PixelData> action)
     {
-        var nativeElement = frame.GetNativeElement();
+        var nativeElement = (SKBitmap)frame;
         var pixelsInEllipse = GetPointsInsideEllipse(detectedObject);
 
         foreach (var (x, y) in pixelsInEllipse)

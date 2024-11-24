@@ -3,23 +3,12 @@ using System.Runtime.InteropServices;
 
 namespace Deface.NET.Graphics.Models;
 
-internal class Frame : IDisposable
+internal sealed class Frame : IDisposable
 {
     private SKBitmap _bitmap;
 
     public int Width => _bitmap.Width;
     public int Height => _bitmap.Height;
-
-    public Frame(byte[] bgrData, int width, int height)
-    {
-        if (width * height * 3 != bgrData.Length)
-        {
-            throw new ArgumentException($"{nameof(bgrData)} length must be the size of width * height * 3");
-        }
-
-        byte[] rgbaData = GraphicsHelper.ConvertBgrToRgba(bgrData, width, height);
-        _bitmap = GraphicsHelper.GetBgraBitmapFromBytes(rgbaData, width, height);
-    }
 
     public Frame(Stream stream)
     {
@@ -37,14 +26,6 @@ internal class Frame : IDisposable
     {
         var pixel = _bitmap.GetPixel(x, y);
         return new(pixel.Red, pixel.Green, pixel.Blue);
-    }
-
-    public SKBitmap GetNativeElement() => _bitmap;
-
-    public void UpdateNativeElement(SKBitmap bitmap)
-    {
-        _bitmap.Dispose();
-        _bitmap = bitmap;
     }
 
     public byte[] ToByteArray(ImageFormat imageFormat)
@@ -107,4 +88,7 @@ internal class Frame : IDisposable
 
         return new(outputBitmap);
     }
+
+    public static explicit operator SKBitmap(Frame frame) => frame._bitmap;
+    public static explicit operator Frame(SKBitmap bitmap) => new(bitmap);
 }

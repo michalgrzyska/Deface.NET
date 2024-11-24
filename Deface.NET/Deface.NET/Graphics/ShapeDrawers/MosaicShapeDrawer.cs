@@ -13,7 +13,7 @@ internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
 
     public Frame Draw(Frame frame, List<DetectedObject> objects)
     {
-        var bitmap = frame.GetNativeElement();
+        var bitmap = (SKBitmap)frame;
         var (mosaicW, mosaicH) = GetMosaicSize(frame);
 
         using SKCanvas canvas = new(bitmap);

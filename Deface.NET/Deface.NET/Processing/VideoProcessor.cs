@@ -15,7 +15,8 @@ internal sealed class VideoProcessor
     IObjectDetector detector,
     IVideoWriter videoWriter,
     IVideoReader videoReader,
-    IShapeDrawerProvider shapeDrawerProvider
+    IShapeDrawerProvider shapeDrawerProvider,
+    IFrameCreator frameCreator
 ) : IVideoProcessor
 {
     private readonly IDLogger<IDefaceService> _logger = logger;
@@ -23,6 +24,7 @@ internal sealed class VideoProcessor
     private readonly IVideoWriter _videoWriter = videoWriter;
     private readonly IVideoReader _videoReader = videoReader;
     private readonly IShapeDrawerProvider _shapeDrawerProvider = shapeDrawerProvider;
+    private readonly IFrameCreator _frameCreator = frameCreator;
 
     private readonly Settings _settings = settingsProvider.Settings;
 
@@ -54,7 +56,7 @@ internal sealed class VideoProcessor
 
         VideoInfo videoInfo = await _videoReader.ReadVideo((frameInfo) =>
         {
-            Frame frame = new(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
+            Frame frame = _frameCreator.FromBgrArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
             Frame processedFrame = ProcessFrame(frame, frameInfo.Index);
             processedFrames.Add(processedFrame);
 

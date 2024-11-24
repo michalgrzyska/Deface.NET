@@ -24,7 +24,7 @@ internal static class GraphicsHelper
         return rgbaData;
     }
 
-    public static SKBitmap GetBgraBitmapFromBytes(byte[] rgbData, int width, int height)
+    public static SKBitmap GetBgraBitmapFromRawBytes(byte[] rgbData, int width, int height)
     {
         SKBitmap bitmap = new(width, height, SKColorType.Bgra8888, SKAlphaType.Premul);
         GCHandle handle = GCHandle.Alloc(rgbData, GCHandleType.Pinned);

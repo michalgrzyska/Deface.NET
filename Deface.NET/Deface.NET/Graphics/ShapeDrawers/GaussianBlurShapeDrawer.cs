@@ -11,7 +11,7 @@ internal class GaussianBlurShapeDrawer(Settings settings) : IShapeDrawer
 
     public Frame Draw(Frame frame, List<DetectedObject> objects)
     {
-        var bitmap = frame.GetNativeElement();
+        var bitmap = (SKBitmap)frame;
         float blurFactor = CalculateBlurFactor(frame);
 
         SKImageInfo imageInfo = new(bitmap.Width, bitmap.Height);
@@ -37,8 +37,7 @@ internal class GaussianBlurShapeDrawer(Settings settings) : IShapeDrawer
 
         snapshot.ReadPixels(resultBitmap.Info, resultBitmap.GetPixels(), resultBitmap.RowBytes, 0, 0);
 
-        frame.UpdateNativeElement(resultBitmap);
-        return frame;
+        return (Frame)resultBitmap;
     }
 
     private static float CalculateBlurFactor(Frame frame)

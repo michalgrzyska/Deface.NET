@@ -24,7 +24,7 @@ internal static class TestFrameHelper
     {
         Frame frame = GetTestFrame();
 
-        var nativeElement = frame.GetNativeElement();
+        var nativeElement = (SKBitmap)frame;
 
         for (var y = 0; y < nativeElement.Height; y++)
         {

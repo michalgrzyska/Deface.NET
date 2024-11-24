@@ -50,7 +50,7 @@ public class GraphicsHelperUnitTests
         ];
 
         // Act
-        using SKBitmap bitmap = GraphicsHelper.GetBgraBitmapFromBytes(rgbaData, width, height);
+        using SKBitmap bitmap = GraphicsHelper.GetBgraBitmapFromRawBytes(rgbaData, width, height);
 
         // Assert
         bitmap.Width.Should().Be(width);
