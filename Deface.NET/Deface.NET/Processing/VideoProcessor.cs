@@ -1,8 +1,10 @@
-﻿using Deface.NET.Configuration.Provider;
+﻿using Deface.NET.Common;
+using Deface.NET.Configuration.Provider;
 using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
+using Deface.NET.Processing.Models;
 using Deface.NET.VideoIO.Interfaces;
 using Deface.NET.VideoIO.Models;
 
@@ -25,30 +27,27 @@ internal sealed class VideoProcessor
     private readonly IVideoReader _videoReader = videoReader;
     private readonly IShapeDrawerProvider _shapeDrawerProvider = shapeDrawerProvider;
     private readonly IFrameCreator _frameCreator = frameCreator;
-
     private readonly Settings _settings = settingsProvider.Settings;
 
     private List<DetectedObject> _lastDetectedObjects = [];
 
-    public void Dispose() => _detector.Dispose();
-
     public async Task<ProcessingResult> Process(string inputPath, string outputPath)
     {
-        _logger.Log(LoggingLevel.Basic, "Video processing started for \"{InputPath}\"", inputPath);
+        LogProcessingStarted(inputPath);
+        var processedFrames = await GetProcessedFrames(inputPath);
 
-        var (videoInfo, processedFrames, time) = await GetProcessedFrames(inputPath);
+        LogSavingVideo(inputPath);
+        _videoWriter.WriteVideo(processedFrames.Frames, processedFrames.VideoInfo, outputPath);
 
-        _logger.Log(LoggingLevel.Detailed, "Saving processed video \"{InputPath}\" to a destinate location", inputPath);
+        LogVideoProcessed(inputPath, processedFrames, outputPath);
+        processedFrames.Frames.Dispose();
 
-        _videoWriter.WriteVideo(processedFrames, videoInfo, outputPath);
-        DisposeFrames(processedFrames);
-
-        _logger.Log(LoggingLevel.Basic, "Video \"{InputPath}\" processed in {Time} and saved to \"{OutputPath}\"", inputPath, time, outputPath);
-
-        return new ProcessingResult(inputPath, outputPath, time, _settings.Threshold, videoInfo.AverageFps);
+        return GetProcessingResult(inputPath, outputPath, processedFrames);
     }
 
-    private async Task<(VideoInfo, List<Frame>, TimeSpan)> GetProcessedFrames(string inputPath)
+    public void Dispose() => _detector.Dispose();
+
+    private async Task<ProcessedFrames> GetProcessedFrames(string inputPath)
     {
         var progressLogger = _logger.GetProgressLogger();
         progressLogger.Start();
@@ -62,12 +61,11 @@ internal sealed class VideoProcessor
             processedFrames.Add(processedFrame);
 
             progressLogger.LogProgress(frameInfo.Index + 1, "Processing video frames", frameInfo.TotalFrames);
-            return Task.CompletedTask;
         }, inputPath);
 
         TimeSpan processingTime = progressLogger.Stop();
 
-        return (videoInfo, processedFrames, processingTime);
+        return new(processedFrames, videoInfo, processingTime);
     }
 
     private Frame ProcessFrame(Frame frame, int i)
@@ -77,15 +75,18 @@ internal sealed class VideoProcessor
             _lastDetectedObjects = _detector.Detect(frame, _settings);
         }
 
-        Frame processedFrame = _shapeDrawerProvider.ShapeDrawer.Draw(frame, _lastDetectedObjects);
-        return processedFrame;
+        return _shapeDrawerProvider.ShapeDrawer.Draw(frame, _lastDetectedObjects);
     }
 
-    private static void DisposeFrames(List<Frame> frames)
+    private ProcessingResult GetProcessingResult(string inputPath, string outputPath, ProcessedFrames processedFrames)
     {
-        foreach (Frame frame in frames)
-        {
-            frame.Dispose();
-        }
+        return new ProcessingResult(inputPath, outputPath, processedFrames.ProcessingTime, _settings.Threshold, processedFrames.VideoInfo.AverageFps);
     }
+
+    private void LogProcessingStarted(string inputPath) => _logger.LogBasic("Video processing started for \"{InputPath}\"", inputPath);
+
+    private void LogSavingVideo(string inputPath) => _logger.LogDetailed("Saving processed video \"{InputPath}\" to a destinate location", inputPath);
+
+    private void LogVideoProcessed(string inputPath, ProcessedFrames processedFrames, string outputPath) =>
+        _logger.LogBasic("Video \"{InputPath}\" processed in {Time} and saved to \"{OutputPath}\"", inputPath, processedFrames.ProcessingTime, outputPath);
 }

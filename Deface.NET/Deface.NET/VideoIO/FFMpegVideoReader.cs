@@ -5,7 +5,7 @@ namespace Deface.NET.VideoIO;
 
 internal class FFMpegVideoReader : IDisposable
 {
-    private readonly Func<FrameInfo, Task> _frameProcess;
+    private readonly Action<FrameInfo> _frameProcess;
     private readonly ExternalProcess _ffmpegProcess;
     private readonly string _videoFilePath;
     private readonly VideoInfo _videoInfo = default!;
@@ -15,7 +15,7 @@ internal class FFMpegVideoReader : IDisposable
     private int _totalBytesRead = 0;
     private int _frameSize = 0;
 
-    public FFMpegVideoReader(string videoFilePath, Func<FrameInfo, Task> frameProcess, string ffmpegPath, VideoInfo videoInfo)
+    public FFMpegVideoReader(string videoFilePath, Action<FrameInfo> frameProcess, string ffmpegPath, VideoInfo videoInfo)
     {
         _frameProcess = frameProcess;
         _videoFilePath = videoFilePath;
@@ -23,18 +23,18 @@ internal class FFMpegVideoReader : IDisposable
         _videoInfo = videoInfo;
     }
 
-    public async Task ProcessVideo()
+    public void ProcessVideo()
     {
         SetupFields();
 
         _ffmpegProcess.Start();
 
-        await ProcessStream();
+        ProcessStream();
     }
 
     public void Dispose() => _ffmpegProcess?.Dispose();
 
-    private async Task ProcessStream()
+    private void ProcessStream()
     {
         int i = 0;
 
@@ -51,7 +51,7 @@ internal class FFMpegVideoReader : IDisposable
 
             while (_totalBytesRead >= _frameSize)
             {
-                await ProcessFrame(i);
+                ProcessFrame(i);
                 i++;
             }
         }
@@ -64,13 +64,13 @@ internal class FFMpegVideoReader : IDisposable
         _rolloverBuffer = new byte[_frameSize];
     }
 
-    private async Task ProcessFrame(int i)
+    private void ProcessFrame(int i)
     {
         byte[] frameData = new byte[_frameSize];
         Array.Copy(_buffer, 0, frameData, 0, _frameSize);
 
         FrameInfo frameInfo = new(frameData, i, _videoInfo.TotalFrames, _videoInfo.Width, _videoInfo.Height);
-        await _frameProcess(frameInfo);
+        _frameProcess(frameInfo);
 
         int excessBytes = _totalBytesRead - _frameSize;
 

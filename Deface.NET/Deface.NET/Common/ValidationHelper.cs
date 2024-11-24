@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Deface.NET.Utils;
+namespace Deface.NET.Common;
 
 /// <summary>
 /// Author's note: I'd have to be crazy to upload the entire FluentValidation for this purpose.

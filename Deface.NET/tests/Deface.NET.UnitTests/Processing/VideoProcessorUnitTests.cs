@@ -54,7 +54,7 @@ public class VideoProcessorUnitTests
         _detector.Received(framesCount).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
         shapeDrawer.Received(framesCount).Draw(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
         _videoWriter.Received(1).WriteVideo(Arg.Any<List<Frame>>(), Arg.Any<VideoInfo>(), Arg.Any<string>());
-        await _videoReader.Received(1).ReadVideo(Arg.Any<Func<FrameInfo, Task>>(), Arg.Any<string>());
+        await _videoReader.Received(1).ReadVideo(Arg.Any<Action<FrameInfo>>(), Arg.Any<string>());
     }
 
     [Fact]
@@ -132,15 +132,15 @@ public class VideoProcessorUnitTests
             .ToList();
 
         _videoReader
-            .ReadVideo(Arg.Any<Func<FrameInfo, Task>>(), Arg.Any<string>())
-            .Returns(async call =>
+            .ReadVideo(Arg.Any<Action<FrameInfo>>(), Arg.Any<string>())
+            .Returns(call =>
             {
-                var frameCallback = call.Arg<Func<FrameInfo, Task>>();
+                var frameCallback = call.Arg<Action<FrameInfo>>();
 
                 for (int i = 0; i < mockFrames.Count; i++)
                 {
                     FrameInfo fi = new(mockFrames[i].ToByteArray(), i, mockFrames.Count, mockFrames[i].Width, mockFrames[i].Height);
-                    await frameCallback(fi);
+                    frameCallback(fi);
                 }
 
                 return new VideoInfo(FrameSize, FrameSize, mockFrames.Count, Fps, Fps);

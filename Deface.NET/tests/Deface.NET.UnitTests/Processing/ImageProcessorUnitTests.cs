@@ -64,7 +64,7 @@ public class ImageProcessorUnitTests
 
         shapeDrawer
             .Draw(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>())
-            .Returns(TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo1));
+            .Returns((_) => TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo1));
 
         _shapeDrawerProvider.ShapeDrawer.Returns(shapeDrawer);
 
@@ -97,7 +97,7 @@ public class ImageProcessorUnitTests
 
         _frameCreator
             .FromFile(Arg.Any<string>())
-            .Returns(TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo1));
+            .Returns((_) => TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo1));
 
         _detector
             .Detect(Arg.Any<Frame>(), Arg.Any<Settings>())

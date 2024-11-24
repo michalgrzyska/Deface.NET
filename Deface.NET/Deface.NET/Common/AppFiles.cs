@@ -1,4 +1,4 @@
-﻿namespace Deface.NET.Utils;
+﻿namespace Deface.NET.Common;
 
 internal static class AppFiles
 {

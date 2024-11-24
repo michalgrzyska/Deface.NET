@@ -15,8 +15,8 @@ IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
     options.AnonimizationShape = AnonimizationShape.Ellipse;
 });
 
-var result = await defaceService.ProcessVideo(TestResources.Video_Short_HD_1280_720_24fps, "\"C://DefaceTest//testt.mp4");
+//var result = await defaceService.ProcessVideo(TestResources.Video_Short_HD_1280_720_24fps, "\"C://DefaceTest//testt.mp4");
 
-//var result = defaceService.ProcessImage(TestResources.Photo3, "C://DefaceTest//4.png");
+var result = defaceService.ProcessImage(TestResources.Photo3, "C://DefaceTest//4.png");
 
 var x = 5;

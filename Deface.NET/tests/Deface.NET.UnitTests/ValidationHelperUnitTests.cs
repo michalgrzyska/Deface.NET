@@ -1,4 +1,4 @@
-﻿using Deface.NET.Utils;
+﻿using Deface.NET.Common;
 
 namespace Deface.NET.UnitTests;
 
