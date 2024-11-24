@@ -11,13 +11,13 @@ internal static class TestFrameHelper
     public static Frame GetTestFrame(string path)
     {
         using FileStream fileStream = new(path, FileMode.Open, FileAccess.Read);
-        return new(fileStream);
+        return (Frame)SKBitmap.Decode(fileStream);
     }
 
     public static Frame GetTestFrame()
     {
         using MemoryStream stream = GetFrameStream();
-        return new(stream);
+        return (Frame)SKBitmap.Decode(stream);
     }
 
     public static Frame GetTestFrameWithMesh()

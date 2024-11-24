@@ -27,7 +27,9 @@ internal class FrameCreator(IFileSystem fileSystem) : IFrameCreator
         try
         {
             using FileStream stream = _fileSystem.OpenRead(path);
-            return new(stream);
+            var bitmap = SKBitmap.Decode(stream);
+
+            return (Frame)bitmap;
         }
         catch (Exception e)
         {

@@ -5,6 +5,7 @@ using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.Processing;
 using Deface.NET.UnitTests._TestsConfig;
+using Deface.NET.UnitTests.Graphics.Helpers;
 using Deface.NET.VideoIO.Interfaces;
 using Deface.NET.VideoIO.Models;
 using Microsoft.Extensions.Logging;
@@ -127,7 +128,7 @@ public class VideoProcessorUnitTests
     {
         List<Frame> mockFrames = Enumerable
             .Range(1, 10)
-            .Select(x => ProcessingTestHelper.GetTestFrame())
+            .Select(x => TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo1))
             .ToList();
 
         _videoReader

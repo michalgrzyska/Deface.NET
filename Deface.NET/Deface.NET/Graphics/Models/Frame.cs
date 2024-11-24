@@ -5,15 +5,10 @@ namespace Deface.NET.Graphics.Models;
 
 internal sealed class Frame : IDisposable
 {
-    private SKBitmap _bitmap;
+    private readonly SKBitmap _bitmap;
 
     public int Width => _bitmap.Width;
     public int Height => _bitmap.Height;
-
-    public Frame(Stream stream)
-    {
-        _bitmap = SKBitmap.Decode(stream);
-    }
 
     private Frame(SKBitmap bitmap)
     {

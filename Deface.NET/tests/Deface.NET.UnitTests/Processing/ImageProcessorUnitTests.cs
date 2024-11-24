@@ -6,6 +6,7 @@ using Deface.NET.ObjectDetection;
 using Deface.NET.Processing;
 using Deface.NET.System;
 using Deface.NET.UnitTests._TestsConfig;
+using Deface.NET.UnitTests.Graphics.Helpers;
 using NSubstitute;
 
 namespace Deface.NET.UnitTests.Processing;
@@ -41,7 +42,7 @@ public class ImageProcessorUnitTests
 
         shapeDrawer
             .Draw(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>())
-            .Returns(ProcessingTestHelper.GetTestFrame());
+            .Returns(TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo1));
 
         _shapeDrawerProvider.ShapeDrawer.Returns(shapeDrawer);
 
@@ -63,7 +64,7 @@ public class ImageProcessorUnitTests
 
         shapeDrawer
             .Draw(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>())
-            .Returns(ProcessingTestHelper.GetTestFrame());
+            .Returns(TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo1));
 
         _shapeDrawerProvider.ShapeDrawer.Returns(shapeDrawer);
 
@@ -96,7 +97,7 @@ public class ImageProcessorUnitTests
 
         _frameCreator
             .FromFile(Arg.Any<string>())
-            .Returns(ProcessingTestHelper.GetTestFrame());
+            .Returns(TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo1));
 
         _detector
             .Detect(Arg.Any<Frame>(), Arg.Any<Settings>())

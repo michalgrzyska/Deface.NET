@@ -29,20 +29,9 @@ public class FrameUnitTests
     }
 
     [Fact]
-    public void New_FromStream_CreatedCorrectly()
-    {
-        using FileStream fileStream = new(TestResources.TestResources.PhotoRed, FileMode.Open);
-
-        var action = () => new Frame(fileStream);
-
-        action.Should().NotThrow();
-    }
-
-    [Fact]
     public void GetPixel_ReturnsCorrectValue()
     {
-        using FileStream fileStream = new(TestResources.TestResources.PhotoRed, FileMode.Open);
-        Frame frame = new(fileStream);
+        Frame frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
 
         frame.GetPixel(0, 0).ShouldBe(255, 0, 0);
     }
