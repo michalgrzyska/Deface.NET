@@ -68,7 +68,7 @@ internal sealed class ImageProcessor
     private void ProcessImage(Frame image, string outputPath)
     {
         List<DetectedObject> detectedObjects = _detector.Detect(image, _settings);
-        Frame result = _shapeDrawerProvider.ShapeDrawer.Draw(image, detectedObjects);
+        using Frame result = _shapeDrawerProvider.ShapeDrawer.Draw(image, detectedObjects);
 
         var resultBytes = result.ToByteArray(_settings.ImageFormat);
         _fileSystem.Save(outputPath, resultBytes);

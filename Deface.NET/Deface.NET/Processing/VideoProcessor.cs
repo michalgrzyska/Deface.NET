@@ -41,6 +41,7 @@ internal sealed class VideoProcessor
         _logger.Log(LoggingLevel.Detailed, "Saving processed video \"{InputPath}\" to a destinate location", inputPath);
 
         _videoWriter.WriteVideo(processedFrames, videoInfo, outputPath);
+        DisposeFrames(processedFrames);
 
         _logger.Log(LoggingLevel.Basic, "Video \"{InputPath}\" processed in {Time} and saved to \"{OutputPath}\"", inputPath, time, outputPath);
 
@@ -56,7 +57,7 @@ internal sealed class VideoProcessor
 
         VideoInfo videoInfo = await _videoReader.ReadVideo((frameInfo) =>
         {
-            Frame frame = _frameCreator.FromBgrArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
+            using Frame frame = _frameCreator.FromBgrArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
             Frame processedFrame = ProcessFrame(frame, frameInfo.Index);
             processedFrames.Add(processedFrame);
 
@@ -78,5 +79,13 @@ internal sealed class VideoProcessor
 
         Frame processedFrame = _shapeDrawerProvider.ShapeDrawer.Draw(frame, _lastDetectedObjects);
         return processedFrame;
+    }
+
+    private static void DisposeFrames(List<Frame> frames)
+    {
+        foreach (Frame frame in frames)
+        {
+            frame.Dispose();
+        }
     }
 }
