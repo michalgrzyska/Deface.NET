@@ -51,7 +51,7 @@ internal class UltraFaceDetector : IDetector, IDisposable
 
     private static float[] PreprocessImage(Frame frame)
     {
-        Frame resized = frame.GetRescaledWithPadding(Width, Height);
+        Frame resized = frame.AsRescaledWithPadding(Width, Height);
         float[] imageData = new float[1 * 3 * Height * Width];
         int index = 0;
 

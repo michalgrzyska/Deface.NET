@@ -10,9 +10,9 @@ internal class Frame : IDisposable
     public int Width => _bitmap.Width;
     public int Height => _bitmap.Height;
 
-    public Frame(byte[] data, int width, int height)
+    public Frame(byte[] bgrData, int width, int height)
     {
-        byte[] rgbaData = ConvertBgrToRgba(data, width, height);
+        byte[] rgbaData = ConvertBgrToRgba(bgrData, width, height);
         _bitmap = GetBitmapFromBytes(rgbaData, width, height);
     }
 
@@ -83,7 +83,7 @@ internal class Frame : IDisposable
         return rgbData;
     }
 
-    public Frame GetRescaledWithPadding(int targetWidth, int targetHeight)
+    public Frame AsRescaledWithPadding(int targetWidth, int targetHeight)
     {
         float scale = Math.Min((float)targetWidth / Width, (float)targetHeight / Height);
 

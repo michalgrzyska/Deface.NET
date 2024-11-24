@@ -3,7 +3,7 @@ using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection;
 using SkiaSharp;
 
-namespace Deface.NET.Graphics.Effects;
+namespace Deface.NET.Graphics.ShapeDrawers;
 
 internal class GaussianBlurShapeDrawer(Settings settings) : IShapeDrawer
 {
