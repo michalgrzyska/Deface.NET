@@ -52,12 +52,13 @@ internal sealed class VideoProcessor
 
         List<Frame> processedFrames = [];
 
-        VideoInfo videoInfo = await _videoReader.ReadVideo((frame, index, totalFrames) =>
+        VideoInfo videoInfo = await _videoReader.ReadVideo((frameInfo) =>
         {
-            Frame processedFrame = ProcessFrame(frame, index);
+            Frame frame = new(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
+            Frame processedFrame = ProcessFrame(frame, frameInfo.Index);
             processedFrames.Add(processedFrame);
 
-            progressLogger.LogProgress(index + 1, "Processing video frames", totalFrames);
+            progressLogger.LogProgress(frameInfo.Index + 1, "Processing video frames", frameInfo.TotalFrames);
             return Task.CompletedTask;
         }, inputPath);
 

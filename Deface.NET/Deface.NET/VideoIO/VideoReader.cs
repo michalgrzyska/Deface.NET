@@ -1,5 +1,4 @@
 ﻿using Deface.NET.Configuration.Provider;
-using Deface.NET.Graphics.Models;
 using Deface.NET.VideoIO.Interfaces;
 using Deface.NET.VideoIO.Models;
 
@@ -10,11 +9,11 @@ internal class VideoReader(IScopedSettingsProvider settingsProvider, IVideoInfoP
     private readonly Settings _settings = settingsProvider.Settings;
     private readonly IVideoInfoProvider _videoInfoService = videoInfoService;
 
-    public async Task<VideoInfo> ReadVideo(Func<Frame, int, int, Task> frameProcess, string videoFilePath)
+    public async Task<VideoInfo> ReadVideo(Func<FrameInfo, Task> frameProcess, string videoFilePath)
     {
         VideoInfo videoInfo = await _videoInfoService.GetInfo(videoFilePath);
 
-        using VideoFileSystemReader videoReader = new(videoFilePath, frameProcess, _settings.FFMpegPath, videoInfo);
+        using FFMpegVideoReader videoReader = new(videoFilePath, frameProcess, _settings.FFMpegPath, videoInfo);
         await videoReader.ProcessVideo();
 
         return videoInfo;

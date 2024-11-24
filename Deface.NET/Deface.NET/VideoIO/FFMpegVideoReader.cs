@@ -1,12 +1,11 @@
-﻿using Deface.NET.Graphics.Models;
-using Deface.NET.System;
+﻿using Deface.NET.System;
 using Deface.NET.VideoIO.Models;
 
 namespace Deface.NET.VideoIO;
 
-internal class VideoFileSystemReader : IDisposable
+internal class FFMpegVideoReader : IDisposable
 {
-    private readonly Func<Frame, int, int, Task> _frameProcess;
+    private readonly Func<FrameInfo, Task> _frameProcess;
     private readonly ExternalProcess _ffmpegProcess;
     private readonly string _videoFilePath;
     private readonly VideoInfo _videoInfo = default!;
@@ -16,7 +15,7 @@ internal class VideoFileSystemReader : IDisposable
     private int _totalBytesRead = 0;
     private int _frameSize = 0;
 
-    public VideoFileSystemReader(string videoFilePath, Func<Frame, int, int, Task> frameProcess, string ffmpegPath, VideoInfo videoInfo)
+    public FFMpegVideoReader(string videoFilePath, Func<FrameInfo, Task> frameProcess, string ffmpegPath, VideoInfo videoInfo)
     {
         _frameProcess = frameProcess;
         _videoFilePath = videoFilePath;
@@ -70,8 +69,8 @@ internal class VideoFileSystemReader : IDisposable
         byte[] frameData = new byte[_frameSize];
         Array.Copy(_buffer, 0, frameData, 0, _frameSize);
 
-        Frame frame = new(frameData, _videoInfo.Width, _videoInfo.Height);
-        await _frameProcess(frame, i, _videoInfo.TotalFrames);
+        FrameInfo frameInfo = new(frameData, i, _videoInfo.TotalFrames, _videoInfo.Width, _videoInfo.Height);
+        await _frameProcess(frameInfo);
 
         int excessBytes = _totalBytesRead - _frameSize;
 
