@@ -8,6 +8,12 @@ internal static class TestFrameHelper
     private const int Width = 1000;
     private const int Height = 1000;
 
+    public static Frame GetTestFrame(string path)
+    {
+        using FileStream fileStream = new(path, FileMode.Open, FileAccess.Read);
+        return new(fileStream);
+    }
+
     public static Frame GetTestFrame()
     {
         using MemoryStream stream = GetFrameStream();
