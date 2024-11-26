@@ -58,7 +58,7 @@ public partial class DefaceServiceUnitTests
 
         // Act
 
-        var action = () => _service.ProcessVideo(input, outputString);
+        var action = () => _service.ProcessVideo(input, outputString!);
 
         // Assert
 

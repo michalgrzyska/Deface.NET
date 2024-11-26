@@ -1,10 +1,10 @@
 ﻿namespace Deface.NET.ObjectDetection;
 
-internal record DetectedObject(int X1, int Y1, int X2, int Y2, float Confidence, bool IsEnlarged = false)
+internal record DetectedObject(int X1, int Y1, int X2, int Y2, float Confidence, bool IsResized = false)
 {
     public DetectedObject GetResized(float scaleFactor = 1.0f)
     {
-        if (IsEnlarged || scaleFactor == 1.0f)
+        if (IsResized || scaleFactor == 1.0f)
         {
             return this;
         }
@@ -23,6 +23,6 @@ internal record DetectedObject(int X1, int Y1, int X2, int Y2, float Confidence,
         var y1 = (int)(centerY - newHeight / 2);
         var y2 = (int)(centerY + newHeight / 2);
 
-        return new(x1, y1, x2, y2, Confidence, IsEnlarged: true);
+        return new(x1, y1, x2, y2, Confidence, IsResized: true);
     }
 }

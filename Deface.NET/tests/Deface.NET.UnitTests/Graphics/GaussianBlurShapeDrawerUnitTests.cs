@@ -11,9 +11,9 @@ public class GaussianBlurShapeDrawerUnitTests(SettingsFixture settingsFixture)
 {
     private readonly SettingsFixture _settingsFixture = settingsFixture;
 
-    private readonly DetectedObject Object1 = new(10, 10, 100, 100, 1, IsEnlarged: true);
-    private readonly DetectedObject Object2 = new(110, 110, 200, 200, 1, IsEnlarged: true);
-    private readonly DetectedObject Object3 = new(210, 210, 400, 400, 1, IsEnlarged: true);
+    private readonly DetectedObject Object1 = new(10, 10, 100, 100, 1, IsResized: true);
+    private readonly DetectedObject Object2 = new(110, 110, 200, 200, 1, IsResized: true);
+    private readonly DetectedObject Object3 = new(210, 210, 400, 400, 1, IsResized: true);
 
     [Fact]
     public void DrawObject_NoObjects_DrawnCorrectly()
