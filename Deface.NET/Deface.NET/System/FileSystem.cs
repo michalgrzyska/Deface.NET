@@ -1,5 +1,8 @@
-﻿namespace Deface.NET.System;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Deface.NET.System;
+
+[ExcludeFromCodeCoverage]
 internal class FileSystem : IFileSystem
 {
     public FileStream OpenRead(string path)

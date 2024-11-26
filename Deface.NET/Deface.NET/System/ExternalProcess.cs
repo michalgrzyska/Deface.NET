@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Deface.NET.System;
 
+[ExcludeFromCodeCoverage]
 internal class ExternalProcess : IDisposable
 {
     private readonly Process _process;

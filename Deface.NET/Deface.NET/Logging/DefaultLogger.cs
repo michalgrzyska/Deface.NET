@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Deface.NET.Logging;
 
+[ExcludeFromCodeCoverage]
 internal class DefaultLogger<T> : ILogger<T>
 {
     public IDisposable? BeginScope<TState>(TState state) where TState : notnull => default;
@@ -15,6 +17,7 @@ internal class DefaultLogger<T> : ILogger<T>
     }
 }
 
+[ExcludeFromCodeCoverage]
 internal static class LoggerDependencyInjection
 {
     public static void AddDefaultLoggerIfNeeded(this IServiceCollection services)
