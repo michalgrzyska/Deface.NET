@@ -58,7 +58,9 @@ public class DLoggerUnitTests(SettingsFixture settingsFixture)
     {
         var (dLogger, _) = GetDLogger(LoggingLevel.Basic);
 
-        dLogger.Should().NotBeNull();
+        var progressLogger = dLogger.GetProgressLogger();
+
+        progressLogger.Should().NotBeNull();
     }
 
     private (DLogger<object>, FakeLogger<object>) GetDLogger(LoggingLevel loggingLevel)
