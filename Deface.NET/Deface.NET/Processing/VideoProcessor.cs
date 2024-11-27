@@ -45,8 +45,6 @@ internal sealed class VideoProcessor
         return GetProcessingResult(inputPath, outputPath, processedFrames);
     }
 
-    public void Dispose() => _detector.Dispose();
-
     private ProcessedFrames GetProcessedFrames(string inputPath)
     {
         var progressLogger = _logger.GetProgressLogger();

@@ -1,15 +1,15 @@
-﻿namespace Deface.NET.Common;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Deface.NET.Common;
+
+[ExcludeFromCodeCoverage]
 internal static class IEnumerableExtensions
 {
     public static void Dispose<T>(this IEnumerable<T> collection) where T : IDisposable
     {
         foreach (var item in collection)
         {
-            if (item is not null)
-            {
-                item.Dispose();
-            }
+            item?.Dispose();
         }
     }
 }

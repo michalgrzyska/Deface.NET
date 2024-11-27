@@ -28,8 +28,6 @@ internal sealed class ImageProcessor
 
     private readonly static string[] ImageExtensions = [".jpg", ".jpeg", ".png"];
 
-    public void Dispose() => _detector.Dispose();
-
     public ProcessingResult Process(string inputPath, string outputPath)
     {
         Stopwatch stopwatch = new();

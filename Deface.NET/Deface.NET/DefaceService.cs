@@ -15,7 +15,7 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
         ValidationHelper.MustNotBeNullOrWhiteSpace(outputPath, nameof(outputPath));
 
         using var scope = _scopeFactory.CreateUserScope(customSettings);
-        using var processor = scope.ServiceProvider.GetRequiredService<IVideoProcessor>();
+        var processor = scope.ServiceProvider.GetRequiredService<IVideoProcessor>();
 
         return processor.Process(inputPath, outputPath);
     }
@@ -26,7 +26,7 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
         ValidationHelper.MustNotBeNullOrWhiteSpace(outputPath, nameof(outputPath));
 
         using var scope = _scopeFactory.CreateUserScope(customSettings);
-        using var processor = scope.ServiceProvider.GetRequiredService<IImageProcessor>();
+        var processor = scope.ServiceProvider.GetRequiredService<IImageProcessor>();
 
         return processor.Process(inputPath, outputPath);
     }
@@ -37,7 +37,7 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
         ValidationHelper.ValidateDirectoryPath(outputDirectory, nameof(outputDirectory));
 
         using var scope = _scopeFactory.CreateUserScope(customSettings);
-        using var processor = scope.ServiceProvider.GetRequiredService<IImageProcessor>();
+        var processor = scope.ServiceProvider.GetRequiredService<IImageProcessor>();
 
         return processor.ProcessMany(inputDirectory, outputDirectory);
     }

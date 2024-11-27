@@ -19,4 +19,4 @@ var result = defaceService.ProcessVideo(TestResources.Video_Short_640_360_24fps,
 
 //var result = defaceService.ProcessImage(TestResources.Photo3, "C://DefaceTest//4.png");
 
-var x = 5;
+Console.ReadKey();

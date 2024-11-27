@@ -2,7 +2,7 @@
 
 namespace Deface.NET.ObjectDetection;
 
-internal interface IObjectDetector : IDisposable
+internal interface IObjectDetector
 {
     List<DetectedObject> Detect(Frame frame, Settings settings);
 }

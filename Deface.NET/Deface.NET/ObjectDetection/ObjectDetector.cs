@@ -6,19 +6,13 @@ namespace Deface.NET.ObjectDetection;
 /// <summary>
 /// This is the foundation for multiple models if needed (which is planned).
 /// </summary>
-internal class ObjectDetector : IObjectDetector
+internal class ObjectDetector(IUltraFaceDetector ultraFaceDetector) : IObjectDetector
 {
-    private UltraFaceDetector _ultraface = default!;
-    private UltraFaceDetector Ultraface => _ultraface ??= new();
+    private readonly IUltraFaceDetector _ultraFaceDetector = ultraFaceDetector;
 
     public List<DetectedObject> Detect(Frame frame, Settings settings)
     {
-        var objects = Ultraface.Detect(frame, settings.Threshold);
+        var objects = _ultraFaceDetector.Detect(frame, settings.Threshold);
         return objects.Select(x => x.GetResized(settings.MaskScale)).ToList();
-    }
-
-    public void Dispose()
-    {
-        _ultraface?.Dispose();
     }
 }
