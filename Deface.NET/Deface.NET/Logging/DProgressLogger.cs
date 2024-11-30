@@ -24,10 +24,13 @@ internal class DProgressLogger<T>(ILogger<T> logger, LoggingLevel loggingLevel)
         return _stopwatch.Elapsed;
     }
 
-    public TimeSpan GetEllapsedTime() => _stopwatch.Elapsed;
-
     public void Log(int currentStep, string message, int totalSteps)
     {
+        if (totalSteps == 0)
+        {
+            return;
+        }
+
         if (_loggingLevel < LoggingLevel.Detailed)
         {
             return;

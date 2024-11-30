@@ -1,5 +1,6 @@
 ﻿using Deface.NET.Graphics;
 using Deface.NET.System;
+using Deface.NET.UnitTests.Graphics.Helpers;
 
 namespace Deface.NET.UnitTests.Graphics;
 
@@ -33,5 +34,58 @@ public class FrameCreatorUnitTests
         var action = () => _frameCreator.FromFile(path);
 
         action.Should().Throw<DefaceException>();
+    }
+
+    [Fact]
+    public void FromBgrArray_EmptyArray_ShouldThrowArgumentException()
+    {
+        var action = () => _frameCreator.FromBgrArray([], 10, 10);
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void FromBgrArray_RedImage_FrameIsCorrectAndBlue()
+    {
+        // Arrange
+
+        var width = 1000; 
+        var height = 1000;
+
+        var bgrArray = CreateRedBgrImage(1000, 1000);
+
+        // Act
+
+        var result = _frameCreator.FromBgrArray(bgrArray, width, height);
+
+        // Assert
+
+        result.Width.Should().Be(width);
+        result.Height.Should().Be(height);
+
+        for (var y = 0; y < result.Height; y++) 
+        {
+            for (var x = 0; x < result.Width; x++)
+            {
+                var pixel = result.GetPixel(x, y);
+                pixel.ShouldBe(0, 0, 255);
+            }
+        }
+    }
+
+    private static byte[] CreateRedBgrImage(int width, int height)
+    {
+        int bytesPerPixel = 3;
+        int imageSize = width * height * bytesPerPixel;
+
+        byte[] imageData = new byte[imageSize];
+
+        for (int i = 0; i < imageSize; i += bytesPerPixel)
+        {
+            imageData[i] = 0;     // Blue
+            imageData[i + 1] = 0; // Green
+            imageData[i + 2] = 255; // Red
+        }
+
+        return imageData;
     }
 }

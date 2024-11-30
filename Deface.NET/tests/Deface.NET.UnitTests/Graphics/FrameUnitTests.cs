@@ -164,13 +164,3 @@ public class FrameUnitTests
         result.GetPixel(targetWidth - 1, targetHeight - 1).ShouldBe(0, 0, 0);
     }
 }
-
-file static class Extensions
-{
-    public static void ShouldBe(this Pixel pixel, byte r, byte g, byte b)
-    {
-        pixel.R.Should().Be(r);
-        pixel.G.Should().Be(g);
-        pixel.B.Should().Be(b);
-    }
-}
