@@ -1,26 +1,27 @@
 ﻿using Deface.NET.Configuration.Provider;
-using Deface.NET.System;
+using Deface.NET.System.ExternalProcessing;
 using Deface.NET.VideoIO.Interfaces;
 using Deface.NET.VideoIO.Models;
 using System.Text.Json;
 
 namespace Deface.NET.VideoIO;
 
-internal class VideoInfoProvider(IScopedSettingsProvider settingsProvider) : IVideoInfoProvider
+internal class VideoInfoProvider(IScopedSettingsProvider settingsProvider, IExternalProcessFactory externalProcessFactory) : IVideoInfoProvider
 {
     private readonly Settings _settings = settingsProvider.Settings;
+    private readonly IExternalProcessFactory _externalProcessFactory = externalProcessFactory;
 
     public VideoInfo GetInfo(string filePath)
     {
-        using ExternalProcess process = GetProcess(filePath);
+        using var process = GetProcess(filePath);
 
         var processOutput = process.ExecuteWithOutput();
         var output = JsonSerializer.Deserialize<VideoInfoOutput>(processOutput)!;
 
-        return ConvertOutputToVideoInfo(output);
+        return ConvertOutputToVideoInfo(output, filePath);
     }
 
-    private ExternalProcess GetProcess(string filePath)
+    private IExternalProcess GetProcess(string filePath)
     {
         string ffProbePath = _settings.FFProbePath;
 
@@ -33,10 +34,10 @@ internal class VideoInfoProvider(IScopedSettingsProvider settingsProvider) : IVi
             $"\"{filePath}\""
         ]);
 
-        return new ExternalProcess(ffProbePath, args);
+        return _externalProcessFactory.CreateExternalProcess(ffProbePath, args);
     }
 
-    private static VideoInfo ConvertOutputToVideoInfo(VideoInfoOutput output)
+    private static VideoInfo ConvertOutputToVideoInfo(VideoInfoOutput output, string filePath)
     {
         var stream = output.Streams.FirstOrDefault() ?? throw new InvalidOperationException("Video has no streams.");
 
@@ -46,7 +47,7 @@ internal class VideoInfoProvider(IScopedSettingsProvider settingsProvider) : IVi
         var targetFps = ParseFrameRateString(stream.TargetFrameRate);
         var averageFps = ParseFrameRateString(stream.AverageFrameRate);
 
-        return new(width, height, frames, targetFps, averageFps);
+        return new(width, height, frames, targetFps, averageFps, filePath);
     }
 
     private static float ParseFrameRateString(string str)

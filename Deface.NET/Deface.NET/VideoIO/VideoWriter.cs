@@ -1,19 +1,20 @@
 ﻿using Deface.NET.Configuration.Provider;
 using Deface.NET.Graphics.Models;
-using Deface.NET.System;
+using Deface.NET.System.ExternalProcessing;
 using Deface.NET.VideoIO.Interfaces;
 using Deface.NET.VideoIO.Models;
 using System.Globalization;
 
 namespace Deface.NET.VideoIO;
 
-internal class VideoWriter(IScopedSettingsProvider settingsProvider) : IVideoWriter
+internal class VideoWriter(IScopedSettingsProvider settingsProvider, IExternalProcessFactory externalProcessFactory) : IVideoWriter
 {
     private readonly Settings _settings = settingsProvider.Settings;
+    private readonly IExternalProcessFactory _externalProcessFactory = externalProcessFactory;
 
     public void WriteVideo(List<Frame> frames, VideoInfo videoInfo, string outputPath)
     {
-        using ExternalProcess ffmpegProcess = GetFfmpegProcess(videoInfo, outputPath);
+        using var ffmpegProcess = GetFfmpegProcess(videoInfo, outputPath);
         ffmpegProcess.Start();
 
         using var ffmpegInput = ffmpegProcess.InputStream;
@@ -25,7 +26,7 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider) : IVideoWri
             }
     }
 
-    private ExternalProcess GetFfmpegProcess(VideoInfo videoInfo, string outputPath)
+    private IExternalProcess GetFfmpegProcess(VideoInfo videoInfo, string outputPath)
     {
         string ffmpegPath = _settings.FFMpegPath;
 
@@ -43,6 +44,6 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider) : IVideoWri
             $"\"{outputPath}\""
         ]);
 
-        return new ExternalProcess(ffmpegPath, args, redirectStandardInput: true);
+        return _externalProcessFactory.CreateExternalProcess(ffmpegPath, args, redirectStandardInput: true);
     }
 }

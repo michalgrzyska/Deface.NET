@@ -143,7 +143,7 @@ public class VideoProcessorUnitTests
                     frameCallback(fi);
                 }
 
-                return new VideoInfo(FrameSize, FrameSize, mockFrames.Count, Fps, Fps);
+                return new VideoInfo(FrameSize, FrameSize, mockFrames.Count, Fps, Fps, "");
             });
 
         return mockFrames.Count;

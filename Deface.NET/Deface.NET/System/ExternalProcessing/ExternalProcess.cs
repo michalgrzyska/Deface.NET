@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Deface.NET.System;
+namespace Deface.NET.System.ExternalProcessing;
 
 [ExcludeFromCodeCoverage]
-internal class ExternalProcess : IDisposable
+internal class ExternalProcess : IExternalProcess
 {
     private readonly Process _process;
 
@@ -41,6 +41,6 @@ internal class ExternalProcess : IDisposable
     }
 
     public void Start() => _process.Start();
-    public void WaitForExit() =>_process.WaitForExit();
+    public void WaitForExit() => _process.WaitForExit();
     public void Dispose() => _process?.Dispose();
 }

@@ -6,6 +6,7 @@ using Deface.NET.ObjectDetection;
 using Deface.NET.ObjectDetection.UltraFace;
 using Deface.NET.Processing;
 using Deface.NET.System;
+using Deface.NET.System.ExternalProcessing;
 using Deface.NET.VideoIO;
 using Deface.NET.VideoIO.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,6 +43,7 @@ public static class DependencyInjection
         services.AddSingleton<IFileSystem, FileSystem>();
         services.AddSingleton<IFrameCreator, FrameCreator>();
         services.AddSingleton<IUltraFaceDetector, UltraFaceDetector>();
+        services.AddSingleton<IExternalProcessFactory, ExternalProcessFactory>();
 
         return services;
     }

@@ -13,7 +13,7 @@ internal class VideoReader(IScopedSettingsProvider settingsProvider, IVideoInfoP
     {
         VideoInfo videoInfo = _videoInfoService.GetInfo(videoFilePath);
 
-        using FFMpegVideoReader videoReader = new(videoFilePath, frameProcess, _settings.FFMpegPath, videoInfo);
+        using FFMpegVideoReader videoReader = new(frameProcess, _settings.FFMpegPath, videoInfo);
         videoReader.ProcessVideo();
 
         return videoInfo;
