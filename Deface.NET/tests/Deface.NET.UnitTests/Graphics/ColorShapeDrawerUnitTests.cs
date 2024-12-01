@@ -1,6 +1,6 @@
 ﻿using Deface.NET.Configuration;
-using Deface.NET.Graphics.ShapeDrawers;
 using Deface.NET.Graphics.Models;
+using Deface.NET.Graphics.ShapeDrawers;
 using Deface.NET.ObjectDetection;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;

@@ -48,7 +48,7 @@ public class FrameCreatorUnitTests
     {
         // Arrange
 
-        var width = 1000; 
+        var width = 1000;
         var height = 1000;
 
         var bgrArray = CreateRedBgrImage(1000, 1000);
@@ -62,7 +62,7 @@ public class FrameCreatorUnitTests
         result.Width.Should().Be(width);
         result.Height.Should().Be(height);
 
-        for (var y = 0; y < result.Height; y++) 
+        for (var y = 0; y < result.Height; y++)
         {
             for (var x = 0; x < result.Width; x++)
             {

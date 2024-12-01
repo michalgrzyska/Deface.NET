@@ -1,7 +1,7 @@
 ﻿using Deface.NET.Configuration;
 using Deface.NET.Configuration.Provider;
-using Deface.NET.Graphics.ShapeDrawers;
 using Deface.NET.Graphics.Interfaces;
+using Deface.NET.Graphics.ShapeDrawers;
 
 namespace Deface.NET.Graphics;
 

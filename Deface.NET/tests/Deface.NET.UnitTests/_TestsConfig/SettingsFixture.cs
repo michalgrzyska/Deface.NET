@@ -1,4 +1,7 @@
-﻿namespace Deface.NET.UnitTests._TestsConfig;
+﻿using Deface.NET.Configuration.Provider;
+using NSubstitute;
+
+namespace Deface.NET.UnitTests._TestsConfig;
 
 public sealed class SettingsFixture : IDisposable
 {
@@ -31,6 +34,16 @@ public sealed class SettingsFixture : IDisposable
         }
 
         return settings;
+    }
+
+    internal IScopedSettingsProvider GetScopedSettingsProvider(Action<Settings>? action = null)
+    {
+        var settings = WithAction(action);
+        var provider = Substitute.For<IScopedSettingsProvider>();
+
+        provider.Settings.Returns(settings);
+
+        return provider;
     }
 
     public void Dispose()

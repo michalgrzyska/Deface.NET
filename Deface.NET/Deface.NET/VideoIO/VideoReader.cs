@@ -7,7 +7,7 @@ namespace Deface.NET.VideoIO;
 
 internal class VideoReader
 (
-    IScopedSettingsProvider settingsProvider, 
+    IScopedSettingsProvider settingsProvider,
     IVideoInfoProvider videoInfoService,
     IExternalProcessFactory externalProcessFactory
 ) : IVideoReader

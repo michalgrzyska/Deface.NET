@@ -2,10 +2,10 @@
 
 internal record VideoInfo
 (
-    int Width, 
-    int Height, 
-    int TotalFrames, 
-    float TargetFps, 
-    float AverageFps, 
+    int Width,
+    int Height,
+    int TotalFrames,
+    float TargetFps,
+    float AverageFps,
     string Path
 );

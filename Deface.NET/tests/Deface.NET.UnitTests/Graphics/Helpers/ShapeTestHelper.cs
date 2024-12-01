@@ -15,7 +15,7 @@ internal static class ShapeTestHelper
 
         for (int y = 0; y < frame.Height; y++)
         {
-            for (int x = 0; x < frame.Width; x++) 
+            for (int x = 0; x < frame.Width; x++)
             {
                 ValidatePixel(x, y, action, nativeElement);
             }

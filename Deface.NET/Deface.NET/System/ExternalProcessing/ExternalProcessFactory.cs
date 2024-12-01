@@ -1,5 +1,8 @@
-﻿namespace Deface.NET.System.ExternalProcessing;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace Deface.NET.System.ExternalProcessing;
+
+[ExcludeFromCodeCoverage]
 internal class ExternalProcessFactory : IExternalProcessFactory
 {
     public IExternalProcess CreateExternalProcess(string path, string arguments, bool redirectStandardInput = false)

@@ -1,5 +1,6 @@
 ﻿using Deface.NET.Configuration.Provider;
 using Deface.NET.System.ExternalProcessing;
+using Deface.NET.VideoIO.Helpers;
 using Deface.NET.VideoIO.Interfaces;
 using Deface.NET.VideoIO.Models;
 using System.Text.Json;
@@ -18,7 +19,7 @@ internal class VideoInfoProvider(IScopedSettingsProvider settingsProvider, IExte
         var processOutput = process.ExecuteWithOutput();
         var output = JsonSerializer.Deserialize<VideoInfoOutput>(processOutput)!;
 
-        return ConvertOutputToVideoInfo(output, filePath);
+        return VideoInfoHelper.ConvertOutputToVideoInfo(output, filePath);
     }
 
     private IExternalProcess GetProcess(string filePath)
@@ -35,24 +36,5 @@ internal class VideoInfoProvider(IScopedSettingsProvider settingsProvider, IExte
         ]);
 
         return _externalProcessFactory.CreateExternalProcess(ffProbePath, args);
-    }
-
-    private static VideoInfo ConvertOutputToVideoInfo(VideoInfoOutput output, string filePath)
-    {
-        var stream = output.Streams.FirstOrDefault() ?? throw new InvalidOperationException("Video has no streams.");
-
-        var width = stream.Width;
-        var height = stream.Height;
-        var frames = int.Parse(stream.Frames);
-        var targetFps = ParseFrameRateString(stream.TargetFrameRate);
-        var averageFps = ParseFrameRateString(stream.AverageFrameRate);
-
-        return new(width, height, frames, targetFps, averageFps, filePath);
-    }
-
-    private static float ParseFrameRateString(string str)
-    {
-        var numberParts = str.Split('/').Select(int.Parse).ToArray();
-        return (float)numberParts[0] / numberParts[1];
     }
 }
