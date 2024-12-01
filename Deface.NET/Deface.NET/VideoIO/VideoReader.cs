@@ -8,18 +8,17 @@ namespace Deface.NET.VideoIO;
 internal class VideoReader
 (
     IScopedSettingsProvider settingsProvider,
-    IVideoInfoProvider videoInfoService,
+    IVideoInfoProvider videoInfoProvider,
     IExternalProcessFactory externalProcessFactory
 ) : IVideoReader
 {
     private readonly Settings _settings = settingsProvider.Settings;
-    private readonly IScopedSettingsProvider settingsProvider = settingsProvider;
-    private readonly IVideoInfoProvider _videoInfoService = videoInfoService;
+    private readonly IVideoInfoProvider _videoInfoProvider = videoInfoProvider;
     private readonly IExternalProcessFactory _externalProcessFactory = externalProcessFactory;
 
     public VideoInfo ReadVideo(Action<FrameInfo> frameProcess, string videoFilePath)
     {
-        var videoInfo = _videoInfoService.GetInfo(videoFilePath);
+        var videoInfo = _videoInfoProvider.GetInfo(videoFilePath);
 
         using var process = GetFfmpegProcess(videoInfo);
         process.Start();
