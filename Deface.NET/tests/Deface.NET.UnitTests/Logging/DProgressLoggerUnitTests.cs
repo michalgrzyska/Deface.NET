@@ -47,8 +47,6 @@ public class DProgressLoggerUnitTests
         _logger.Collector.Count.Should().Be(0);
     }
 
-
-
     [Theory]
     [InlineData(LoggingLevel.None, false)]
     [InlineData(LoggingLevel.Basic, false)]
