@@ -125,7 +125,7 @@ public class ValidationHelperTests
     {
         var nonExistentFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
-        Acvartion act = () => ValidationHelper.ValidateFilePath(nonExistentFilePath, nameof(nonExistentFilePath));
+        var act = () => ValidationHelper.ValidateFilePath(nonExistentFilePath, nameof(nonExistentFilePath));
         act.Should().Throw<FileNotFoundException>();
     }
 

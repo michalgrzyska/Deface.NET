@@ -66,6 +66,8 @@ public class VideoProcessorUnitTests
         var inputFile = "input";
         var outputFile = "output";
 
+        SetupVideoReader();
+
         // Act
 
         var result = processor.Process(inputFile, outputFile);
