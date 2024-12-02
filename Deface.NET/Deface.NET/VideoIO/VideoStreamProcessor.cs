@@ -23,11 +23,11 @@ internal class VideoStreamProcessor
 
     public void Process(Stream stream, Action<FrameInfo> action)
     {
-        int i = 0;
+        var i = 0;
 
         while (true)
         {
-            int bytesRead = stream.Read(_buffer, _totalBytesRead, _frameSize - _totalBytesRead);
+            var bytesRead = stream.Read(_buffer, _totalBytesRead, _frameSize - _totalBytesRead);
 
             if (bytesRead == 0)
             {
@@ -46,7 +46,7 @@ internal class VideoStreamProcessor
 
     private void ProcessFrame(int i, Action<FrameInfo> action)
     {
-        byte[] frameData = new byte[_frameSize];
+        var frameData = new byte[_frameSize];
         Array.Copy(_buffer, 0, frameData, 0, _frameSize);
 
         FrameInfo frameInfo = new(frameData, i, _videoInfo.TotalFrames, _videoInfo.Width, _videoInfo.Height);

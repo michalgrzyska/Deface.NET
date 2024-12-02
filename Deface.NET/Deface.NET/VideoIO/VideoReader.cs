@@ -31,7 +31,7 @@ internal class VideoReader
 
     private IExternalProcess GetFfmpegProcess(VideoInfo videoInfo)
     {
-        string args = string.Join(" ",
+        var args = string.Join(" ",
         [
             "-loglevel", "panic",
             "-i", $"\"{videoInfo.Path}\"",

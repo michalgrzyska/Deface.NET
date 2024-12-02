@@ -24,9 +24,9 @@ internal class VideoInfoProvider(IScopedSettingsProvider settingsProvider, IExte
 
     private IExternalProcess GetProcess(string filePath)
     {
-        string ffProbePath = _settings.FFProbePath;
+        var ffProbePath = _settings.FFProbePath;
 
-        string args = string.Join(" ",
+        var args = string.Join(" ",
         [
             "-v", "error",
             "-select_streams", "v:0",

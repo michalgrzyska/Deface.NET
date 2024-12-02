@@ -43,15 +43,15 @@ internal class DProgressLogger<T>(ILogger<T> logger, LoggingLevel loggingLevel)
 
         _lastLogTime = _stopwatch.ElapsedMilliseconds;
 
-        string stepInfo = $"{currentStep}/{totalSteps}";
-        string paddedStepInfo = stepInfo.PadLeft(stepInfo.Length + totalSteps.ToString().Length - currentStep.ToString().Length);
+        var stepInfo = $"{currentStep}/{totalSteps}";
+        var paddedStepInfo = stepInfo.PadLeft(stepInfo.Length + totalSteps.ToString().Length - currentStep.ToString().Length);
 
-        string percentage = (currentStep * 100 / totalSteps).ToString();
-        string paddedPercentInfo = $"{percentage}%".PadLeft(4);
+        var percentage = (currentStep * 100 / totalSteps).ToString();
+        var paddedPercentInfo = $"{percentage}%".PadLeft(4);
 
-        string time = _stopwatch.Elapsed.ToString(@"hh\:mm\:ss\:fff");
+        var time = _stopwatch.Elapsed.ToString(@"hh\:mm\:ss\:fff");
 
-        string resultMessage = message + " | {StepInfo} | {PercentInfo} | {Time}";
+        var resultMessage = message + " | {StepInfo} | {PercentInfo} | {Time}";
 
         _logger.LogInformation(resultMessage, paddedStepInfo, paddedPercentInfo, time);
     }

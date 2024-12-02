@@ -50,22 +50,21 @@ internal sealed class VideoProcessor
 
         List<Frame> processedFrames = [];
 
-        VideoInfo videoInfo = _videoReader.ReadVideo((frameInfo) =>
+        var videoInfo = _videoReader.ReadVideo((frameInfo) =>
         {
-            Frame processedFrame = ProcessFrame(frameInfo);
+            var processedFrame = ProcessFrame(frameInfo);
             processedFrames.Add(processedFrame);
 
             progressLogger.Log(frameInfo.Index + 1, "Processing video frames", frameInfo.TotalFrames);
         }, inputPath);
 
-        TimeSpan processingTime = progressLogger.Stop();
-
+        var processingTime = progressLogger.Stop();
         return new(processedFrames, videoInfo, processingTime);
     }
 
     private Frame ProcessFrame(FrameInfo frameInfo)
     {
-        using Frame frame = _frameCreator.FromBgrArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
+        using var frame = _frameCreator.FromBgrArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
 
         if (frameInfo.Index % _settings.RunDetectionEachNFrames == 0)
         {
@@ -77,7 +76,7 @@ internal sealed class VideoProcessor
 
     private ProcessingResult GetProcessingResult(string inputPath, string outputPath, ProcessedFrames processedFrames)
     {
-        return new ProcessingResult(inputPath, outputPath, processedFrames.ProcessingTime, _settings.Threshold, processedFrames.VideoInfo.AverageFps);
+        return new(inputPath, outputPath, processedFrames.ProcessingTime, _settings.Threshold, processedFrames.VideoInfo.AverageFps);
     }
 
     private void LogProcessingStarted(string inputPath) => _logger.LogBasic("Video processing started for \"{InputPath}\"", inputPath);

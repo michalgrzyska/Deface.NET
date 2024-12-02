@@ -27,7 +27,7 @@ internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
 
             roiCanvas.DrawBitmap(bitmap, rect, new SKRect(0, 0, roiBitmap.Width, roiBitmap.Height));
 
-            SKBitmap mosaicBitmap = CreateMosaic(roiBitmap, mosaicW, mosaicH);
+            var mosaicBitmap = CreateMosaic(roiBitmap, mosaicW, mosaicH);
 
             if (_settings.AnonimizationShape == AnonimizationShape.Rectangle)
             {
@@ -56,16 +56,16 @@ internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
         var longerSide = Math.Max(frame.Width, frame.Height);
         var mosaicSize = longerSide / MosaicDivisionFactor;
 
-        int mosaicWidth = frame.Width / mosaicSize;
-        int mosaicHeight = frame.Height / mosaicSize;
+        var mosaicWidth = frame.Width / mosaicSize;
+        var mosaicHeight = frame.Height / mosaicSize;
 
         return (mosaicWidth, mosaicHeight);
     }
 
     private static SKBitmap CreateMosaic(SKBitmap bitmap, int mosaicW, int mosaicH)
     {
-        int width = bitmap.Width;
-        int height = bitmap.Height;
+        var width = bitmap.Width;
+        var height = bitmap.Height;
 
         SKBitmap mosaicBitmap = new(width, height);
         using SKCanvas canvas = new(mosaicBitmap);

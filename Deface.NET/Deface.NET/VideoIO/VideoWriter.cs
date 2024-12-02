@@ -30,9 +30,9 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider, IExternalPr
 
     private IExternalProcess GetFfmpegProcess(VideoInfo videoInfo, string outputPath)
     {
-        string ffmpegPath = _settings.FFMpegPath;
+        var ffmpegPath = _settings.FFMpegPath;
 
-        string args = string.Join(" ",
+        var args = string.Join(" ",
         [
             "-loglevel", "panic",
             "-y",

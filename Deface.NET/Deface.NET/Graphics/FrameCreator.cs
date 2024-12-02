@@ -16,8 +16,8 @@ internal class FrameCreator(IFileSystem fileSystem) : IFrameCreator
             throw new ArgumentException($"{nameof(bgrData)} length must be the size of width * height * 3");
         }
 
-        byte[] rgbaData = GraphicsHelper.ConvertBgrToRgba(bgrData, width, height);
-        SKBitmap bitmap = GraphicsHelper.GetBgraBitmapFromRawBytes(rgbaData, width, height);
+        var rgbaData = GraphicsHelper.ConvertBgrToRgba(bgrData, width, height);
+        var bitmap = GraphicsHelper.GetBgraBitmapFromRawBytes(rgbaData, width, height);
 
         return (Frame)bitmap;
     }
@@ -26,7 +26,7 @@ internal class FrameCreator(IFileSystem fileSystem) : IFrameCreator
     {
         try
         {
-            using FileStream stream = _fileSystem.OpenRead(path);
+            using var stream = _fileSystem.OpenRead(path);
             var bitmap = SKBitmap.Decode(stream);
 
             return (Frame)bitmap;

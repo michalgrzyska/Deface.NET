@@ -12,18 +12,18 @@ internal class GaussianBlurShapeDrawer(Settings settings) : IShapeDrawer
     public Frame Draw(Frame frame, List<DetectedObject> objects)
     {
         var bitmap = (SKBitmap)frame;
-        float blurFactor = CalculateBlurFactor(frame);
+        var blurFactor = CalculateBlurFactor(frame);
 
         SKImageInfo imageInfo = new(bitmap.Width, bitmap.Height);
-        using SKSurface surface = SKSurface.Create(imageInfo);
-        SKCanvas canvas = surface.Canvas;
+        using var surface = SKSurface.Create(imageInfo);
+        var canvas = surface.Canvas;
 
         canvas.DrawBitmap(bitmap, 0, 0);
 
-        using SKImageFilter blurFilter = SKImageFilter.CreateBlur(blurFactor, blurFactor);
+        using var blurFilter = SKImageFilter.CreateBlur(blurFactor, blurFactor);
         using SKPaint paint = new() { ImageFilter = blurFilter };
 
-        foreach (DetectedObject obj in objects)
+        foreach (var obj in objects)
         {
             canvas.Save();
 
@@ -32,7 +32,7 @@ internal class GaussianBlurShapeDrawer(Settings settings) : IShapeDrawer
             canvas.Restore();
         }
 
-        using SKImage snapshot = surface.Snapshot();
+        using var snapshot = surface.Snapshot();
         SKBitmap resultBitmap = new(bitmap.Width, bitmap.Height);
 
         snapshot.ReadPixels(resultBitmap.Info, resultBitmap.GetPixels(), resultBitmap.RowBytes, 0, 0);

@@ -33,7 +33,7 @@ internal class ExternalProcess : IExternalProcess
     {
         Start();
 
-        string output = _process.StandardOutput.ReadToEnd();
+        var output = _process.StandardOutput.ReadToEnd();
 
         WaitForExit();
 

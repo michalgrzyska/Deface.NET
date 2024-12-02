@@ -26,28 +26,28 @@ internal sealed class Frame : IDisposable, ISize
 
     public byte[] ToByteArray(ImageFormat imageFormat)
     {
-        using SKImage resultImage = SKImage.FromBitmap(_bitmap);
-        using SKData data = resultImage.Encode(imageFormat.Format, imageFormat.Quality);
+        using var resultImage = SKImage.FromBitmap(_bitmap);
+        using var data = resultImage.Encode(imageFormat.Format, imageFormat.Quality);
 
         return data.ToArray();
     }
 
     public byte[] ToByteArray()
     {
-        int width = _bitmap.Width;
-        int height = _bitmap.Height;
-        int bytesPerPixel = 3;
-        byte[] rgbData = new byte[width * height * bytesPerPixel];
+        var width = _bitmap.Width;
+        var height = _bitmap.Height;
+        var bytesPerPixel = 3;
+        var rgbData = new byte[width * height * bytesPerPixel];
 
-        using SKImage image = SKImage.FromBitmap(_bitmap);
-        using SKPixmap pixmap = image.PeekPixels();
+        using var image = SKImage.FromBitmap(_bitmap);
+        using var pixmap = image.PeekPixels();
 
-        byte[] bgraData = new byte[width * height * 4];
+        var bgraData = new byte[width * height * 4];
         var handle = GCHandle.Alloc(bgraData, GCHandleType.Pinned);
 
         try
         {
-            nint bgraDataPtr = handle.AddrOfPinnedObject();
+            var bgraDataPtr = handle.AddrOfPinnedObject();
             pixmap.ReadPixels(new SKImageInfo(width, height, SKColorType.Bgra8888, SKAlphaType.Premul), bgraDataPtr, width * 4);
 
             for (int i = 0, j = 0; i < bgraData.Length; i += 4, j += 3)
@@ -67,13 +67,13 @@ internal sealed class Frame : IDisposable, ISize
 
     public Frame AsRescaledWithPadding(int targetWidth, int targetHeight)
     {
-        float scale = Math.Min((float)targetWidth / Width, (float)targetHeight / Height);
+        var scale = Math.Min((float)targetWidth / Width, (float)targetHeight / Height);
 
-        int scaledWidth = (int)(Width * scale);
-        int scaledHeight = (int)(Height * scale);
+        var scaledWidth = (int)(Width * scale);
+        var scaledHeight = (int)(Height * scale);
 
-        int offsetX = (targetWidth - scaledWidth) / 2;
-        int offsetY = (targetHeight - scaledHeight) / 2;
+        var offsetX = (targetWidth - scaledWidth) / 2;
+        var offsetY = (targetHeight - scaledHeight) / 2;
 
         SKBitmap outputBitmap = new(targetWidth, targetHeight);
 

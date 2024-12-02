@@ -16,7 +16,7 @@ internal class ScopedSettingsProvider(Settings settings) : IScopedSettingsProvid
             return;
         }
 
-        Settings settingsClone = _settings.Clone();
+        var settingsClone = _settings.Clone();
         settingsClone.ApplyAction(action);
 
         _scopedSettings = settingsClone;
