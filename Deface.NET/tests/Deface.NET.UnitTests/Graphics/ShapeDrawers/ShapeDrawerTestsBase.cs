@@ -22,7 +22,7 @@ public abstract class ShapeDrawerTestsBase(SettingsFixture settingsFixture)
     [Fact]
     public virtual void DrawObject_NoObjects_DrawnCorrectly()
     {
-        WithTestData((settings, frame, drawer) =>
+        WithTestData(AnonimizationShape.Rectangle, (settings, frame, drawer) =>
         {
             var result = drawer.Draw(frame, []);
             ShapeTestHelper.ValidateWholeFrame(frame, ValidateWholeFramePixel);
@@ -32,7 +32,7 @@ public abstract class ShapeDrawerTestsBase(SettingsFixture settingsFixture)
     [Fact]
     public virtual void DrawObject_SingleRectangle_DrawnCorrectly()
     {
-        WithTestData((settings, frame, drawer) =>
+        WithTestData(AnonimizationShape.Rectangle, (settings, frame, drawer) =>
         {
             var result = drawer.Draw(frame, [Object1]);
             ShapeTestHelper.ValidateRectangle(result, Object1, p => ValidatePixel(p, settings));
@@ -42,7 +42,7 @@ public abstract class ShapeDrawerTestsBase(SettingsFixture settingsFixture)
     [Fact]
     public virtual void DrawObject_SingleEllipse_DrawnCorrectly()
     {
-        WithTestData((settings, frame, drawer) =>
+        WithTestData(AnonimizationShape.Ellipse, (settings, frame, drawer) =>
         {
             var result = drawer.Draw(frame, [Object1]);
             ShapeTestHelper.ValidateEllipse(result, Object1, p => ValidatePixel(p, settings));
@@ -52,7 +52,7 @@ public abstract class ShapeDrawerTestsBase(SettingsFixture settingsFixture)
     [Fact]
     public virtual void DrawObject_MultipleEllipses_DrawnCorrectly()
     {
-        WithTestData((settings, frame, drawer) =>
+        WithTestData(AnonimizationShape.Ellipse, (settings, frame, drawer) =>
         {
             List<DetectedObject> objects = [Object1, Object2, Object3];
             var result = drawer.Draw(frame, objects);
@@ -67,7 +67,7 @@ public abstract class ShapeDrawerTestsBase(SettingsFixture settingsFixture)
     [Fact]
     public virtual void DrawObject_MultipleRectangles_DrawnCorrectly()
     {
-        WithTestData((settings, frame, drawer) =>
+        WithTestData(AnonimizationShape.Rectangle, (settings, frame, drawer) =>
         {
             List<DetectedObject> objects = [Object1, Object2, Object3];
             var result = drawer.Draw(frame, objects);
@@ -79,9 +79,9 @@ public abstract class ShapeDrawerTestsBase(SettingsFixture settingsFixture)
         });
     }
 
-    internal void WithTestData(Action<Settings, Frame, IShapeDrawer> action)
+    internal void WithTestData(AnonimizationShape shape, Action<Settings, Frame, IShapeDrawer> action)
     {
-        var settings = GetSettings(AnonimizationShape.Rectangle);
+        var settings = GetSettings(shape);
         var frame = GetTestFrame();
         var drawer = GetShapeDrawer(settings);
 

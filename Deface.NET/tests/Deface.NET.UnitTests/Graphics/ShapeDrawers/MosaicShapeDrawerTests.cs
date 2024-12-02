@@ -1,75 +1,127 @@
-﻿//using Deface.NET.Graphics.Drawers;
-//using Deface.NET.Graphics;
-//using Deface.NET.ObjectDetection;
-//using Deface.NET.UnitTests._TestsConfig;
-//using Deface.NET.UnitTests.Graphics.Helpers;
-//using SkiaSharp;
+﻿using Deface.NET.Graphics.Interfaces;
+using Deface.NET.Graphics.Models;
+using Deface.NET.Graphics.ShapeDrawers;
+using Deface.NET.ObjectDetection;
+using Deface.NET.UnitTests._TestsConfig;
+using Deface.NET.UnitTests.Graphics.Helpers;
 
-//namespace Deface.NET.UnitTests.Graphics;
+namespace Deface.NET.UnitTests.Graphics.ShapeDrawers;
 
-//[Collection(nameof(SettingsCollection))]
-//public class MosaicShapeDrawerUnitTests(SettingsFixture settingsFixture)
-//{
-//    private readonly SettingsFixture _settingsFixture = settingsFixture;
+[Collection(nameof(SettingsCollection))]
+public class MosaicShapeDrawerTests(SettingsFixture settingsFixture) : ShapeDrawerTestsBase(settingsFixture)
+{
+    protected override AnonimizationMethod AnonimizationMethod => AnonimizationMethod.Mosaic;
 
-//    private readonly DetectedObject Object1 = new(10, 10, 100, 100, 1, IsEnlarged: true);
-//    private readonly DetectedObject Object2 = new(110, 110, 200, 200, 1, IsEnlarged: true);
-//    private readonly DetectedObject Object3 = new(210, 210, 400, 400, 1, IsEnlarged: true);
+    [Fact]
+    public override void DrawObject_NoObjects_DrawnCorrectly()
+    {
+        WithTestData(AnonimizationShape.Rectangle, (settings, frame, drawer) =>
+        {
+            var originalFrame = GetTestFrame();
+            var result = drawer.Draw(frame, []);
 
-//    [Fact]
-//    public void X()
-//    {
-//        Settings settings = GetSettings(AnonimizationShape.Rectangle);
-//        Frame frame = TestFrameHelper.GetTestFrameWithMesh();
+            ShapeTestHelper.ValidateWholeFrame(frame, pixel =>
+            {
+                var originalPixel = originalFrame.GetPixel(pixel.X, pixel.Y);
+                pixel.ShouldBe(originalPixel.R, originalPixel.G, originalPixel.B);
+            });
+        });
+    }
 
-//        MosaicShapeDrawer drawer = new(settings);
-//        Frame result = drawer.Draw(frame, [Object1]);
+    [Fact]
+    public override void DrawObject_SingleRectangle_DrawnCorrectly()
+    {
+        WithTestData(AnonimizationShape.Rectangle, (settings, frame, drawer) =>
+        {
+            var originalFrame = GetTestFrame();
+            var result = drawer.Draw(frame, [Object1]);
 
-//        ValidateMosaic(frame, Object1);
-//    }
+            ValidateFrameForObject(originalFrame, frame, Object1, settings);
+        });
+    }
 
-//    private Settings GetSettings(AnonimizationShape shape)
-//    {
-//        return _settingsFixture.WithAction(x =>
-//        {
-//            x.AnonimizationShape = shape;
-//            x.AnonimizationMethod = AnonimizationMethod.Mosaic;
-//        });
-//    }
+    [Fact]
+    public override void DrawObject_SingleEllipse_DrawnCorrectly()
+    {
+        WithTestData(AnonimizationShape.Ellipse, (settings, frame, drawer) =>
+        {
+            var originalFrame = GetTestFrame();
+            var result = drawer.Draw(frame, [Object1]);
 
-//    private void ValidateMosaic(Frame frame, DetectedObject detectedObject)
-//    {
-//        var (mosaicW, mosaicH) = MosaicShapeDrawer.GetMosaicSize(frame);
-//        var nativeElement = frame.GetNativeElement();
+            ValidateFrameForObject(originalFrame, frame, Object1, settings);
+        });
+    }
 
-//        for (int y = detectedObject.Y1; y < detectedObject.Y2; y += mosaicH)
-//        {
-//            for (int x = detectedObject.X1; x < detectedObject.X2; x += mosaicW)
-//            {
-//                if (x + mosaicW > detectedObject.X2 || y + mosaicH > detectedObject.Y2)
-//                {
-//                    continue;
-//                }
+    [Fact]
+    public override void DrawObject_MultipleEllipses_DrawnCorrectly()
+    {
+        WithTestData(AnonimizationShape.Ellipse, (settings, frame, drawer) =>
+        {
+            List<DetectedObject> detectedObjects = [Object1, Object2, Object3];
 
-//                ValidateMosaicTile(nativeElement, x, y, mosaicW, mosaicH);
-//            }
-//        }
-//    }
+            var originalFrame = GetTestFrame();
+            var result = drawer.Draw(frame, detectedObjects);
 
-//    private void ValidateMosaicTile(SKBitmap nativeElement, int firstPixelX, int firstPixelY, int mosaicW, int mosaicH)
-//    {
-//        var firstPixel = nativeElement.GetPixel(firstPixelX, firstPixelY);
+            foreach (var detectedObject in detectedObjects)
+            {
+                ValidateFrameForObject(originalFrame, frame, detectedObject, settings);
+            }
+        });
+    }
 
-//        for (int y = firstPixelY; y < firstPixelY + mosaicH; y++)
-//        {
-//            for (int x = firstPixelX; x < firstPixelX + mosaicW; x++)
-//            {
-//                var pixelUnderTest = nativeElement.GetPixel(x, y);
+    [Fact]
+    public override void DrawObject_MultipleRectangles_DrawnCorrectly()
+    {
+        WithTestData(AnonimizationShape.Rectangle, (settings, frame, drawer) =>
+        {
+            List<DetectedObject> detectedObjects = [Object1, Object2, Object3];
 
-//                pixelUnderTest.Red.Should().Be(firstPixel.Red);
-//                pixelUnderTest.Green.Should().Be(firstPixel.Green);
-//                pixelUnderTest.Blue.Should().Be(firstPixel.Blue);
-//            }
-//        }
-//    }
-//}
+            var originalFrame = GetTestFrame();
+            var result = drawer.Draw(frame, detectedObjects);
+
+            foreach (var detectedObject in detectedObjects)
+            {
+                ValidateFrameForObject(originalFrame, frame, detectedObject, settings);
+            }
+        });
+    }
+
+    private static void ValidateFrameForObject(Frame originalFrame, Frame resultFrame, DetectedObject obj, Settings settings)
+    {
+        List<PixelData> actualPixels = [];
+        List<Pixel> originalPixels = [];
+
+        Action<Frame, DetectedObject, Action<PixelData>> validateFn = settings.AnonimizationShape switch
+        {
+            AnonimizationShape.Ellipse => ShapeTestHelper.ValidateEllipse,
+            AnonimizationShape.Rectangle => ShapeTestHelper.ValidateRectangle,
+            _ => throw new NotImplementedException(),
+        };
+
+        validateFn(resultFrame, obj, actualPixel =>
+        {
+            var originalPixel = originalFrame.GetPixel(actualPixel.X, actualPixel.Y);
+
+            actualPixels.Add(actualPixel);
+            originalPixels.Add(originalPixel);
+        });
+
+        var originalUniqueColors = originalPixels.GroupBy(x => new { x.R, x.G, x.B }).Count();
+        var actualUniqueColors = actualPixels.GroupBy(x => new { x.R, x.G, x.B }).Count();
+
+        actualUniqueColors.Should().BeLessThan(originalUniqueColors);
+    }
+
+    internal override IShapeDrawer GetShapeDrawer(Settings settings)
+    {
+        return new MosaicShapeDrawer(settings);
+    }
+
+    internal override Frame GetTestFrame()
+    {
+        return TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo2);
+    }
+
+    internal override void ValidatePixel(PixelData pixel, Settings settings) { }
+    internal override void ValidateWholeFramePixel(PixelData pixel) { }
+}
