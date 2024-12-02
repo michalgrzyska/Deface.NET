@@ -5,14 +5,14 @@ using NSubstitute;
 
 namespace Deface.NET.UnitTests.DefaceServiceTests;
 
-public partial class DefaceServiceUnitTests
+public partial class DefaceServiceTests
 {
     private readonly DefaceService _service;
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly IVideoProcessor _videoProcessor;
     private readonly IImageProcessor _imageProcessor;
 
-    public DefaceServiceUnitTests()
+    public DefaceServiceTests()
     {
         _videoProcessor = Substitute.For<IVideoProcessor>();
         _imageProcessor = Substitute.For<IImageProcessor>();

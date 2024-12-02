@@ -2,7 +2,7 @@
 
 namespace Deface.NET.UnitTests.DefaceServiceTests;
 
-public partial class DefaceServiceUnitTests
+public partial class DefaceServiceTests
 {
     [Fact]
     public void ProcessImages_ProperData_DependenciesInvokedCorrectly()

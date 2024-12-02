@@ -5,7 +5,7 @@ using SkiaSharp;
 
 namespace Deface.NET.UnitTests.Graphics;
 
-public class FrameUnitTests
+public class FrameTests
 {
     [Theory]
     [InlineData(TestResources.TestResources.PhotoRed, 200, 200)]

@@ -14,7 +14,7 @@ using NSubstitute;
 namespace Deface.NET.UnitTests.Processing;
 
 [Collection(nameof(SettingsCollection))]
-public class VideoProcessorUnitTests
+public class VideoProcessorTests
 {
     private readonly SettingsFixture _settingsFixture;
 
@@ -28,7 +28,7 @@ public class VideoProcessorUnitTests
     private const int FrameSize = 1000;
     private const int Fps = 10;
 
-    public VideoProcessorUnitTests(SettingsFixture settingsFixture)
+    public VideoProcessorTests(SettingsFixture settingsFixture)
     {
         _settingsFixture = settingsFixture;
         SetupMockMethods();

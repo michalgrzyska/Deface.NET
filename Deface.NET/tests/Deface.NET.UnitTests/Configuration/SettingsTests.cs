@@ -3,7 +3,7 @@
 namespace Deface.NET.UnitTests.Configuration;
 
 [Collection(nameof(SettingsCollection))]
-public class SettingsUnitTests(SettingsFixture settingsFixture)
+public class SettingsTests(SettingsFixture settingsFixture)
 {
     private readonly SettingsFixture _settingsFixture = settingsFixture;
 

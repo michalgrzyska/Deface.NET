@@ -4,7 +4,7 @@ using NSubstitute;
 
 namespace Deface.NET.UnitTests.Configuration;
 
-public class ServiceScopeFactoryExtensionsUnitTests
+public class ServiceScopeFactoryExtensionsTests
 {
     [Fact]
     public void CreateUserScope_WithCustomSettings_ShouldCallInitOnScopedSettingsProvider()

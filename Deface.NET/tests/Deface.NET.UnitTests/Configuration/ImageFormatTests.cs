@@ -2,7 +2,7 @@
 
 namespace Deface.NET.UnitTests.Configuration;
 
-public class ImageFormatUnitTests
+public class ImageFormatTests
 {
     [Fact]
     public void Png_HasProperDataSet()

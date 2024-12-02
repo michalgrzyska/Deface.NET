@@ -3,7 +3,7 @@ using Deface.NET.UnitTests.Graphics.Helpers;
 
 namespace Deface.NET.UnitTests.ObjectDetection;
 
-public class UltraFaceDetectorUnitTests : IDisposable
+public class UltraFaceDetectorTests : IDisposable
 {
     private readonly UltraFaceDetector _detector = new();
 

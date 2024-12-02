@@ -8,7 +8,7 @@ using NSubstitute;
 namespace Deface.NET.UnitTests.ObjectDetection;
 
 [Collection(nameof(SettingsCollection))]
-public class ObjectDetectorUnitTests
+public class ObjectDetectorTests
 {
     private readonly SettingsFixture _settingsFixture;
 
@@ -23,7 +23,7 @@ public class ObjectDetectorUnitTests
         new(1, 1, 2, 2, 1),
     ];
 
-    public ObjectDetectorUnitTests(SettingsFixture settingsFixture)
+    public ObjectDetectorTests(SettingsFixture settingsFixture)
     {
         _settingsFixture = settingsFixture;
 

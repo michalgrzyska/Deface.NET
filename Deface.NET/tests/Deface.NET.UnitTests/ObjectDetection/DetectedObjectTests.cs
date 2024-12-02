@@ -2,7 +2,7 @@
 
 namespace Deface.NET.UnitTests.ObjectDetection;
 
-public class DetectedObjectUnitTests
+public class DetectedObjectTests
 {
     [Fact]
     public void GetResized_WithScaleFactorOfOne_ShouldReturnSameObject()

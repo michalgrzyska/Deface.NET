@@ -3,7 +3,7 @@ using Deface.NET.UnitTests.Graphics.Helpers;
 
 namespace Deface.NET.UnitTests.Configuration;
 
-public class AnonimizationMethodUnitTests
+public class AnonimizationMethodTests
 {
     [Fact]
     public void GaussianBlur_ProperValuesAreSet()

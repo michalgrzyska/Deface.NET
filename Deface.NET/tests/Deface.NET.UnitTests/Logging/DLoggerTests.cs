@@ -7,7 +7,7 @@ using NSubstitute;
 namespace Deface.NET.UnitTests.Logging;
 
 [Collection(nameof(SettingsCollection))]
-public class DLoggerUnitTests(SettingsFixture settingsFixture)
+public class DLoggerTests(SettingsFixture settingsFixture)
 {
     private readonly SettingsFixture _settingsFixture = settingsFixture;
 

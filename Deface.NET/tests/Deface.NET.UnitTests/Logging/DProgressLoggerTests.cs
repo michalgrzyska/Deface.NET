@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging.Testing;
 
 namespace Deface.NET.UnitTests.Logging;
 
-public class DProgressLoggerUnitTests
+public class DProgressLoggerTests
 {
     private readonly FakeLogger<object> _logger = new();
 

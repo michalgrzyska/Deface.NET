@@ -7,7 +7,7 @@ using NSubstitute;
 namespace Deface.NET.UnitTests.Graphics;
 
 [Collection(nameof(SettingsCollection))]
-public class ShapeDrawerProviderUnitTests(SettingsFixture settingsFixture)
+public class ShapeDrawerProviderTests(SettingsFixture settingsFixture)
 {
     private readonly SettingsFixture _settingsFixture = settingsFixture;
 

@@ -5,11 +5,11 @@ using Deface.NET.UnitTests.Graphics.Helpers;
 
 namespace Deface.NET.UnitTests.Graphics;
 
-public class FrameCreatorUnitTests
+public class FrameCreatorTests
 {
     private readonly FrameCreator _frameCreator;
 
-    public FrameCreatorUnitTests()
+    public FrameCreatorTests()
     {
         FileSystem fileSystem = new();
         _frameCreator = new FrameCreator(fileSystem);

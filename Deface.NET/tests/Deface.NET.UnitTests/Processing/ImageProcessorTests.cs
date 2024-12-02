@@ -12,7 +12,7 @@ using NSubstitute;
 namespace Deface.NET.UnitTests.Processing;
 
 [Collection(nameof(SettingsCollection))]
-public class ImageProcessorUnitTests
+public class ImageProcessorTests
 {
     private readonly SettingsFixture _settingsFixture;
 
@@ -25,7 +25,7 @@ public class ImageProcessorUnitTests
 
     private readonly ImageProcessor _imageProcessor;
 
-    public ImageProcessorUnitTests(SettingsFixture settingsFixture)
+    public ImageProcessorTests(SettingsFixture settingsFixture)
     {
         _settingsFixture = settingsFixture;
 

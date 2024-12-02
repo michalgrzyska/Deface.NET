@@ -4,7 +4,7 @@ using Deface.NET.UnitTests._TestsConfig;
 namespace Deface.NET.UnitTests.Configuration;
 
 [Collection(nameof(SettingsCollection))]
-public class ScopedSettingsProviderUnitTests(SettingsFixture settingsFixture)
+public class ScopedSettingsProviderTests(SettingsFixture settingsFixture)
 {
     private readonly SettingsFixture _settingsFixture = settingsFixture;
 
