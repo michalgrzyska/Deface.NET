@@ -65,11 +65,8 @@ public class DLoggerUnitTests(SettingsFixture settingsFixture)
 
     private (DLogger<object>, FakeLogger<object>) GetDLogger(LoggingLevel loggingLevel)
     {
-        var settings = _settingsFixture.WithAction(x => { x.LoggingLevel = loggingLevel; });
         var logger = new FakeLogger<object>();
-
-        var settingsProvider = Substitute.For<IScopedSettingsProvider>();
-        settingsProvider.Settings.Returns(settings);
+        var settingsProvider = _settingsFixture.GetScopedSettingsProvider(x => x.LoggingLevel = loggingLevel);
 
         return (new(settingsProvider, logger), logger);
     }

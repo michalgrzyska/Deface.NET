@@ -43,14 +43,9 @@ public class ShapeDrawerProviderUnitTests(SettingsFixture settingsFixture)
 
     private IScopedSettingsProvider GetSettingsProvider(AnonimizationMethod method)
     {
-        var settings = _settingsFixture.WithAction(x =>
+        return _settingsFixture.GetScopedSettingsProvider(x =>
         {
             x.AnonimizationMethod = method;
         });
-
-        var settingsProvider = Substitute.For<IScopedSettingsProvider>();
-        settingsProvider.Settings.Returns(settings);
-
-        return settingsProvider;
     }
 }

@@ -117,17 +117,13 @@ public class VideoProcessorUnitTests
 
     private VideoProcessor GetVideoProcessor(Action<Settings>? action = null)
     {
-        var settings = _settingsFixture.WithAction(action);
-
-        IScopedSettingsProvider settingsProvider = Substitute.For<IScopedSettingsProvider>();
-        settingsProvider.Settings.Returns(settings);
-
+        var settingsProvider = _settingsFixture.GetScopedSettingsProvider(action);
         return new(settingsProvider, _logger, _detector, _videoWriter, _videoReader, _shapeDrawerProvider, _frameCreator);
     }
 
     private int SetupVideoReader()
     {
-        List<Frame> mockFrames = Enumerable
+        var mockFrames = Enumerable
             .Range(1, 10)
             .Select(x => TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo1))
             .ToList();
