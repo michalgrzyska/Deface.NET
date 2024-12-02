@@ -1,9 +1,10 @@
-﻿using SkiaSharp;
+﻿using Deface.NET.Graphics.Interfaces;
+using SkiaSharp;
 using System.Runtime.InteropServices;
 
 namespace Deface.NET.Graphics.Models;
 
-internal sealed class Frame : IDisposable
+internal sealed class Frame : IDisposable, ISize
 {
     private readonly SKBitmap _bitmap;
 

@@ -19,11 +19,7 @@ public class VideoStreamProcessorTests
         using var stream = GetFramesStream(videoInfo, framesCount);
 
         List<FrameInfo> framesProcessed = [];
-
-        Action<FrameInfo> action = frameInfo =>
-        {
-            framesProcessed.Add(frameInfo);
-        };
+        Action<FrameInfo> action = framesProcessed.Add;
 
         // Act
 

@@ -48,25 +48,25 @@ internal static class ShapeTestHelper
 
     private static List<(int X, int Y)> GetPointsInsideEllipse(DetectedObject detectedObject)
     {
-        int minX = Math.Min(detectedObject.X1, detectedObject.X2);
-        int minY = Math.Min(detectedObject.Y1, detectedObject.Y2);
-        int maxX = Math.Max(detectedObject.X1, detectedObject.X2);
-        int maxY = Math.Max(detectedObject.Y1, detectedObject.Y2);
+        var minX = Math.Min(detectedObject.X1, detectedObject.X2);
+        var minY = Math.Min(detectedObject.Y1, detectedObject.Y2);
+        var maxX = Math.Max(detectedObject.X1, detectedObject.X2);
+        var maxY = Math.Max(detectedObject.Y1, detectedObject.Y2);
 
         int rectWidth = maxX - minX;
         int rectHeight = maxY - minY;
 
-        double xc = minX + rectWidth / 2.0;
-        double yc = minY + rectHeight / 2.0;
-        double a = rectWidth / 2.0;
-        double b = rectHeight / 2.0;
+        var xc = minX + rectWidth / 2.0;
+        var yc = minY + rectHeight / 2.0;
+        var a = rectWidth / 2.0;
+        var b = rectHeight / 2.0;
 
-        double shrunkA = a - EllipseShrinkFactor;
-        double shrunkB = b - EllipseShrinkFactor;
+        var shrunkA = a - EllipseShrinkFactor;
+        var shrunkB = b - EllipseShrinkFactor;
 
         if (shrunkA <= 0 || shrunkB <= 0)
         {
-            throw new ArgumentException("Półosie elipsy po pomniejszeniu są mniejsze lub równe zeru.");
+            throw new ArgumentException("The semi-axes of the ellipse after reduction are less than or equal to zero.");
         }
 
         List<(int X, int Y)> pointsInsideShrunkEllipse = [];

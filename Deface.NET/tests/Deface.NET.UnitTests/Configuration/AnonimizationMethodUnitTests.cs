@@ -1,4 +1,5 @@
 ﻿using Deface.NET.Configuration;
+using Deface.NET.UnitTests.Graphics.Helpers;
 
 namespace Deface.NET.UnitTests.Configuration;
 
@@ -7,21 +8,21 @@ public class AnonimizationMethodUnitTests
     [Fact]
     public void GaussianBlur_ProperValuesAreSet()
     {
-        AnonimizationMethod anonimizationMethod = AnonimizationMethod.GaussianBlur;
+        var anonimizationMethod = AnonimizationMethod.GaussianBlur;
         anonimizationMethod.Type.Should().Be(AnonimizationType.GaussianBlur);
     }
 
     [Fact]
     public void Mosaic_ProperValuesAreSet()
     {
-        AnonimizationMethod anonimizationMethod = AnonimizationMethod.Mosaic;
+        var anonimizationMethod = AnonimizationMethod.Mosaic;
         anonimizationMethod.Type.Should().Be(AnonimizationType.Mosaic);
     }
 
     [Fact]
     public void Color_ProperEnumValueIsSet()
     {
-        AnonimizationMethod anonimizationMethod = AnonimizationMethod.Color(0, 0, 0);
+        var anonimizationMethod = AnonimizationMethod.Color(0, 0, 0);
         anonimizationMethod.Type.Should().Be(AnonimizationType.Color);
     }
 
@@ -33,10 +34,7 @@ public class AnonimizationMethodUnitTests
     [InlineData(255, 255, 255)]
     public void Color_ProperColorValuesAreSet(byte r, byte g, byte b)
     {
-        AnonimizationMethod anonimizationMethod = AnonimizationMethod.Color(r, g, b);
-
-        anonimizationMethod.ColorValue!.R.Should().Be(r);
-        anonimizationMethod.ColorValue!.G.Should().Be(g);
-        anonimizationMethod.ColorValue!.B.Should().Be(b);
+        var anonimizationMethod = AnonimizationMethod.Color(r, g, b);
+        anonimizationMethod.ColorValue!.ShouldBe(r, g, b);
     }
 }

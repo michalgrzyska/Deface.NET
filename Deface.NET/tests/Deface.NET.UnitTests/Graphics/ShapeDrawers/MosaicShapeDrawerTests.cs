@@ -23,7 +23,7 @@ public class MosaicShapeDrawerTests(SettingsFixture settingsFixture) : ShapeDraw
             ShapeTestHelper.ValidateWholeFrame(frame, pixel =>
             {
                 var originalPixel = originalFrame.GetPixel(pixel.X, pixel.Y);
-                pixel.ShouldBe(originalPixel.R, originalPixel.G, originalPixel.B);
+                pixel.ShouldBe(originalPixel);
             });
         });
     }

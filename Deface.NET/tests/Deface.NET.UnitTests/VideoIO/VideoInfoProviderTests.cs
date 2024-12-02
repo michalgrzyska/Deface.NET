@@ -1,5 +1,6 @@
 ﻿using Deface.NET.System.ExternalProcessing;
 using Deface.NET.UnitTests._TestsConfig;
+using Deface.NET.UnitTests.Graphics.Helpers;
 using Deface.NET.VideoIO;
 using Deface.NET.VideoIO.Helpers;
 using Deface.NET.VideoIO.Models;
@@ -17,6 +18,7 @@ public class VideoInfoProviderTests(SettingsFixture settingsFixture)
     public void GetInfo_OutputMatchesTestData()
     {
         // Arrange
+
         var testOutput = GetTestVideoInfoOutput();
         var settingsProvider = _settingsFixture.GetScopedSettingsProvider();
         var processFactory = GetExternalProcessFactory(testOutput);
@@ -32,8 +34,7 @@ public class VideoInfoProviderTests(SettingsFixture settingsFixture)
 
         var testStreamOutput = testOutput.Streams[0];
 
-        result.Width.Should().Be(testStreamOutput.Width);
-        result.Height.Should().Be(testStreamOutput.Height);
+        result.ShouldBe(testStreamOutput.Width, testStreamOutput.Height);
         result.TotalFrames.Should().Be(int.Parse(testStreamOutput.Frames));
         result.AverageFps.Should().Be(VideoInfoHelper.ParseFrameRateString(testStreamOutput.AverageFrameRate));
         result.TargetFps.Should().Be(VideoInfoHelper.ParseFrameRateString(testStreamOutput.TargetFrameRate));
@@ -67,9 +68,6 @@ public class VideoInfoProviderTests(SettingsFixture settingsFixture)
             AverageFrameRate = "20/2"
         };
 
-        return new()
-        {
-            Streams = [streamOutput]
-        };
+        return new() { Streams = [streamOutput] };
     }
 }

@@ -30,6 +30,6 @@ public class ColorShapeDrawerTests(SettingsFixture settingsFixture)
     internal override void ValidatePixel(PixelData pixel, Settings settings)
     {
         var color = settings.AnonimizationMethod.ColorValue!;
-        pixel.ShouldBe(color.R, color.G, color.B);
+        pixel.ShouldBe(color);
     }
 }

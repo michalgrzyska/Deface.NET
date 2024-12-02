@@ -29,7 +29,6 @@ public partial class DefaceServiceUnitTests
     public void ProcessVideo_InputNotExisting_ThrowsFileNotFoundException()
     {
         var action = () => _service.ProcessVideo("test", "file");
-
         action.Should().Throw<FileNotFoundException>();
     }
 
@@ -41,7 +40,6 @@ public partial class DefaceServiceUnitTests
     public void ProcessVideo_InvalidInputString_ThrowsArgumentNullException(string? inputString)
     {
         var action = () => _service.ProcessVideo(inputString!, "file");
-
         action.Should().Throw<ArgumentNullException>();
     }
 

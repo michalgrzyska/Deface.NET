@@ -1,3 +1,5 @@
-﻿namespace Deface.NET.Graphics.Models;
+﻿using Deface.NET.Graphics.Interfaces;
 
-internal record Pixel(byte R, byte G, byte B);
+namespace Deface.NET.Graphics.Models;
+
+internal record Pixel(byte R, byte G, byte B) : IRgb;

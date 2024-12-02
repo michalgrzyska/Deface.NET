@@ -10,6 +10,7 @@ public class ServiceScopeFactoryExtensionsUnitTests
     public void CreateUserScope_WithCustomSettings_ShouldCallInitOnScopedSettingsProvider()
     {
         // Arrange
+
         var serviceScopeFactory = Substitute.For<IServiceScopeFactory>();
         var serviceScope = Substitute.For<IServiceScope>();
         var scopedSettingsProvider = Substitute.For<IScopedSettingsProvider>();
@@ -17,12 +18,14 @@ public class ServiceScopeFactoryExtensionsUnitTests
         serviceScopeFactory.CreateScope().Returns(serviceScope);
         serviceScope.ServiceProvider.GetService(typeof(IScopedSettingsProvider)).Returns(scopedSettingsProvider);
 
-        Action<Settings> customSettings = settings => { };
+        Action<Settings> customSettings = _ => { };
 
         // Act
+
         var result = serviceScopeFactory.CreateUserScope(customSettings);
 
         // Assert
+
         result.Should().Be(serviceScope);
         scopedSettingsProvider.Received(1).Init(customSettings);
     }
@@ -31,6 +34,7 @@ public class ServiceScopeFactoryExtensionsUnitTests
     public void CreateUserScope_WithoutCustomSettings_ShouldNotCallInitOnScopedSettingsProvider()
     {
         // Arrange
+
         var serviceScopeFactory = Substitute.For<IServiceScopeFactory>();
         var serviceScope = Substitute.For<IServiceScope>();
         var scopedSettingsProvider = Substitute.For<IScopedSettingsProvider>();
@@ -39,9 +43,11 @@ public class ServiceScopeFactoryExtensionsUnitTests
         serviceScope.ServiceProvider.GetService(typeof(IScopedSettingsProvider)).Returns(scopedSettingsProvider);
 
         // Act
+
         var result = serviceScopeFactory.CreateUserScope(null);
 
         // Assert
+
         result.Should().Be(serviceScope);
         scopedSettingsProvider.DidNotReceive().Init(Arg.Any<Action<Settings>>());
     }

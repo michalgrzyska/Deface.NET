@@ -1,3 +1,5 @@
-﻿namespace Deface.NET.Configuration;
+﻿using Deface.NET.Graphics.Interfaces;
 
-internal record Color(byte R, byte G, byte B);
+namespace Deface.NET.Configuration;
+
+internal record Color(byte R, byte G, byte B) : IRgb;

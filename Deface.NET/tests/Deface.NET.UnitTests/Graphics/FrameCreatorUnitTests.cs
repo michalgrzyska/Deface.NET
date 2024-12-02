@@ -1,4 +1,5 @@
 ﻿using Deface.NET.Graphics;
+using Deface.NET.Graphics.Models;
 using Deface.NET.System;
 using Deface.NET.UnitTests.Graphics.Helpers;
 
@@ -11,7 +12,6 @@ public class FrameCreatorUnitTests
     public FrameCreatorUnitTests()
     {
         FileSystem fileSystem = new();
-
         _frameCreator = new FrameCreator(fileSystem);
     }
 
@@ -22,8 +22,7 @@ public class FrameCreatorUnitTests
 
         var frame = _frameCreator.FromFile(path);
 
-        frame.Width.Should().Be(1280);
-        frame.Height.Should().Be(946);
+        frame.ShouldBe(1280, 946);
     }
 
     [Fact]
@@ -59,17 +58,12 @@ public class FrameCreatorUnitTests
 
         // Assert
 
-        result.Width.Should().Be(width);
-        result.Height.Should().Be(height);
+        result.ShouldBe(width, height);
 
-        for (var y = 0; y < result.Height; y++)
+        ShapeTestHelper.ValidateWholeFrame(result, pixel =>
         {
-            for (var x = 0; x < result.Width; x++)
-            {
-                var pixel = result.GetPixel(x, y);
-                pixel.ShouldBe(0, 0, 255);
-            }
-        }
+            pixel.ShouldBe(0, 0, 255);
+        });
     }
 
     private static byte[] CreateRedBgrImage(int width, int height)

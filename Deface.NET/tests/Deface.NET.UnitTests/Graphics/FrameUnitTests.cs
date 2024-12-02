@@ -12,10 +12,8 @@ public class FrameUnitTests
     [InlineData(TestResources.TestResources.Photo1, 1280, 946)]
     public void FrameHasCorrectSize(string path, int width, int height)
     {
-        Frame frame = TestFrameHelper.GetTestFrame(path);
-
-        frame.Width.Should().Be(width);
-        frame.Height.Should().Be(height);
+        var frame = TestFrameHelper.GetTestFrame(path);
+        frame.ShouldBe(width, height);
     }
 
     [Fact]
@@ -23,7 +21,7 @@ public class FrameUnitTests
     {
         var bgrBitmap = CreateRedRgbBitmap(200, 200);
 
-        Frame frame = (Frame)GraphicsHelper.GetBgraBitmapFromRawBytes(bgrBitmap, 200, 200);
+        var frame = (Frame)GraphicsHelper.GetBgraBitmapFromRawBytes(bgrBitmap, 200, 200);
 
         frame.GetPixel(0, 0).ShouldBe(0, 0, 255);
     }
@@ -31,7 +29,7 @@ public class FrameUnitTests
     [Fact]
     public void GetPixel_ReturnsCorrectValue()
     {
-        Frame frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
+        var frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
 
         frame.GetPixel(0, 0).ShouldBe(255, 0, 0);
     }
@@ -39,39 +37,35 @@ public class FrameUnitTests
     [Fact]
     public void GetNativeElement_WorksCorrectly()
     {
-        Frame frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
+        var frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
 
         var nativeElement = (SKBitmap)frame;
 
-        nativeElement.Width.Should().Be(200);
-        nativeElement.Height.Should().Be(200);
-        nativeElement.GetPixel(0, 0).Red.Should().Be(255);
+        nativeElement.ShouldBe(200, 200);
+        nativeElement.GetPixel(0, 0).ShouldBe(255, 0, 0);
     }
 
     [Fact]
     public void ToByteArray_Png_IsReturnDataOK()
     {
-        Frame frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
-
+        var frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
         var byteArray = frame.ToByteArray(ImageFormat.Png);
 
         var bitmap = SKBitmap.Decode(byteArray);
 
-        bitmap.Width.Should().Be(frame.Width);
-        bitmap.Height.Should().Be(frame.Height);
+        bitmap.ShouldBe(frame.Width, frame.Height);
     }
 
     [Fact]
     public void ToByteArray_IsReturnDataOK()
     {
-        Frame frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
+        var frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
 
         var byteArray = frame.ToByteArray();
         var bitmap = GraphicsHelper.GetBgraBitmapFromRawBytes(byteArray, frame.Width, frame.Height);
 
-        bitmap.Width.Should().Be(frame.Width);
-        bitmap.Height.Should().Be(frame.Height);
-        bitmap.GetPixel(0, 0).Blue.Should().Be(255);
+        bitmap.ShouldBe(frame.Width, frame.Height);
+        bitmap.GetPixel(0, 0).ShouldBe(0, 0, 255);
     }
 
     [Theory]
@@ -81,20 +75,18 @@ public class FrameUnitTests
     [InlineData(100)]
     public void ToByteArray_Jpg_IsReturnDataOK(int quality)
     {
-        Frame frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
+        var frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
 
         var byteArray = frame.ToByteArray(ImageFormat.Jpeg(quality));
-
         var bitmap = SKBitmap.Decode(byteArray);
 
-        bitmap.Width.Should().Be(frame.Width);
-        bitmap.Height.Should().Be(frame.Height);
+        bitmap.ShouldBe(frame.Width, frame.Height);
     }
 
     private static byte[] CreateRedRgbBitmap(int width, int height)
     {
-        int bytesPerPixel = 3;
-        byte[] bgrData = new byte[width * height * bytesPerPixel];
+        var bytesPerPixel = 3;
+        var bgrData = new byte[width * height * bytesPerPixel];
 
         for (int i = 0; i < bgrData.Length; i += bytesPerPixel)
         {
@@ -110,17 +102,19 @@ public class FrameUnitTests
     public void AsRescaledWithPadding_ShouldReturnBitmap_WithCorrectDimensions()
     {
         // Arrange
+
         var frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
-        int targetWidth = 300;
-        int targetHeight = 350;
+        var targetWidth = 300;
+        var targetHeight = 350;
 
         // Act
+
         var result = frame.AsRescaledWithPadding(targetWidth, targetHeight);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.Equal(targetWidth, result.Width);
-        Assert.Equal(targetHeight, result.Height);
+
+        result.Should().NotBeNull();
+        result.ShouldBe(targetWidth, targetHeight);
     }
 
     [Fact]
@@ -128,14 +122,14 @@ public class FrameUnitTests
     {
         // Arrange
         var frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
-        int targetWidth = 300;
-        int targetHeight = 350;
+        var targetWidth = 300;
+        var targetHeight = 350;
 
-        float scale = Math.Min((float)targetWidth / 200, (float)targetHeight / 200);
-        int scaledWidth = (int)(200 * scale);
-        int scaledHeight = (int)(200 * scale);
-        int expectedOffsetX = (targetWidth - scaledWidth) / 2;
-        int expectedOffsetY = (targetHeight - scaledHeight) / 2;
+        var scale = Math.Min((float)targetWidth / 200, (float)targetHeight / 200);
+        var scaledWidth = (int)(200 * scale);
+        var scaledHeight = (int)(200 * scale);
+        var expectedOffsetX = (targetWidth - scaledWidth) / 2;
+        var expectedOffsetY = (targetHeight - scaledHeight) / 2;
 
         // Act
         var result = frame.AsRescaledWithPadding(targetWidth, targetHeight);
@@ -153,8 +147,8 @@ public class FrameUnitTests
     {
         // Arrange
         var frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
-        int targetWidth = 300;
-        int targetHeight = 350;
+        var targetWidth = 300;
+        var targetHeight = 350;
 
         // Act
         var result = frame.AsRescaledWithPadding(targetWidth, targetHeight);

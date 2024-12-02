@@ -65,7 +65,6 @@ public class VideoProcessorUnitTests
         var processor = GetVideoProcessor();
         var inputFile = "input";
         var outputFile = "output";
-        int framesCount = SetupVideoReader();
 
         // Act
 
@@ -90,8 +89,8 @@ public class VideoProcessorUnitTests
     {
         // Arrange 
 
-        int framesCount = SetupVideoReader();
-        int timesDetectionShouldBeRan = (int)Math.Ceiling((double)(framesCount / (runDetectionEachNFrames + 0.0)));
+        var framesCount = SetupVideoReader();
+        var timesDetectionShouldBeRan = (int)Math.Ceiling((double)(framesCount / (runDetectionEachNFrames + 0.0)));
 
         var processor = GetVideoProcessor(x =>
         {

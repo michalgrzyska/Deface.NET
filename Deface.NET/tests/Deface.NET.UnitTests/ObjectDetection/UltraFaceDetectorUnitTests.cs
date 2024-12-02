@@ -1,5 +1,4 @@
-﻿using Deface.NET.Graphics.Models;
-using Deface.NET.ObjectDetection.UltraFace;
+﻿using Deface.NET.ObjectDetection.UltraFace;
 using Deface.NET.UnitTests.Graphics.Helpers;
 
 namespace Deface.NET.UnitTests.ObjectDetection;
@@ -17,7 +16,7 @@ public class UltraFaceDetectorUnitTests : IDisposable
     [InlineData(TestResources.TestResources.Photo6, 0)]
     public void Detect_ProperData_DetectsProperAmountOfFaces(string imagePath, int expectedFaces)
     {
-        Frame frame = TestFrameHelper.GetTestFrame(imagePath);
+        var frame = TestFrameHelper.GetTestFrame(imagePath);
 
         var result = _detector.Detect(frame, 0.6f);
 

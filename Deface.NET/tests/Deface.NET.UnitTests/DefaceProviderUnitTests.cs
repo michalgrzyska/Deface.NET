@@ -35,9 +35,11 @@ public class DefaceProviderTests(SettingsFixture settingsFixture)
         };
 
         // Act
+
         var defaceService = DefaceProvider.GetDefaceService(action);
 
         // Assert
+
         settingsActionCalled.Should().BeTrue();
         defaceService.Should().NotBeNull();
         defaceService.Should().BeAssignableTo<IDefaceService>();

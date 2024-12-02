@@ -7,7 +7,7 @@ public class ImageFormatUnitTests
     [Fact]
     public void Png_HasProperDataSet()
     {
-        ImageFormat imageFormat = ImageFormat.Png;
+        var imageFormat = ImageFormat.Png;
 
         imageFormat.Quality.Should().Be(100);
         imageFormat.Format.Should().Be(SKEncodedImageFormat.Png);
@@ -20,7 +20,7 @@ public class ImageFormatUnitTests
     [InlineData(77)]
     public void Jpeg_WithQuality_HasProperDataSet(int quality)
     {
-        ImageFormat imageFormat = ImageFormat.Jpeg(quality);
+        var imageFormat = ImageFormat.Jpeg(quality);
 
         imageFormat.Quality.Should().Be(quality);
         imageFormat.Format.Should().Be(SKEncodedImageFormat.Jpeg);
@@ -34,7 +34,7 @@ public class ImageFormatUnitTests
     [InlineData(200)]
     public void Jpeg_InvalidQuality_ThrowsArgumentOutOfRangeException(int quality)
     {
-        ImageFormat imageFormat = ImageFormat.Jpeg(quality);
+        var imageFormat = ImageFormat.Jpeg(quality);
 
         var action = () => imageFormat.Validate();
 

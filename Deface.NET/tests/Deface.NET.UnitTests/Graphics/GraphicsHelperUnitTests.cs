@@ -1,4 +1,5 @@
 ﻿using Deface.NET.Graphics;
+using Deface.NET.UnitTests.Graphics.Helpers;
 using SkiaSharp;
 
 namespace Deface.NET.UnitTests.Graphics;
@@ -10,8 +11,9 @@ public class GraphicsHelperUnitTests
     {
         // Arrange
 
-        int width = 2;
-        int height = 2;
+        var width = 2;
+        var height = 2;
+
         byte[] bgrData =
         [
             255, 0, 0,
@@ -22,16 +24,18 @@ public class GraphicsHelperUnitTests
 
         byte[] expectedRgbaData =
         [
-            0, 0, 255, 255,  // Blue pixel
-            0, 255, 0, 255,  // Green pixel
-            255, 0, 0, 255,  // Red pixel
-            0, 255, 255, 255 // Yellow pixel
+            0, 0, 255, 255, // B
+            0, 255, 0, 255, // G
+            255, 0, 0, 255, // R
+            0, 255, 255, 255 // Y
         ];
 
         // Act
-        byte[] rgbaData = GraphicsHelper.ConvertBgrToRgba(bgrData, width, height);
+
+        var rgbaData = GraphicsHelper.ConvertBgrToRgba(bgrData, width, height);
 
         // Assert
+
         rgbaData.Should().BeEquivalentTo(expectedRgbaData);
     }
 
@@ -39,8 +43,9 @@ public class GraphicsHelperUnitTests
     public void GetBgraBitmapFromBytes_ShouldCreateBgra8888BitmapWithPremultipliedAlpha()
     {
         // Arrange
-        int width = 2;
-        int height = 2;
+        var width = 2;
+        var height = 2;
+
         byte[] rgbaData =
         [
             0, 0, 255, 255,
@@ -50,17 +55,19 @@ public class GraphicsHelperUnitTests
         ];
 
         // Act
-        using SKBitmap bitmap = GraphicsHelper.GetBgraBitmapFromRawBytes(rgbaData, width, height);
+
+        using var bitmap = GraphicsHelper.GetBgraBitmapFromRawBytes(rgbaData, width, height);
 
         // Assert
+
         bitmap.Width.Should().Be(width);
         bitmap.Height.Should().Be(height);
         bitmap.ColorType.Should().Be(SKColorType.Bgra8888);
         bitmap.AlphaType.Should().Be(SKAlphaType.Premul);
 
-        bitmap.GetPixel(0, 0).Should().Be(new SKColor(255, 0, 0, 255));
-        bitmap.GetPixel(1, 0).Should().Be(new SKColor(0, 255, 0, 255));
-        bitmap.GetPixel(0, 1).Should().Be(new SKColor(0, 0, 255, 255));
-        bitmap.GetPixel(1, 1).Should().Be(new SKColor(255, 255, 0, 255));
+        bitmap.GetPixel(0, 0).ShouldBe(255, 0, 0);
+        bitmap.GetPixel(1, 0).ShouldBe(0, 255, 0);
+        bitmap.GetPixel(0, 1).ShouldBe(0, 0, 255);
+        bitmap.GetPixel(1, 1).ShouldBe(255, 255, 0);
     }
 }
