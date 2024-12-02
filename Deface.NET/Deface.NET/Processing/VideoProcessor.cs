@@ -40,8 +40,6 @@ internal sealed class VideoProcessor
         _videoWriter.WriteVideo(processedFrames.Frames, processedFrames.VideoInfo, outputPath);
 
         LogVideoProcessed(inputPath, processedFrames, outputPath);
-        processedFrames.Frames.Dispose();
-
         return GetProcessingResult(inputPath, outputPath, processedFrames);
     }
 

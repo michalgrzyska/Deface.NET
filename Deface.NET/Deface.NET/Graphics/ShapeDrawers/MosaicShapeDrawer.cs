@@ -39,7 +39,7 @@ internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
             else if (_settings.AnonimizationShape == AnonimizationShape.Ellipse)
             {
                 var path = new SKPath();
-                path.AddOval(new SKRect(obj.X1, obj.Y1, obj.X2, obj.Y2));
+                path.AddOval(rect);
 
                 canvas.Save();
                 canvas.ClipPath(path);
@@ -51,7 +51,7 @@ internal class MosaicShapeDrawer(Settings settings) : IShapeDrawer
         return frame;
     }
 
-    internal static (int SizeW, int SizeH) GetMosaicSize(Frame frame)
+    private static (int SizeW, int SizeH) GetMosaicSize(Frame frame)
     {
         var longerSide = Math.Max(frame.Width, frame.Height);
         var mosaicSize = longerSide / MosaicDivisionFactor;

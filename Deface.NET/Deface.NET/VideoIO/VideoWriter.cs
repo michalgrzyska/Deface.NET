@@ -19,11 +19,13 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider, IExternalPr
 
         using var ffmpegInput = ffmpegProcess.InputStream;
 
-        foreach (var frame in frames) using (frame)
-            {
-                var bytes = frame.ToByteArray();
-                ffmpegInput.Write(bytes);
-            }
+        foreach (var f in frames)
+        {
+            using var frame = f;
+
+            var bytes = frame.ToByteArray();
+            ffmpegInput.Write(bytes);
+        }
     }
 
     private IExternalProcess GetFfmpegProcess(VideoInfo videoInfo, string outputPath)

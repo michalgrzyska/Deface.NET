@@ -8,6 +8,9 @@ internal static class TestFrameHelper
     private const int Width = 1000;
     private const int Height = 1000;
 
+    private static readonly SKColor BlackPixel = new(0, 0, 0);
+    private static readonly SKColor WhitePixel = new(255, 255, 255);
+
     public static Frame GetTestFrame(string path)
     {
         using FileStream fileStream = new(path, FileMode.Open, FileAccess.Read);
@@ -16,27 +19,29 @@ internal static class TestFrameHelper
 
     public static Frame GetTestFrame()
     {
-        using MemoryStream stream = GetFrameStream();
+        using var stream = GetFrameStream();
         return (Frame)SKBitmap.Decode(stream);
     }
 
     public static Frame GetTestFrameWithMesh()
     {
-        Frame frame = GetTestFrame();
-
+        var frame = GetTestFrame();
         var nativeElement = (SKBitmap)frame;
+        var pixels = new SKColor[nativeElement.Width * nativeElement.Height];
+        var isBlack = true;
 
-        for (var y = 0; y < nativeElement.Height; y++)
+        for (int y = 0; y < nativeElement.Height; y++)
         {
-            for (var x = 0; x < nativeElement.Width; x++)
+            for (int x = 0; x < nativeElement.Width; x++)
             {
-                SKColor color = x % 2 == y % 2
-                    ? new SKColor(0, 0, 0)
-                    : new SKColor(255, 255, 255);
-
-                nativeElement.SetPixel(x, y, color);
+                pixels[y * nativeElement.Width + x] = isBlack ? BlackPixel : WhitePixel;
+                isBlack = !isBlack;
             }
+
+            isBlack = nativeElement.Width % 2 == 0 ? isBlack : !isBlack;
         }
+
+        nativeElement.Pixels = pixels;
 
         return frame;
     }
@@ -45,7 +50,7 @@ internal static class TestFrameHelper
     {
         SKBitmap bitmap = new(Width, Height);
 
-        using (var canvas = new SKCanvas(bitmap))
+        using (SKCanvas canvas = new(bitmap))
         {
             canvas.Clear(SKColors.White);
         }
@@ -53,11 +58,10 @@ internal static class TestFrameHelper
         using var image = SKImage.FromBitmap(bitmap);
         using var data = image.Encode(SKEncodedImageFormat.Png, 100);
 
-        var stream = new MemoryStream();
+        MemoryStream stream = new();
         data.SaveTo(stream);
 
         stream.Seek(0, SeekOrigin.Begin);
-
         return stream;
     }
 }

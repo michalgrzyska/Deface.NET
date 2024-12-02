@@ -45,7 +45,7 @@ public class VideoReaderTests(SettingsFixture settingsFixture)
         return videoInfoProvider;
     }
 
-    private IExternalProcessFactory GetExternalProcessFactory()
+    private static IExternalProcessFactory GetExternalProcessFactory()
     {
         var externalProcessFactory = Substitute.For<IExternalProcessFactory>();
 

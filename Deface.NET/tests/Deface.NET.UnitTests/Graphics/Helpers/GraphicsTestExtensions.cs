@@ -10,4 +10,11 @@ internal static class GraphicsTestExtensions
         pixel.G.Should().Be(g);
         pixel.B.Should().Be(b);
     }
+
+    public static void ShouldBe(this PixelData pixel, byte r, byte g, byte b)
+    {
+        pixel.R.Should().Be(r);
+        pixel.G.Should().Be(g);
+        pixel.B.Should().Be(b);
+    }
 }
