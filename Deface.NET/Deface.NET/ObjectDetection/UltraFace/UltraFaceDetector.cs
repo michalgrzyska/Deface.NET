@@ -2,6 +2,7 @@
 using Deface.NET.Graphics.Models;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.Onnx;
+using System.Diagnostics;
 
 namespace Deface.NET.ObjectDetection.UltraFace;
 
@@ -25,11 +26,12 @@ internal class UltraFaceDetector : IUltraFaceDetector
     public List<DetectedObject> Detect(Frame frame, float threshold)
     {
         var preprocessedImage = PreprocessImage(frame);
-
         Input input = new(preprocessedImage);
-        var output = _predictionEngine.Predict(input);
 
-        return PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height, threshold);
+        var output = _predictionEngine.Predict(input);
+        var result = PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height, threshold);
+
+        return result;
     }
 
     public void Dispose() => _predictionEngine.Dispose();
@@ -39,7 +41,8 @@ internal class UltraFaceDetector : IUltraFaceDetector
         return _mlContext.Transforms.ApplyOnnxModel(
             modelFile: AppFiles.UltraFaceONNX,
             outputColumnNames: ["scores", "boxes"],
-            inputColumnNames: ["input"]
+            inputColumnNames: ["input"],
+            gpuDeviceId: 0
         );
     }
 

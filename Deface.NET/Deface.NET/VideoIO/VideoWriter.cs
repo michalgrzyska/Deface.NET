@@ -21,7 +21,7 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider, IExternalPr
 
         foreach (var f in frames)
         {
-            using var frame = f;
+             var frame = f;
 
             var bytes = frame.ToByteArray();
             ffmpegInput.Write(bytes);

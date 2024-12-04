@@ -64,7 +64,7 @@ internal sealed class VideoProcessor
 
     private Frame ProcessFrame(FrameInfo frameInfo)
     {
-        using var frame = _frameCreator.FromBgrArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
+        var frame = _frameCreator.FromBgrArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
 
         if (frameInfo.Index % _settings.RunDetectionEachNFrames == 0)
         {

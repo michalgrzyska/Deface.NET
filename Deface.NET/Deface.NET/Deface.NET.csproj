@@ -18,7 +18,8 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
 		<PackageReference Include="Microsoft.ML" Version="3.0.1" />
 		<PackageReference Include="Microsoft.ML.ImageAnalytics" Version="3.0.1" />
-		<PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.19.2" />
+		 <!--<PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.20.1" />-->
+		<PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.20.1" />
 		<PackageReference Include="Microsoft.ML.OnnxTransformer" Version="3.0.1" />
 		<PackageReference Include="SkiaSharp" Version="2.88.8" />
 	</ItemGroup>
