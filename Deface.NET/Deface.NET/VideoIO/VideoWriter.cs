@@ -19,12 +19,9 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider, IExternalPr
 
         using var ffmpegInput = ffmpegProcess.InputStream;
 
-        foreach (var f in frames)
+        foreach (var frame in frames)
         {
-             var frame = f;
-
-            var bytes = frame.ToByteArray();
-            ffmpegInput.Write(bytes);
+            ffmpegInput.Write(frame.Bytes);
         }
     }
 
@@ -37,7 +34,7 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider, IExternalPr
             "-loglevel", "panic",
             "-y",
             "-f", "rawvideo",
-            "-pixel_format", "rgb24",
+            "-pixel_format", "bgra",
             "-video_size", $"{videoInfo.Width}x{videoInfo.Height}",
             "-framerate",  videoInfo.AverageFps.ToString(CultureInfo.InvariantCulture),
             "-i", "-",

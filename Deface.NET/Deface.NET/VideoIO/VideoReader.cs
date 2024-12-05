@@ -36,7 +36,7 @@ internal class VideoReader
             "-loglevel", "panic",
             "-i", $"\"{videoInfo.Path}\"",
             "-f", "image2pipe",
-            "-pix_fmt", "rgb24",
+            "-pix_fmt", "bgra",
             "-vcodec", "rawvideo",
             "-"
         ]);

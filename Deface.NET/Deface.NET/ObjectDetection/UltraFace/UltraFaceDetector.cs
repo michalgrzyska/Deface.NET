@@ -2,7 +2,7 @@
 using Deface.NET.Graphics.Models;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.Onnx;
-using System.Diagnostics;
+using SkiaSharp;
 
 namespace Deface.NET.ObjectDetection.UltraFace;
 
@@ -38,12 +38,14 @@ internal class UltraFaceDetector : IUltraFaceDetector
 
     private OnnxScoringEstimator GetPipeline()
     {
-        return _mlContext.Transforms.ApplyOnnxModel(
+        var result = _mlContext.Transforms.ApplyOnnxModel(
             modelFile: AppFiles.UltraFaceONNX,
             outputColumnNames: ["scores", "boxes"],
-            inputColumnNames: ["input"],
-            gpuDeviceId: 0
+            inputColumnNames: ["input"]
+            //gpuDeviceId: 0
         );
+
+        return result;
     }
 
     private PredictionEngine<Input, Output> GetPredictionEngine()
@@ -54,21 +56,25 @@ internal class UltraFaceDetector : IUltraFaceDetector
 
     private static float[] PreprocessImage(Frame frame)
     {
-        Frame resized = frame.AsRescaledWithPadding(Width, Height);
+        var resized = (SKBitmap)frame.AsRescaledWithPadding(Width, Height);
         var imageData = new float[1 * 3 * Height * Width];
-        var index = 0;
 
-        for (int y = 0; y < resized.Height; y++)
+        unsafe
         {
-            for (int x = 0; x < resized.Width; x++)
+            var pixels = (byte*)resized.GetPixels();
+
+            var totalPixels = Height * Width;
+            var offsetR = 0;
+            var offsetG = totalPixels;
+            var offsetB = 2 * totalPixels;
+
+            for (int i = 0; i < totalPixels; i++)
             {
-                var pixel = resized.GetPixel(x, y);
+                byte* pixel = pixels + i * 4;
 
-                imageData[index] = (pixel.R - 127) / 128f;
-                imageData[index + Height * Width] = (pixel.G - 127) / 128f;
-                imageData[index + 2 * Height * Width] = (pixel.B - 127) / 128f;
-
-                index++;
+                imageData[offsetR + i] = (pixel[0] - 127) / 128f;
+                imageData[offsetG + i] = (pixel[1] - 127) / 128f;
+                imageData[offsetB + i] = (pixel[2] - 127) / 128f;
             }
         }
 

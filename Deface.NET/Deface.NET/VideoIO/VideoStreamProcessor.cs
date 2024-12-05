@@ -15,7 +15,7 @@ internal class VideoStreamProcessor
     public VideoStreamProcessor(VideoInfo videoInfo)
     {
         _videoInfo = videoInfo;
-        _frameSize = videoInfo.Width * videoInfo.Height * 3;
+        _frameSize = videoInfo.Width * videoInfo.Height * 4;
 
         _buffer = new byte[_frameSize];
         _rolloverBuffer = new byte[_frameSize];

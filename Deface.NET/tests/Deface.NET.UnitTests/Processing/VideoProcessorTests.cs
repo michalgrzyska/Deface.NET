@@ -136,7 +136,7 @@ public class VideoProcessorTests
 
                 for (int i = 0; i < mockFrames.Count; i++)
                 {
-                    FrameInfo fi = new(mockFrames[i].ToByteArray(), i, mockFrames.Count, mockFrames[i].Width, mockFrames[i].Height);
+                    FrameInfo fi = new(mockFrames[i].Bytes, i, mockFrames.Count, mockFrames[i].Width, mockFrames[i].Height);
                     frameCallback(fi);
                 }
 

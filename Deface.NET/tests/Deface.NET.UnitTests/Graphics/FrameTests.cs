@@ -56,18 +56,6 @@ public class FrameTests
         bitmap.ShouldBe(frame.Width, frame.Height);
     }
 
-    [Fact]
-    public void ToByteArray_IsReturnDataOK()
-    {
-        var frame = TestFrameHelper.GetTestFrame(TestResources.TestResources.PhotoRed);
-
-        var byteArray = frame.ToByteArray();
-        var bitmap = GraphicsHelper.GetBgraBitmapFromRawBytes(byteArray, frame.Width, frame.Height);
-
-        bitmap.ShouldBe(frame.Width, frame.Height);
-        bitmap.GetPixel(0, 0).ShouldBe(0, 0, 255);
-    }
-
     [Theory]
     [InlineData(5)]
     [InlineData(40)]

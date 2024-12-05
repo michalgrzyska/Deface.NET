@@ -11,14 +11,7 @@ internal class FrameCreator(IFileSystem fileSystem) : IFrameCreator
 
     public Frame FromBgrArray(byte[] bgrData, int width, int height)
     {
-        if (width * height * 3 != bgrData.Length)
-        {
-            throw new ArgumentException($"{nameof(bgrData)} length must be the size of width * height * 3");
-        }
-
-        var rgbaData = GraphicsHelper.ConvertBgrToRgba(bgrData, width, height);
-        var bitmap = GraphicsHelper.GetBgraBitmapFromRawBytes(rgbaData, width, height);
-
+        var bitmap = GraphicsHelper.CreateBitmapFromBgra(bgrData, width, height);
         return (Frame)bitmap;
     }
 

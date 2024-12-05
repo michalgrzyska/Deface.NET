@@ -1,6 +1,5 @@
 ﻿using Deface.NET.Graphics.Interfaces;
 using SkiaSharp;
-using System.Runtime.InteropServices;
 
 namespace Deface.NET.Graphics.Models;
 
@@ -10,6 +9,7 @@ internal sealed class Frame : IDisposable, ISize
 
     public int Width => _bitmap.Width;
     public int Height => _bitmap.Height;
+    public byte[] Bytes => _bitmap.Bytes;
 
     private Frame(SKBitmap bitmap)
     {
@@ -30,39 +30,6 @@ internal sealed class Frame : IDisposable, ISize
         using var data = resultImage.Encode(imageFormat.Format, imageFormat.Quality);
 
         return data.ToArray();
-    }
-
-    public byte[] ToByteArray()
-    {
-        var width = _bitmap.Width;
-        var height = _bitmap.Height;
-        var bytesPerPixel = 3;
-        var rgbData = new byte[width * height * bytesPerPixel];
-
-        using var image = SKImage.FromBitmap(_bitmap);
-        using var pixmap = image.PeekPixels();
-
-        var bgraData = new byte[width * height * 4];
-        var handle = GCHandle.Alloc(bgraData, GCHandleType.Pinned);
-
-        try
-        {
-            var bgraDataPtr = handle.AddrOfPinnedObject();
-            pixmap.ReadPixels(new SKImageInfo(width, height, SKColorType.Bgra8888, SKAlphaType.Premul), bgraDataPtr, width * 4);
-
-            for (int i = 0, j = 0; i < bgraData.Length; i += 4, j += 3)
-            {
-                rgbData[j] = bgraData[i + 2];
-                rgbData[j + 1] = bgraData[i + 1];
-                rgbData[j + 2] = bgraData[i];
-            }
-        }
-        finally
-        {
-            handle.Free();
-        }
-
-        return rgbData;
     }
 
     public Frame AsRescaledWithPadding(int targetWidth, int targetHeight)
