@@ -39,7 +39,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="_Files\ultraface.onnx">
+	  <None Update="Resources\ultraface.onnx">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

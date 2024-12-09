@@ -2,7 +2,7 @@
 
 internal static class AppFiles
 {
-    private const string FilesDir = "_Files";
+    private const string FilesDir = "Resources";
 
     public const string UltraFaceONNX = $"{FilesDir}/ultraface.onnx";
 }
