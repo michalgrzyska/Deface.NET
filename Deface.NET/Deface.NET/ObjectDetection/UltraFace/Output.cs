@@ -7,10 +7,10 @@ namespace Deface.NET.ObjectDetection.UltraFace;
 internal class Output
 {
     [VectorType(1, 17640, 2)]
-    [ColumnName("scores")]
+    [ColumnName(UltraFaceConstants.Scores)]
     public float[] Scores { get; set; } = [];
 
     [VectorType(1, 17640, 4)]
-    [ColumnName("boxes")]
+    [ColumnName(UltraFaceConstants.Boxes)]
     public float[] Boxes { get; set; } = [];
 }

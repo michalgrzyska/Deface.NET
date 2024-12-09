@@ -38,11 +38,16 @@ internal class UltraFaceDetector : IUltraFaceDetector
 
     private OnnxScoringEstimator GetPipeline()
     {
+        //var sessionOptions = new SessionOptions();
+        //sessionOptions.AppendExecutionProvider_CUDA();
+
+        //var x = OrtEnv.Instance().GetAvailableProviders();
+
         var result = _mlContext.Transforms.ApplyOnnxModel(
             modelFile: AppFiles.UltraFaceONNX,
-            outputColumnNames: ["scores", "boxes"],
-            inputColumnNames: ["input"]
-            //gpuDeviceId: 0
+            outputColumnNames: [UltraFaceConstants.Scores, UltraFaceConstants.Boxes],
+            inputColumnNames: [UltraFaceConstants.Input],
+            gpuDeviceId: 15
         );
 
         return result;

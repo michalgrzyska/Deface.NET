@@ -7,6 +7,6 @@ namespace Deface.NET.ObjectDetection.UltraFace;
 internal class Input(float[] image)
 {
     [VectorType(1, 3, 480, 640)]
-    [ColumnName("input")]
+    [ColumnName(UltraFaceConstants.Input)]
     public float[] Image { get; set; } = image;
 }

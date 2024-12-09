@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deface.NET", "Deface.NET\Deface.NET.csproj", "{8239A4DA-A604-4F9A-9C65-5CE02ABFC0D9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C848643C-D471-4293-A8AA-07E8D176765A}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Deface.NET.UnitTests\code-coverage-report.ps1 = tests\Deface.NET.UnitTests\code-coverage-report.ps1
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deface.NET.PerformanceTestRunner", "tests\Deface.NET.PerformanceTestRunner\Deface.NET.PerformanceTestRunner.csproj", "{A53CE0D6-9C18-45FA-9E40-F8A6AFA654BE}"
 EndProject
