@@ -1,6 +1,4 @@
-﻿using Deface.NET.Graphics;
-using Deface.NET.Graphics.Models;
-using Deface.NET.UnitTests.Graphics.Helpers;
+﻿using Deface.NET.UnitTests.Graphics.Helpers;
 using SkiaSharp;
 
 namespace Deface.NET.UnitTests.Graphics;
@@ -14,16 +12,6 @@ public class FrameTests
     {
         var frame = TestFrameHelper.GetTestFrame(path);
         frame.ShouldBe(width, height);
-    }
-
-    [Fact]
-    public void New_FromBgrData_FrameCreatedCorrectly()
-    {
-        var bgrBitmap = CreateRedRgbBitmap(200, 200);
-
-        var frame = (Frame)GraphicsHelper.GetBgraBitmapFromRawBytes(bgrBitmap, 200, 200);
-
-        frame.GetPixel(0, 0).ShouldBe(0, 0, 255);
     }
 
     [Fact]

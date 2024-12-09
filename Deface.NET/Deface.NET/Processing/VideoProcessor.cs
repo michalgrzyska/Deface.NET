@@ -1,5 +1,4 @@
-﻿using Deface.NET.Common;
-using Deface.NET.Configuration.Provider;
+﻿using Deface.NET.Configuration.Provider;
 using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.Logging;
@@ -64,7 +63,7 @@ internal sealed class VideoProcessor
 
     private Frame ProcessFrame(FrameInfo frameInfo)
     {
-        var frame = _frameCreator.FromBgrArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
+        var frame = _frameCreator.FromBgraArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
 
         if (frameInfo.Index % _settings.RunDetectionEachNFrames == 0)
         {

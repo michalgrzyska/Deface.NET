@@ -2,7 +2,6 @@
 using Deface.NET.Graphics;
 using Deface.NET.Graphics.ShapeDrawers;
 using Deface.NET.UnitTests._TestsConfig;
-using NSubstitute;
 
 namespace Deface.NET.UnitTests.Graphics;
 

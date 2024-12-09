@@ -1,5 +1,4 @@
-﻿using Deface.NET.Configuration.Provider;
-using Deface.NET.Graphics.Interfaces;
+﻿using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;

@@ -1,6 +1,5 @@
 ﻿using Deface.NET.Graphics.Interfaces;
 using SkiaSharp;
-using System.Drawing;
 
 namespace Deface.NET.UnitTests.Graphics.Helpers;
 

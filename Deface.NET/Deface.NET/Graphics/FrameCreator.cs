@@ -9,9 +9,9 @@ internal class FrameCreator(IFileSystem fileSystem) : IFrameCreator
 {
     private readonly IFileSystem _fileSystem = fileSystem;
 
-    public Frame FromBgrArray(byte[] bgrData, int width, int height)
+    public Frame FromBgraArray(byte[] bgraData, int width, int height)
     {
-        var bitmap = GraphicsHelper.CreateBitmapFromBgra(bgrData, width, height);
+        var bitmap = GraphicsHelper.CreateBitmapFromBgra(bgraData, width, height);
         return (Frame)bitmap;
     }
 

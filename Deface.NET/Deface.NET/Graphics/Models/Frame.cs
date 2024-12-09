@@ -7,6 +7,8 @@ internal sealed class Frame : IDisposable, ISize
 {
     private readonly SKBitmap _bitmap;
 
+    public const int ChannelsCount = 4;
+
     public int Width => _bitmap.Width;
     public int Height => _bitmap.Height;
     public byte[] Bytes => _bitmap.Bytes;

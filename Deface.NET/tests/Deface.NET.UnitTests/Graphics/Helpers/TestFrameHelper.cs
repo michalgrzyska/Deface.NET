@@ -13,8 +13,22 @@ internal static class TestFrameHelper
 
     public static Frame GetTestFrame(string path)
     {
-        using FileStream fileStream = new(path, FileMode.Open, FileAccess.Read);
-        return (Frame)SKBitmap.Decode(fileStream);
+        var imageBytes = File.ReadAllBytes(path);
+
+        using (var stream = new MemoryStream(imageBytes))
+        using (var codec = SKCodec.Create(stream))
+        {
+            // Create an SKImageInfo with the desired color type
+            var imageInfo = new SKImageInfo(codec.Info.Width, codec.Info.Height, SKColorType.Bgra8888);
+
+            // Create an empty SKBitmap with the desired color type
+            var bitmap = new SKBitmap(imageInfo);
+
+            // Decode the image data into the bitmap
+            var result = codec.GetPixels(imageInfo, bitmap.GetPixels());
+
+            return (Frame)bitmap;
+        }
     }
 
     public static Frame GetTestFrame()

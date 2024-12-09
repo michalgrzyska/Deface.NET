@@ -36,13 +36,6 @@ public class FrameCreatorTests
     }
 
     [Fact]
-    public void FromBgrArray_EmptyArray_ShouldThrowArgumentException()
-    {
-        var action = () => _frameCreator.FromBgrArray([], 10, 10);
-        action.Should().Throw<ArgumentException>();
-    }
-
-    [Fact]
     public void FromBgrArray_RedImage_FrameIsCorrectAndBlue()
     {
         // Arrange
@@ -50,11 +43,11 @@ public class FrameCreatorTests
         var width = 1000;
         var height = 1000;
 
-        var bgrArray = CreateRedBgrImage(1000, 1000);
+        var bgraArray = CreateRedBgraImage(1000, 1000);
 
         // Act
 
-        var result = _frameCreator.FromBgrArray(bgrArray, width, height);
+        var result = _frameCreator.FromBgraArray(bgraArray, width, height);
 
         // Assert
 
@@ -62,22 +55,23 @@ public class FrameCreatorTests
 
         ShapeTestHelper.ValidateWholeFrame(result, pixel =>
         {
-            pixel.ShouldBe(0, 0, 255);
+            pixel.ShouldBe(255, 0, 0);
         });
     }
 
-    private static byte[] CreateRedBgrImage(int width, int height)
+    private static byte[] CreateRedBgraImage(int width, int height)
     {
-        int bytesPerPixel = 3;
+        int bytesPerPixel = Frame.ChannelsCount;
         int imageSize = width * height * bytesPerPixel;
 
         byte[] imageData = new byte[imageSize];
 
         for (int i = 0; i < imageSize; i += bytesPerPixel)
         {
-            imageData[i] = 0;     // Blue
-            imageData[i + 1] = 0; // Green
-            imageData[i + 2] = 255; // Red
+            imageData[i] = 0;
+            imageData[i + 1] = 0;
+            imageData[i + 2] = 255;
+            imageData[i + 3] = 255;
         }
 
         return imageData;

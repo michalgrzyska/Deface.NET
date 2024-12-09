@@ -1,4 +1,5 @@
-﻿using Deface.NET.VideoIO;
+﻿using Deface.NET.Graphics.Models;
+using Deface.NET.VideoIO;
 using Deface.NET.VideoIO.Models;
 
 namespace Deface.NET.UnitTests.VideoIO;
@@ -40,14 +41,15 @@ public class VideoStreamProcessorTests
 
     private static MemoryStream GetFramesStream(VideoInfo videoInfo, int count = 1)
     {
-        var frameSize = videoInfo.Width * videoInfo.Height * 3;
+        var frameSize = videoInfo.Width * videoInfo.Height * Frame.ChannelsCount;
         var result = new byte[frameSize * count];
 
-        for (int i = 0; i < frameSize * count; i += 3)
+        for (int i = 0; i < frameSize * count; i += Frame.ChannelsCount)
         {
             result[i] = 255;
             result[i + 1] = 0;
             result[i + 2] = 0;
+            result[i + 3] = 255;
         }
 
         return new MemoryStream(result);

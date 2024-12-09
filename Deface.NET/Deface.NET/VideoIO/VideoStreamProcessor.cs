@@ -1,4 +1,5 @@
-﻿using Deface.NET.VideoIO.Models;
+﻿using Deface.NET.Graphics.Models;
+using Deface.NET.VideoIO.Models;
 
 namespace Deface.NET.VideoIO;
 
@@ -15,7 +16,7 @@ internal class VideoStreamProcessor
     public VideoStreamProcessor(VideoInfo videoInfo)
     {
         _videoInfo = videoInfo;
-        _frameSize = videoInfo.Width * videoInfo.Height * 4;
+        _frameSize = videoInfo.Width * videoInfo.Height * Frame.ChannelsCount;
 
         _buffer = new byte[_frameSize];
         _rolloverBuffer = new byte[_frameSize];

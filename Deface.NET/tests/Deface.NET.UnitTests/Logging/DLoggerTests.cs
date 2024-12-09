@@ -1,8 +1,6 @@
-﻿using Deface.NET.Configuration.Provider;
-using Deface.NET.Logging;
+﻿using Deface.NET.Logging;
 using Deface.NET.UnitTests._TestsConfig;
 using Microsoft.Extensions.Logging.Testing;
-using NSubstitute;
 
 namespace Deface.NET.UnitTests.Logging;
 

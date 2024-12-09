@@ -1,5 +1,4 @@
-﻿using Deface.NET.Configuration.Provider;
-using Deface.NET.System.ExternalProcessing;
+﻿using Deface.NET.System.ExternalProcessing;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.VideoIO;
 using Deface.NET.VideoIO.Interfaces;
