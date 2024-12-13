@@ -31,7 +31,7 @@ public class ObjectDetectorTests
         _objectDetector = new(_faceDetector);
 
         _faceDetector
-            .Detect(Arg.Any<Frame>(), Arg.Any<float>())
+            .Detect(Arg.Any<Frame>(), Arg.Any<Settings>())
             .Returns(testData);
     }
 
@@ -49,7 +49,7 @@ public class ObjectDetectorTests
 
         // Assert
 
-        _faceDetector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<float>());
+        _faceDetector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
         objects.Should().OnlyContain(x => x.IsResized);
     }
 }

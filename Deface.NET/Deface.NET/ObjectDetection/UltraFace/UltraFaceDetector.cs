@@ -1,57 +1,36 @@
 ﻿using Deface.NET.Common;
 using Deface.NET.Graphics.Models;
+using Deface.NET.ObjectDetection.ONNX;
 using Microsoft.ML;
-using Microsoft.ML.Transforms.Onnx;
 using SkiaSharp;
 
 namespace Deface.NET.ObjectDetection.UltraFace;
 
-internal class UltraFaceDetector : IUltraFaceDetector
+internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDetector
 {
-    private readonly MLContext _mlContext;
-    private readonly OnnxScoringEstimator _pipeline;
     private readonly PredictionEngine<Input, Output> _predictionEngine;
 
     private const int Width = 640;
     private const int Height = 480;
     private const float IouThreshold = 0.5f;
 
-    public UltraFaceDetector()
+    public UltraFaceDetector(IOnnxProvider onnxProvider, Settings settings) : base(onnxProvider, settings, AppFiles.UltraFaceONNX)
     {
-        _mlContext = new();
-        _pipeline = GetPipeline();
         _predictionEngine = GetPredictionEngine();
     }
 
-    public List<DetectedObject> Detect(Frame frame, float threshold)
+    public List<DetectedObject> Detect(Frame frame, Settings settings)
     {
         var preprocessedImage = PreprocessImage(frame);
         Input input = new(preprocessedImage);
 
         var output = _predictionEngine.Predict(input);
-        var result = PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height, threshold);
+        var result = PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height, settings.Threshold);
 
         return result;
     }
 
     public void Dispose() => _predictionEngine.Dispose();
-
-    private OnnxScoringEstimator GetPipeline()
-    {
-        //var sessionOptions = new SessionOptions();
-        //sessionOptions.AppendExecutionProvider_CUDA();
-
-        //var x = OrtEnv.Instance().GetAvailableProviders();
-
-        var result = _mlContext.Transforms.ApplyOnnxModel(
-            modelFile: AppFiles.UltraFaceONNX,
-            outputColumnNames: [UltraFaceConstants.Scores, UltraFaceConstants.Boxes],
-            inputColumnNames: [UltraFaceConstants.Input],
-            gpuDeviceId: 15
-        );
-
-        return result;
-    }
 
     private PredictionEngine<Input, Output> GetPredictionEngine()
     {

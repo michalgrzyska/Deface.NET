@@ -13,6 +13,7 @@ IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
 
     options.AnonimizationMethod = AnonimizationMethod.Mosaic;
     options.AnonimizationShape = AnonimizationShape.Ellipse;
+    options.Hardware = Hardware.Cuda(0);
 });
 
 var result = defaceService.ProcessVideo(TestResources.Video_Short_HD_1280_720_24fps, "\"C://DefaceTest//testt.mp4");

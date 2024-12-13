@@ -66,6 +66,11 @@ public class Settings : IValidable
     /// </summary>
     public string FFProbePath { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Hardware used for the object detection. NOTE: Cannot be overriden locally, Deface.NET always uses global setting.
+    /// </summary>
+    public Hardware Hardware {  get; set; } = Hardware.Cpu();
+
     internal Settings(Action<Settings>? builderAction)
     {
         ApplyAction(builderAction);
