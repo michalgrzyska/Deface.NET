@@ -7,7 +7,7 @@ namespace Deface.NET;
 /// </summary>
 public readonly struct Hardware
 {
-    internal HardwareType Type { get; private init; }
+    internal HardwareType Type { get; private init; } = HardwareType.CPU;
     internal int? GpuDeviceId { get; private init; }
 
     /// <summary>

@@ -7,7 +7,7 @@ namespace Deface.NET;
 /// </summary>
 public readonly struct AnonimizationMethod
 {
-    internal AnonimizationType Type { get; private init; }
+    internal AnonimizationType Type { get; private init; } = AnonimizationType.GaussianBlur;
     internal Color? ColorValue { get; private init; }
 
     private AnonimizationMethod(AnonimizationType type, Color? color = default)

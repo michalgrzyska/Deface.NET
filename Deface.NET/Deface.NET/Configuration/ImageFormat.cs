@@ -12,8 +12,8 @@ namespace Deface.NET;
 /// </summary>
 public readonly struct ImageFormat : IValidable
 {
-    internal SKEncodedImageFormat Format { get; private init; }
-    internal int Quality { get; private init; }
+    internal SKEncodedImageFormat Format { get; private init; } = SKEncodedImageFormat.Png;
+    internal int Quality { get; private init; } = 100;
 
     private ImageFormat(SKEncodedImageFormat format, int quality)
     {
