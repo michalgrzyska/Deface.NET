@@ -2,5 +2,6 @@
 
 internal interface IOnnxProvider
 {
+    bool IsCpuAvailable();
     bool IsGpuAvailable();
 }

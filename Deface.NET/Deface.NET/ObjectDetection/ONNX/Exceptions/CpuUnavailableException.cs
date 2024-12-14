@@ -3,4 +3,4 @@
 namespace Deface.NET.ObjectDetection.ONNX.Exceptions;
 
 [ExcludeFromCodeCoverage]
-internal class GpuIdNotFoundException(int gpuId) : Exception($"GPU with ID {gpuId} is not found.");
+internal class CpuUnavailableException() : Exception("CPU provider is not available. Check you settings.");

@@ -15,7 +15,7 @@ public class UltraFaceDetectorTests : IDisposable
     public UltraFaceDetectorTests(SettingsFixture settingsFixture)
     {
         _settingsFixture = settingsFixture;
-        _detector = new(Arg.Any<IOnnxProvider>(), _settingsFixture.Settings);
+        _detector = new(GetOnnxProvider(), _settingsFixture.Settings);
     }
 
     [Theory]
@@ -38,4 +38,14 @@ public class UltraFaceDetectorTests : IDisposable
     }
 
     public void Dispose() => _detector.Dispose();
+
+    private static IOnnxProvider GetOnnxProvider()
+    {
+        var provider = Substitute.For<IOnnxProvider>();
+
+        provider.IsCpuAvailable().Returns(true);
+        provider.IsGpuAvailable().Returns(true);
+
+        return provider;
+    }
 }

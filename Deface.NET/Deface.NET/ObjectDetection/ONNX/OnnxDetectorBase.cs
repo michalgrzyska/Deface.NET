@@ -2,6 +2,7 @@
 using Deface.NET.ObjectDetection.ONNX.Exceptions;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.Onnx;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Deface.NET.ObjectDetection.ONNX;
 
@@ -19,11 +20,12 @@ internal abstract class OnnxDetectorBase<TInput, TOutput>
 
     public OnnxDetectorBase(IOnnxProvider onnxProvider, Settings settings, string modelFile)
     {
-        _inputColumnNames = ColumnNameHelper.GetColumnNamesFrom<TInput>();
-        _outputColumnNames = ColumnNameHelper.GetColumnNamesFrom<TOutput>();
+        _onnxProvider = onnxProvider;
         _modelFile = modelFile;
 
-        _onnxProvider = onnxProvider;
+        _inputColumnNames = ColumnNameHelper.GetColumnNamesFrom<TInput>();
+        _outputColumnNames = ColumnNameHelper.GetColumnNamesFrom<TOutput>();
+
         _mlContext = new();
         _pipeline = GetScoringEstimator(settings);
     }
@@ -43,12 +45,13 @@ internal abstract class OnnxDetectorBase<TInput, TOutput>
             return estimator;
         }
         catch (Exception e) 
-        when (e is GpuUnavailableException || e is GpuIdNotFoundException)
+        when (e is GpuUnavailableException || e is GpuIdNotFoundException || e is CpuUnavailableException)
         {
             throw new DefaceException(e.Message);
         }
     }
 
+    [ExcludeFromCodeCoverage]
     private OnnxScoringEstimator GetCudaEstimator(int gpuId)
     {
         if (!_onnxProvider.IsGpuAvailable())
@@ -73,8 +76,14 @@ internal abstract class OnnxDetectorBase<TInput, TOutput>
         }
     }
 
+    [ExcludeFromCodeCoverage]
     private OnnxScoringEstimator GetCpuEstimator()
     {
+        if (!_onnxProvider.IsCpuAvailable())
+        {
+            throw new CpuUnavailableException();
+        }
+
         var estimator = _mlContext.Transforms.ApplyOnnxModel(
             modelFile: _modelFile,
             inputColumnNames: _inputColumnNames,
