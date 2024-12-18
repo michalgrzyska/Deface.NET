@@ -23,6 +23,7 @@ public class VideoProcessorTests
     private readonly IVideoReader _videoReader = Substitute.For<IVideoReader>();
     private readonly IVideoWriter _videoWriter = Substitute.For<IVideoWriter>();
     private readonly IFrameCreator _frameCreator = Substitute.For<IFrameCreator>();
+    private readonly IVideoEncoderChecker _videoEncoderChecker = Substitute.For<IVideoEncoderChecker>();
 
     private const int FrameSize = 1000;
     private const int Fps = 10;
@@ -117,7 +118,7 @@ public class VideoProcessorTests
     private VideoProcessor GetVideoProcessor(Action<Settings>? action = null)
     {
         var settingsProvider = _settingsFixture.GetScopedSettingsProvider(action);
-        return new(settingsProvider, _logger, _detector, _videoWriter, _videoReader, _shapeDrawerProvider, _frameCreator);
+        return new(settingsProvider, _logger, _detector, _videoWriter, _videoReader, _shapeDrawerProvider, _frameCreator, _videoEncoderChecker);
     }
 
     private int SetupVideoReader()

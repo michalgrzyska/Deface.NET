@@ -10,25 +10,38 @@ using Deface.NET.VideoIO.Models;
 namespace Deface.NET.Processing;
 
 internal sealed class VideoProcessor
-(
-    IScopedSettingsProvider settingsProvider,
-    IDLogger<IDefaceService> logger,
-    IObjectDetector detector,
-    IVideoWriter videoWriter,
-    IVideoReader videoReader,
-    IShapeDrawerProvider shapeDrawerProvider,
-    IFrameCreator frameCreator
-) : IVideoProcessor
+: IVideoProcessor
 {
-    private readonly IDLogger<IDefaceService> _logger = logger;
-    private readonly IObjectDetector _detector = detector;
-    private readonly IVideoWriter _videoWriter = videoWriter;
-    private readonly IVideoReader _videoReader = videoReader;
-    private readonly IShapeDrawerProvider _shapeDrawerProvider = shapeDrawerProvider;
-    private readonly IFrameCreator _frameCreator = frameCreator;
-    private readonly Settings _settings = settingsProvider.Settings;
+    private readonly IDLogger<IDefaceService> _logger;
+    private readonly IObjectDetector _detector;
+    private readonly IVideoWriter _videoWriter;
+    private readonly IVideoReader _videoReader;
+    private readonly IShapeDrawerProvider _shapeDrawerProvider;
+    private readonly IFrameCreator _frameCreator;
+    private readonly Settings _settings;
 
     private List<DetectedObject> _lastDetectedObjects = [];
+
+    public VideoProcessor(
+        IScopedSettingsProvider settingsProvider,
+        IDLogger<IDefaceService> logger,
+        IObjectDetector detector,
+        IVideoWriter videoWriter,
+        IVideoReader videoReader,
+        IShapeDrawerProvider shapeDrawerProvider,
+        IFrameCreator frameCreator,
+        IVideoEncoderChecker videoEncoderChecker)
+    {
+        _logger = logger;
+        _detector = detector;
+        _videoWriter = videoWriter;
+        _videoReader = videoReader;
+        _shapeDrawerProvider = shapeDrawerProvider;
+        _frameCreator = frameCreator;
+        _settings = settingsProvider.Settings;
+
+        videoEncoderChecker.CheckFfmpegCodecs();
+    }
 
     public ProcessingResult Process(string inputPath, string outputPath)
     {

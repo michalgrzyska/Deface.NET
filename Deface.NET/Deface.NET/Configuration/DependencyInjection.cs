@@ -39,6 +39,7 @@ public static class DependencyInjection
         services.AddScoped<IVideoReader, VideoReader>();
         services.AddScoped<IVideoInfoProvider, VideoInfoProvider>();
         services.AddScoped<IShapeDrawerProvider, ShapeDrawerProvider>();
+        services.AddScoped<IVideoEncoderChecker, VideoEncoderChecker>();
 
         services.AddSingleton<IObjectDetector, ObjectDetector>();
         services.AddSingleton<IFileSystem, FileSystem>();

@@ -69,7 +69,12 @@ public class Settings : IValidable
     /// <summary>
     /// Hardware used for the object detection. NOTE: Cannot be overriden locally, Deface.NET always uses global setting.
     /// </summary>
-    public Hardware Hardware {  get; set; } = Hardware.Cpu();
+    public Hardware Hardware { get; set; } = Hardware.Cpu();
+
+    /// <summary>
+    /// Codec used for encoding a processed video.
+    /// </summary>
+    public EncodingCodec EncodingCodec { get; set; } = EncodingCodec.VP9;
 
     internal Settings(Action<Settings>? builderAction)
     {
