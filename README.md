@@ -58,3 +58,21 @@ services.AddDeface(settings =>
     ...
 });
 ```
+
+## Configuration options
+
+To find out more informatiom, read the XML comments for a given option property/value.
+
+| Option                    | Value                                      | Req | Additional info                |
+| ------------------------- | ------------------------------------------ | --- | ------------------------------ |
+| `FFMpegPath`              | `string`                                   | ✅  | -                              |
+| `FFProbePath`             | `string`                                   | ✅  |
+| `LoggingLevel`            | `None`, `Basic`, `Detailed`                |     | -                              |
+| `AnonimizationShape`      | `Ellipse`, `Rectangle`                     |     | -                              |
+| `AnonimizationMethod`     | `GaussianBlur`, `Mosaic`, `Color(r, g, b)` |     | -                              |
+| `Threshold`               | `float`                                    |     | `0 <= Threshold <= 1`          |
+| `RunDetectionEachNFrames` | `int`                                      |     | `1 <= RunDetectionEachNFrames` |
+| `MaskScale`               | `float`                                    |     | `1 <= MaskScale`               |
+| `ImageFormat`             | `Png`, `Jpeg(quality)`                     |     | -                              |
+| `Hardware`                | `Cpu()`, `Cuda(gpuDeviceId)`               |     | -                              |
+| `EncodingCodec`           | `VP9`, `H264`                              |     | -                              |
