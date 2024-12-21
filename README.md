@@ -41,3 +41,20 @@ Another way of using Deface.NET is to use `DefaceProvider:`
     });
 
     var result = defaceService.ProcessImage("1.png", "1-processed.png");
+
+## GPU Compatibility
+
+- You need to have cuDNN and CUDA Toolkit installed.
+- See [NVIDIA docs for CUDA support matrix](https://docs.nvidia.com/deeplearning/cudnn/latest/reference/support-matrix.html).
+- See [tested NVIDIA configurations for Deface.NET](https://github.com/michalgrzyska/Deface.NET/blob/main/docs/tested-configurations.md).
+
+### Usage
+
+```
+services.AddDeface(settings =>
+{
+    ...
+    settings.Hardware = Hardware.Cuda(gpuId); // for most configurations gpuId = 0 or gpuId = 1 works
+    ...
+});
+```
