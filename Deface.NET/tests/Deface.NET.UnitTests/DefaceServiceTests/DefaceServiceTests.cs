@@ -1,4 +1,5 @@
-﻿using Deface.NET.Configuration.Provider;
+﻿using Deface.NET.CommercialFeatures.Interfaces;
+using Deface.NET.Configuration.Provider;
 using Deface.NET.Processing;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -23,13 +24,15 @@ public partial class DefaceServiceTests
 
     private IServiceScopeFactory GetServiceScopeFactory()
     {
-        var scopedSettingsProvider = Substitute.For<IScopedSettingsProvider>();
+        var scopedSettingsProvider = Substitute.For<IScopedSettingsProvider>(); 
+        var commercialFeaturesReporter = Substitute.For<ICommercialFeaturesReporter>();
 
         ServiceCollection serviceCollection = new();
 
         serviceCollection.AddScoped(x => _videoProcessor);
         serviceCollection.AddScoped(x => _imageProcessor);
         serviceCollection.AddScoped(x => scopedSettingsProvider);
+        serviceCollection.AddScoped(x => commercialFeaturesReporter);
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
         return serviceProvider.GetRequiredService<IServiceScopeFactory>();

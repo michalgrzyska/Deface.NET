@@ -11,13 +11,17 @@ internal class ScopedSettingsProvider(Settings settings) : IScopedSettingsProvid
 
     public void Init(Action<Settings>? action = default)
     {
-        if (_isInitiated || action == default)
+        if (_isInitiated)
         {
             return;
         }
 
         var settingsClone = _settings.Clone();
-        settingsClone.ApplyAction(action);
+
+        if (action != null) 
+        {
+            settingsClone.ApplyAction(action);
+        }
 
         _scopedSettings = settingsClone;
         _isInitiated = true;

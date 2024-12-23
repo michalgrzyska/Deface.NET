@@ -1,4 +1,6 @@
-﻿using Deface.NET.Configuration.Provider;
+﻿using Deface.NET.CommercialFeatures;
+using Deface.NET.CommercialFeatures.Interfaces;
+using Deface.NET.Configuration.Provider;
 using Deface.NET.Graphics;
 using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Logging;
@@ -40,6 +42,7 @@ public static class DependencyInjection
         services.AddScoped<IVideoInfoProvider, VideoInfoProvider>();
         services.AddScoped<IShapeDrawerProvider, ShapeDrawerProvider>();
         services.AddScoped<IVideoEncoderChecker, VideoEncoderChecker>();
+        services.AddScoped<ICommercialFeaturesReporter, CommercialFeaturesReporter>();
 
         services.AddSingleton<IObjectDetector, ObjectDetector>();
         services.AddSingleton<IFileSystem, FileSystem>();

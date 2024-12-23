@@ -1,4 +1,5 @@
-﻿using Deface.NET.Configuration.Provider;
+﻿using Deface.NET.CommercialFeatures.Interfaces;
+using Deface.NET.Configuration.Provider;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 
@@ -14,9 +15,12 @@ public class ServiceScopeFactoryExtensionsTests
         var serviceScopeFactory = Substitute.For<IServiceScopeFactory>();
         var serviceScope = Substitute.For<IServiceScope>();
         var scopedSettingsProvider = Substitute.For<IScopedSettingsProvider>();
+        var commercialFeaturesReporter = Substitute.For<ICommercialFeaturesReporter>();
 
         serviceScopeFactory.CreateScope().Returns(serviceScope);
         serviceScope.ServiceProvider.GetService(typeof(IScopedSettingsProvider)).Returns(scopedSettingsProvider);
+        serviceScope.ServiceProvider.GetService(typeof(ICommercialFeaturesReporter)).Returns(commercialFeaturesReporter);
+
 
         Action<Settings> customSettings = _ => { };
 
@@ -38,9 +42,12 @@ public class ServiceScopeFactoryExtensionsTests
         var serviceScopeFactory = Substitute.For<IServiceScopeFactory>();
         var serviceScope = Substitute.For<IServiceScope>();
         var scopedSettingsProvider = Substitute.For<IScopedSettingsProvider>();
+        var commercialFeaturesReporter = Substitute.For<ICommercialFeaturesReporter>();
 
         serviceScopeFactory.CreateScope().Returns(serviceScope);
+
         serviceScope.ServiceProvider.GetService(typeof(IScopedSettingsProvider)).Returns(scopedSettingsProvider);
+        serviceScope.ServiceProvider.GetService(typeof(ICommercialFeaturesReporter)).Returns(commercialFeaturesReporter);
 
         // Act
 
@@ -49,6 +56,6 @@ public class ServiceScopeFactoryExtensionsTests
         // Assert
 
         result.Should().Be(serviceScope);
-        scopedSettingsProvider.DidNotReceive().Init(Arg.Any<Action<Settings>>());
+        scopedSettingsProvider.Received(1).Init(Arg.Any<Action<Settings>>());
     }
 }

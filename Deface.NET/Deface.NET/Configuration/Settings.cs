@@ -76,6 +76,11 @@ public class Settings : IValidable
     /// </summary>
     public EncodingCodec EncodingCodec { get; set; } = EncodingCodec.VP9;
 
+    /// <summary>
+    /// Disables logging for commercial features.
+    /// </summary>
+    public bool HideCommercialFeaturesInfo { get; set; } = false;
+
     internal Settings(Action<Settings>? builderAction)
     {
         ApplyAction(builderAction);
