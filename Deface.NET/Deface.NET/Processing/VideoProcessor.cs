@@ -60,25 +60,26 @@ internal sealed class VideoProcessor
         var progressLogger = _logger.GetProgressLogger();
         progressLogger.Start();
 
+        var videoReadResult = _videoReader.ReadVideo(inputPath);
         List<Frame> processedFrames = [];
 
-        var videoInfo = _videoReader.ReadVideo((frameInfo) =>
+        for (var i = 0; i < videoReadResult.Frames.Count; i++)
         {
-            var processedFrame = ProcessFrame(frameInfo);
+            var processedFrame = ProcessFrame(videoReadResult.Frames[i], videoReadResult.VideoInfo, i);
             processedFrames.Add(processedFrame);
 
-            progressLogger.Log(frameInfo.Index + 1, "Processing video frames", frameInfo.TotalFrames);
-        }, inputPath);
+            progressLogger.Log(i + 1, "Processing video frames", videoReadResult.Frames.Count);
+        }
 
         var processingTime = progressLogger.Stop();
-        return new(processedFrames, videoInfo, processingTime);
+        return new(processedFrames, videoReadResult.VideoInfo, processingTime);
     }
 
-    private Frame ProcessFrame(FrameInfo frameInfo)
+    private Frame ProcessFrame(byte[] frameBytes, VideoInfo videoInfo, int index)
     {
-        var frame = _frameCreator.FromBgraArray(frameInfo.BgrData, frameInfo.Width, frameInfo.Height);
+        var frame = _frameCreator.FromBgraArray(frameBytes, videoInfo.Width, videoInfo.Height);
 
-        if (frameInfo.Index % _settings.RunDetectionEachNFrames == 0)
+        if (index % _settings.RunDetectionEachNFrames == 0)
         {
             _lastDetectedObjects = _detector.Detect(frame, _settings);
         }

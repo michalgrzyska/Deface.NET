@@ -19,24 +19,13 @@ public class VideoStreamProcessorTests
 
         using var stream = GetFramesStream(videoInfo, framesCount);
 
-        List<FrameInfo> framesProcessed = [];
-        Action<FrameInfo> action = framesProcessed.Add;
-
         // Act
 
-        processor.Process(stream, action);
+        var frames = processor.ReadAllFrames(stream);
 
         // Assert
 
-        framesProcessed.Count.Should().Be(framesCount);
-
-        if (framesProcessed.Count > 0)
-        {
-            framesProcessed.Should().OnlyContain(x =>
-                x.Width == videoInfo.Width &&
-                x.Height == videoInfo.Height &&
-                x.TotalFrames == videoInfo.TotalFrames);
-        }
+        frames.Count.Should().Be(framesCount);
     }
 
     private static MemoryStream GetFramesStream(VideoInfo videoInfo, int count = 1)

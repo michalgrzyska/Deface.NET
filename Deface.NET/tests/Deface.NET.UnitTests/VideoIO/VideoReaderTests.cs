@@ -25,8 +25,7 @@ public class VideoReaderTests(SettingsFixture settingsFixture)
 
         // Act
 
-        Action<FrameInfo> action = _ => { };
-        videoReader.ReadVideo(action, "whateva");
+        videoReader.ReadVideo("whateva");
 
         // Assert
 

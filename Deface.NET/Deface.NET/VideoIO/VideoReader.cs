@@ -16,7 +16,7 @@ internal class VideoReader
     private readonly IVideoInfoProvider _videoInfoProvider = videoInfoProvider;
     private readonly IExternalProcessFactory _externalProcessFactory = externalProcessFactory;
 
-    public VideoInfo ReadVideo(Action<FrameInfo> frameProcess, string videoFilePath)
+    public VideoReadResult ReadVideo(string videoFilePath)
     {
         var videoInfo = _videoInfoProvider.GetInfo(videoFilePath);
 
@@ -24,9 +24,9 @@ internal class VideoReader
         process.Start();
 
         VideoStreamProcessor processor = new(videoInfo);
-        processor.Process(process.OutputStream, frameProcess);
+        var frames = processor.ReadAllFrames(process.OutputStream);
 
-        return videoInfo;
+        return new(frames, videoInfo);
     }
 
     private IExternalProcess GetFfmpegProcess(VideoInfo videoInfo)

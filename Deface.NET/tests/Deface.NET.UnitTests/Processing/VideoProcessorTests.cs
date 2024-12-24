@@ -54,7 +54,7 @@ public class VideoProcessorTests
         _detector.Received(framesCount).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
         shapeDrawer.Received(framesCount).Draw(Arg.Any<Frame>(), Arg.Any<List<DetectedObject>>());
         _videoWriter.Received(1).WriteVideo(Arg.Any<List<Frame>>(), Arg.Any<VideoInfo>(), Arg.Any<string>());
-        _videoReader.Received(1).ReadVideo(Arg.Any<Action<FrameInfo>>(), Arg.Any<string>());
+        _videoReader.Received(1).ReadVideo(Arg.Any<string>());
     }
 
     [Fact]
@@ -125,23 +125,14 @@ public class VideoProcessorTests
     {
         var mockFrames = Enumerable
             .Range(1, 10)
-            .Select(x => TestFrameHelper.GetTestFrame(TestResources.TestResources.Photo1))
+            .Select(x => new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 })
             .ToList();
 
+        VideoReadResult videoReadResult = new(mockFrames, new VideoInfo(3, 3, 1, Fps, Fps, ""));
+
         _videoReader
-            .ReadVideo(Arg.Any<Action<FrameInfo>>(), Arg.Any<string>())
-            .Returns(call =>
-            {
-                var frameCallback = call.Arg<Action<FrameInfo>>();
-
-                for (int i = 0; i < mockFrames.Count; i++)
-                {
-                    FrameInfo fi = new(mockFrames[i].Bytes, i, mockFrames.Count, mockFrames[i].Width, mockFrames[i].Height);
-                    frameCallback(fi);
-                }
-
-                return new VideoInfo(FrameSize, FrameSize, mockFrames.Count, Fps, Fps, "");
-            });
+            .ReadVideo(Arg.Any<string>())
+            .Returns(videoReadResult);
 
         return mockFrames.Count;
     }

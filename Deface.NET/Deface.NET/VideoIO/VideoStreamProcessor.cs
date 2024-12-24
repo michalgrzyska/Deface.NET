@@ -5,7 +5,6 @@ namespace Deface.NET.VideoIO;
 
 internal class VideoStreamProcessor
 {
-    private readonly VideoInfo _videoInfo;
     private readonly int _frameSize;
 
     private readonly byte[] _buffer = [];
@@ -15,16 +14,15 @@ internal class VideoStreamProcessor
 
     public VideoStreamProcessor(VideoInfo videoInfo)
     {
-        _videoInfo = videoInfo;
         _frameSize = videoInfo.Width * videoInfo.Height * Frame.ChannelsCount;
 
         _buffer = new byte[_frameSize];
         _rolloverBuffer = new byte[_frameSize];
     }
 
-    public void Process(Stream stream, Action<FrameInfo> action)
+    public List<byte[]> ReadAllFrames(Stream stream)
     {
-        var i = 0;
+        List<byte[]> frames = [];
 
         while (true)
         {
@@ -39,19 +37,18 @@ internal class VideoStreamProcessor
 
             while (_totalBytesRead >= _frameSize)
             {
-                ProcessFrame(i, action);
-                i++;
+                var frame = GetFrame();
+                frames.Add(frame);
             }
         }
+
+        return frames;
     }
 
-    private void ProcessFrame(int i, Action<FrameInfo> action)
+    private byte[] GetFrame()
     {
-        var frameData = new byte[_frameSize];
-        Array.Copy(_buffer, 0, frameData, 0, _frameSize);
-
-        FrameInfo frameInfo = new(frameData, i, _videoInfo.TotalFrames, _videoInfo.Width, _videoInfo.Height);
-        action(frameInfo);
+        var frame = new byte[_frameSize];
+        Array.Copy(_buffer, 0, frame, 0, _frameSize);
 
         int excessBytes = _totalBytesRead - _frameSize;
 
@@ -62,5 +59,7 @@ internal class VideoStreamProcessor
 
         Array.Copy(_rolloverBuffer, 0, _buffer, 0, excessBytes);
         _totalBytesRead = excessBytes;
+
+        return frame;
     }
 }
