@@ -24,6 +24,9 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider, IExternalPr
         {
             ffmpegInput.Write(frame.Bytes);
         }
+
+        ffmpegInput.Close();
+        ffmpegProcess.WaitForExit();
     }
 
     private IExternalProcess GetFfmpegProcess(VideoInfo videoInfo, string outputPath)

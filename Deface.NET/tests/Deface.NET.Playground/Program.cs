@@ -17,7 +17,7 @@ IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
     options.EncodingCodec = EncodingCodec.H264;
 });
 
-var result = defaceService.ProcessVideo(TestResources.Video_Short_HD_1280_720_24fps, "\"C://DefaceTest//testt.mp4");
+var result = defaceService.ProcessVideo(TestResources.Video_Very_Short_480p, "\"C://DefaceTest//testt.mp4");
 
 //var result = defaceService.ProcessImage(TestResources.Photo3, "C://DefaceTest//4.png");
 
