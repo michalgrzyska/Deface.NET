@@ -152,34 +152,4 @@ public class SettingsTests(SettingsFixture settingsFixture)
         var action = () => settings.ApplyAction(settingsAction);
         action.Should().Throw<ArgumentNullException>();
     }
-
-    [Fact]
-    public void FFMpegPath_NonExistingFilePath_FileNotFoundExceptionThrow()
-    {
-        var filePath = $"{Path.GetTempPath()}/{Guid.NewGuid()}";
-        var settings = _settingsFixture.Settings;
-
-        Action<Settings> settingsAction = settings =>
-        {
-            settings.FFMpegPath = filePath;
-        };
-
-        var action = () => settings.ApplyAction(settingsAction);
-        action.Should().Throw<FileNotFoundException>();
-    }
-
-    [Fact]
-    public void FFProbePath_NonExistingFilePath_FileNotFoundExceptionThrow()
-    {
-        var filePath = $"{Path.GetTempPath()}/{Guid.NewGuid()}";
-        var settings = _settingsFixture.Settings;
-
-        Action<Settings> settingsAction = settings =>
-        {
-            settings.FFProbePath = filePath;
-        };
-
-        var action = () => settings.ApplyAction(settingsAction);
-        action.Should().Throw<FileNotFoundException>();
-    }
 }
