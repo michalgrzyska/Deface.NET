@@ -1,6 +1,7 @@
 ﻿using Deface.NET.UnitTests.Graphics.Helpers;
 using Deface.NET.VideoIO.Helpers;
 using Deface.NET.VideoIO.Models;
+using NSubstitute.ExceptionExtensions;
 
 namespace Deface.NET.UnitTests.VideoIO;
 public class VideoInfoHelperTests
@@ -32,12 +33,12 @@ public class VideoInfoHelperTests
 
         // Assert
 
-        result.Should().NotBeNull();
+        result.ShouldNotBeNull();
         result.ShouldBe(1920, 1080);
-        result.TotalFrames.Should().Be(300);
-        result.TargetFps.Should().Be(30f);
-        result.AverageFps.Should().Be(29f);
-        result.Path.Should().Be(filePath);
+        result.TotalFrames.ShouldBe(300);
+        result.TargetFps.ShouldBe(30f);
+        result.AverageFps.ShouldBe(29f);
+        result.Path.ShouldBe(filePath);
     }
 
     [Fact]
@@ -54,7 +55,7 @@ public class VideoInfoHelperTests
 
         // Assert
 
-        action.Should().Throw<InvalidOperationException>();
+        action.ShouldThrow<InvalidOperationException>();
     }
 
     [Fact]
@@ -64,7 +65,7 @@ public class VideoInfoHelperTests
 
         var result = VideoInfoHelper.ParseFrameRateString(frameRateString);
 
-        result.Should().Be(24f);
+        result.ShouldBe(24f);
     }
 
     [Fact]
@@ -74,6 +75,6 @@ public class VideoInfoHelperTests
 
         var action = () => VideoInfoHelper.ParseFrameRateString(frameRateString);
 
-        action.Should().Throw<FormatException>();
+        Should.Throw<FormatException>(() => action());
     }
 }

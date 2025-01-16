@@ -25,7 +25,7 @@ public class VideoStreamProcessorTests
 
         // Assert
 
-        frames.Count.Should().Be(framesCount);
+        frames.Count.ShouldBe(framesCount);
     }
 
     private static MemoryStream GetFramesStream(VideoInfo videoInfo, int count = 1)

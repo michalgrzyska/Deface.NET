@@ -17,8 +17,8 @@ public class DProgressLoggerTests
 
         var timespan = dLogger.Stop();
 
-        timespan.Should().NotBe(TimeSpan.Zero);
-        timespan.Milliseconds.Should().BeGreaterThanOrEqualTo(300);
+        timespan.ShouldNotBe(TimeSpan.Zero);
+        timespan.Milliseconds.ShouldBeGreaterThanOrEqualTo(300);
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public class DProgressLoggerTests
         dLogger.Start();
         dLogger.Stop();
 
-        _logger.Collector.Count.Should().Be(0);
+        _logger.Collector.Count.ShouldBe(0);
     }
 
     [Fact]
@@ -44,7 +44,7 @@ public class DProgressLoggerTests
 
         dLogger.Stop();
 
-        _logger.Collector.Count.Should().Be(0);
+        _logger.Collector.Count.ShouldBe(0);
     }
 
     [Theory]
@@ -60,7 +60,7 @@ public class DProgressLoggerTests
 
         dLogger.Log(1, "", 1);
 
-        _logger.Collector.Count.Should().Be(shouldLog ? 1 : 0);
+        _logger.Collector.Count.ShouldBe(shouldLog ? 1 : 0);
     }
 
     private DProgressLogger<object> GetDProgressLogger(LoggingLevel level = LoggingLevel.Detailed)

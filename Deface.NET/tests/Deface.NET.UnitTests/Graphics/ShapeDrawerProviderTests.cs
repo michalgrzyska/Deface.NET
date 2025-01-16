@@ -17,7 +17,7 @@ public class ShapeDrawerProviderTests(SettingsFixture settingsFixture)
 
         ShapeDrawerProvider provider = new(settingsProvider);
 
-        provider.ShapeDrawer.Should().BeAssignableTo<GaussianBlurShapeDrawer>();
+        provider.ShapeDrawer.ShouldBeAssignableTo<GaussianBlurShapeDrawer>();
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class ShapeDrawerProviderTests(SettingsFixture settingsFixture)
 
         ShapeDrawerProvider provider = new(settingsProvider);
 
-        provider.ShapeDrawer.Should().BeAssignableTo<MosaicShapeDrawer>();
+        provider.ShapeDrawer.ShouldBeAssignableTo<MosaicShapeDrawer>();
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public class ShapeDrawerProviderTests(SettingsFixture settingsFixture)
 
         ShapeDrawerProvider provider = new(settingsProvider);
 
-        provider.ShapeDrawer.Should().BeAssignableTo<ColorShapeDrawer>();
+        provider.ShapeDrawer.ShouldBeAssignableTo<ColorShapeDrawer>();
     }
 
     private IScopedSettingsProvider GetSettingsProvider(AnonimizationMethod method)

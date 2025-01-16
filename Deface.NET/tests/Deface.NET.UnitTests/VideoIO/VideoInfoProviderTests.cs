@@ -35,10 +35,10 @@ public class VideoInfoProviderTests(SettingsFixture settingsFixture)
         var testStreamOutput = testOutput.Streams[0];
 
         result.ShouldBe(testStreamOutput.Width, testStreamOutput.Height);
-        result.TotalFrames.Should().Be(int.Parse(testStreamOutput.Frames));
-        result.AverageFps.Should().Be(VideoInfoHelper.ParseFrameRateString(testStreamOutput.AverageFrameRate));
-        result.TargetFps.Should().Be(VideoInfoHelper.ParseFrameRateString(testStreamOutput.TargetFrameRate));
-        result.Path.Should().Be(path);
+        result.TotalFrames.ShouldBe(int.Parse(testStreamOutput.Frames));
+        result.AverageFps.ShouldBe(VideoInfoHelper.ParseFrameRateString(testStreamOutput.AverageFrameRate));
+        result.TargetFps.ShouldBe(VideoInfoHelper.ParseFrameRateString(testStreamOutput.TargetFrameRate));
+        result.Path.ShouldBe(path);
     }
 
     private IExternalProcessFactory GetExternalProcessFactory(VideoInfoOutput testOutput)

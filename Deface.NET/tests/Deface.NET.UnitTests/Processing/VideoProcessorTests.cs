@@ -74,11 +74,11 @@ public class VideoProcessorTests
 
         // Assert
 
-        result.Fps.Should().Be(Fps);
-        result.InputFile.Should().Be(inputFile);
-        result.OutputFile.Should().Be(outputFile);
-        result.ProcessingTime.Should().NotBe(TimeSpan.Zero);
-        result.Threshold.Should().Be(_settingsFixture.Settings.Threshold);
+        result.Fps.ShouldBe(Fps);
+        result.InputFile.ShouldBe(inputFile);
+        result.OutputFile.ShouldBe(outputFile);
+        result.ProcessingTime.ShouldNotBe(TimeSpan.Zero);
+        result.Threshold.ShouldBe(_settingsFixture.Settings.Threshold);
     }
 
     [Theory]

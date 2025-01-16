@@ -16,8 +16,8 @@ public class DefaceProviderTests(SettingsFixture settingsFixture)
 
         // Assert
 
-        defaceService.Should().NotBeNull();
-        defaceService.Should().BeAssignableTo<IDefaceService>();
+        defaceService.ShouldNotBeNull();
+        defaceService.ShouldBeAssignableTo<IDefaceService>();
     }
 
     [Fact]
@@ -40,8 +40,8 @@ public class DefaceProviderTests(SettingsFixture settingsFixture)
 
         // Assert
 
-        settingsActionCalled.Should().BeTrue();
-        defaceService.Should().NotBeNull();
-        defaceService.Should().BeAssignableTo<IDefaceService>();
+        settingsActionCalled.ShouldBeTrue();
+        defaceService.ShouldNotBeNull();
+        defaceService.ShouldBeAssignableTo<IDefaceService>();
     }
 }

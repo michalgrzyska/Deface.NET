@@ -89,7 +89,7 @@ public class FrameTests
 
         // Assert
 
-        result.Should().NotBeNull();
+        result.ShouldNotBeNull();
         result.ShouldBe(targetWidth, targetHeight);
     }
 

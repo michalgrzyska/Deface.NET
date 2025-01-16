@@ -32,7 +32,7 @@ public class FrameCreatorTests
 
         var action = () => _frameCreator.FromFile(path);
 
-        action.Should().Throw<DefaceException>();
+        action.ShouldThrow<DefaceException>();
     }
 
     [Fact]

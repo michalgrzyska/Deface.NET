@@ -9,21 +9,21 @@ public class AnonimizationMethodTests
     public void GaussianBlur_ProperValuesAreSet()
     {
         var anonimizationMethod = AnonimizationMethod.GaussianBlur;
-        anonimizationMethod.Type.Should().Be(AnonimizationType.GaussianBlur);
+        anonimizationMethod.Type.ShouldBe(AnonimizationType.GaussianBlur);
     }
 
     [Fact]
     public void Mosaic_ProperValuesAreSet()
     {
         var anonimizationMethod = AnonimizationMethod.Mosaic;
-        anonimizationMethod.Type.Should().Be(AnonimizationType.Mosaic);
+        anonimizationMethod.Type.ShouldBe(AnonimizationType.Mosaic);
     }
 
     [Fact]
     public void Color_ProperEnumValueIsSet()
     {
         var anonimizationMethod = AnonimizationMethod.Color(0, 0, 0);
-        anonimizationMethod.Type.Should().Be(AnonimizationType.Color);
+        anonimizationMethod.Type.ShouldBe(AnonimizationType.Color);
     }
 
     [Theory]

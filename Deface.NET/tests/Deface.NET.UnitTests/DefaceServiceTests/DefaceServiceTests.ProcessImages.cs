@@ -31,7 +31,7 @@ public partial class DefaceServiceTests
     {
         var action = () => _service.ProcessImages("test", "file");
 
-        action.Should().Throw<DirectoryNotFoundException>();
+        action.ShouldThrow<DirectoryNotFoundException>();
     }
 
     [Theory]
@@ -43,7 +43,7 @@ public partial class DefaceServiceTests
     {
         var action = () => _service.ProcessImages(inputString!, "file");
 
-        action.Should().Throw<ArgumentNullException>();
+        action.ShouldThrow<ArgumentNullException>();
     }
 
     [Theory]
@@ -63,7 +63,7 @@ public partial class DefaceServiceTests
 
         // Assert
 
-        action.Should().Throw<ArgumentNullException>();
+        action.ShouldThrow<ArgumentNullException>();
 
         // Cleanup
 

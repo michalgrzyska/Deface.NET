@@ -17,7 +17,7 @@ public class OnnxDetectorBaseTests(SettingsFixture settingsFixture)
 
         var action = () => new TestDetector(onnxProvider, settings, "");
 
-        action.Should().Throw<DefaceException>();
+        action.ShouldThrow<DefaceException>();
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public class OnnxDetectorBaseTests(SettingsFixture settingsFixture)
 
         var action = () => new TestDetector(onnxProvider, settings, "");
 
-        action.Should().Throw<DefaceException>();
+        action.ShouldThrow<DefaceException>();
     }
 
     private static IOnnxProvider GetOnnxProvider(bool cpuAvailable, bool gpuAvailable)

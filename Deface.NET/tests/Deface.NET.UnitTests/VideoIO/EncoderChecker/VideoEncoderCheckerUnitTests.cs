@@ -18,7 +18,7 @@ public class VideoEncoderCheckerUnitTests(SettingsFixture settingsFixture)
 
         var action = checker.CheckFfmpegCodecs;
 
-        action.Should().NotThrow();
+        action.ShouldNotThrow();
     }
 
     [Theory]
@@ -32,7 +32,7 @@ public class VideoEncoderCheckerUnitTests(SettingsFixture settingsFixture)
 
         var action = checker.CheckFfmpegCodecs;
 
-        action.Should().Throw<DefaceException>();
+        action.ShouldThrow<DefaceException>();
     }
 
     [Theory]
@@ -50,7 +50,7 @@ public class VideoEncoderCheckerUnitTests(SettingsFixture settingsFixture)
 
         var action = checker.CheckFfmpegCodecs;
 
-        action.Should().Throw<InvalidOperationException>();
+        action.ShouldThrow<InvalidOperationException>();
     }
 
     private VideoEncoderChecker GetVideoEncoderChecker(EncodingCodec codec, string output)

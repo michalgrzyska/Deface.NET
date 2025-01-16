@@ -14,7 +14,7 @@ public class ScopedSettingsProviderTests(SettingsFixture settingsFixture)
         var settings = _settingsFixture.Settings;
         ScopedSettingsProvider provider = new(settings);
 
-        provider.Settings.Threshold.Should().Be(settings.Threshold);
+        provider.Settings.Threshold.ShouldBe(settings.Threshold);
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class ScopedSettingsProviderTests(SettingsFixture settingsFixture)
             x.Threshold = threshold;
         });
 
-        provider.Settings.Threshold.Should().Be(threshold);
+        provider.Settings.Threshold.ShouldBe(threshold);
     }
 
     [Fact]
@@ -51,6 +51,6 @@ public class ScopedSettingsProviderTests(SettingsFixture settingsFixture)
             x.Threshold = 0.4f;
         });
 
-        provider.Settings.Threshold.Should().Be(threshold);
+        provider.Settings.Threshold.ShouldBe(threshold);
     }
 }

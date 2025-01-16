@@ -109,7 +109,7 @@ public class MosaicShapeDrawerTests(SettingsFixture settingsFixture) : ShapeDraw
         var originalUniqueColors = originalPixels.GroupBy(x => new { x.R, x.G, x.B }).Count();
         var actualUniqueColors = actualPixels.GroupBy(x => new { x.R, x.G, x.B }).Count();
 
-        actualUniqueColors.Should().BeLessThan(originalUniqueColors);
+        actualUniqueColors.ShouldBeLessThan(originalUniqueColors);
     }
 
     internal override IShapeDrawer GetShapeDrawer(Settings settings)

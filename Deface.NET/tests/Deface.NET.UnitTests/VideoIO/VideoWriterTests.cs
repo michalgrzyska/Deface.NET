@@ -38,7 +38,7 @@ public class VideoWriterTests(SettingsFixture settingsFixture)
         // Assert
 
         externalProcessFactory.Received(1).CreateExternalProcess(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>());
-        stream.WriteCount.Should().Be(frames.Count);
+        stream.WriteCount.ShouldBe(frames.Count);
     }
 
     private static IExternalProcessFactory GetExternalProcessFactory(Stream stream)

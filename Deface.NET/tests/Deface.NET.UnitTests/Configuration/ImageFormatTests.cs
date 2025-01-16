@@ -9,8 +9,8 @@ public class ImageFormatTests
     {
         var imageFormat = ImageFormat.Png;
 
-        imageFormat.Quality.Should().Be(100);
-        imageFormat.Format.Should().Be(SKEncodedImageFormat.Png);
+        imageFormat.Quality.ShouldBe(100);
+        imageFormat.Format.ShouldBe(SKEncodedImageFormat.Png);
     }
 
     [Theory]
@@ -22,8 +22,8 @@ public class ImageFormatTests
     {
         var imageFormat = ImageFormat.Jpeg(quality);
 
-        imageFormat.Quality.Should().Be(quality);
-        imageFormat.Format.Should().Be(SKEncodedImageFormat.Jpeg);
+        imageFormat.Quality.ShouldBe(quality);
+        imageFormat.Format.ShouldBe(SKEncodedImageFormat.Jpeg);
     }
 
     [Theory]
@@ -38,7 +38,6 @@ public class ImageFormatTests
 
         var action = () => imageFormat.Validate();
 
-        action.Should().Throw<ArgumentOutOfRangeException>();
-
+        action.ShouldThrow<ArgumentOutOfRangeException>();
     }
 }

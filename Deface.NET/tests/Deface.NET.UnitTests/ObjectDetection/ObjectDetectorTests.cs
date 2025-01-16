@@ -50,6 +50,6 @@ public class ObjectDetectorTests
         // Assert
 
         _faceDetector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
-        objects.Should().OnlyContain(x => x.IsResized);
+        objects.ShouldAllBe(x => x.IsResized);
     }
 }

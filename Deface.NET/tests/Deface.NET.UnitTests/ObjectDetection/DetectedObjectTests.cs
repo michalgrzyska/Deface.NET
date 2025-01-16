@@ -14,7 +14,7 @@ public class DetectedObjectTests
         var result = detectedObject.GetResized(1.0f);
 
         // Assert
-        result.Should().BeSameAs(detectedObject);
+        result.ShouldBeSameAs(detectedObject);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class DetectedObjectTests
         var result = detectedObject.GetResized(2.0f);
 
         // Assert
-        result.Should().BeSameAs(detectedObject);
+        result.ShouldBeSameAs(detectedObject);
     }
 
     [Fact]
@@ -41,11 +41,11 @@ public class DetectedObjectTests
         var result = detectedObject.GetResized(scaleFactor);
 
         // Assert
-        result.X1.Should().Be(5);
-        result.Y1.Should().Be(5);
-        result.X2.Should().Be(25);
-        result.Y2.Should().Be(25);
-        result.IsResized.Should().BeTrue();
+        result.X1.ShouldBe(5);
+        result.Y1.ShouldBe(5);
+        result.X2.ShouldBe(25);
+        result.Y2.ShouldBe(25);
+        result.IsResized.ShouldBeTrue();
     }
 
     [Fact]
@@ -59,11 +59,11 @@ public class DetectedObjectTests
         var result = detectedObject.GetResized(scaleFactor);
 
         // Assert
-        result.X1.Should().Be(15);
-        result.Y1.Should().Be(15);
-        result.X2.Should().Be(25);
-        result.Y2.Should().Be(25);
-        result.IsResized.Should().BeTrue();
+        result.X1.ShouldBe(15);
+        result.Y1.ShouldBe(15);
+        result.X2.ShouldBe(25);
+        result.Y2.ShouldBe(25);
+        result.IsResized.ShouldBeTrue();
     }
 
     [Fact]
@@ -81,8 +81,8 @@ public class DetectedObjectTests
         var resultCenterY = (result.Y1 + result.Y2) / 2;
 
         // Assert
-        resultCenterX.Should().Be(expectedCenterX);
-        resultCenterY.Should().Be(expectedCenterY);
+        resultCenterX.ShouldBe(expectedCenterX);
+        resultCenterY.ShouldBe(expectedCenterY);
     }
 
     [Fact]
@@ -95,10 +95,10 @@ public class DetectedObjectTests
         var result = detectedObject.GetResized(2.0f);
 
         // Assert
-        result.X1.Should().Be(10);
-        result.Y1.Should().Be(10);
-        result.X2.Should().Be(10);
-        result.Y2.Should().Be(10);
-        result.IsResized.Should().BeTrue();
+        result.X1.ShouldBe(10);
+        result.Y1.ShouldBe(10);
+        result.X2.ShouldBe(10);
+        result.Y2.ShouldBe(10);
+        result.IsResized.ShouldBeTrue();
     }
 }

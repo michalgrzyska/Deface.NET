@@ -22,7 +22,7 @@ public class DLoggerTests(SettingsFixture settingsFixture)
 
         dLogger.Log(desiredLoggingLevel, "whatever");
 
-        logger.Collector.Count.Should().Be(shouldLog ? 1 : 0);
+        logger.Collector.Count.ShouldBe(shouldLog ? 1 : 0);
     }
 
     [Theory]
@@ -35,7 +35,7 @@ public class DLoggerTests(SettingsFixture settingsFixture)
 
         dLogger.LogBasic("whatever");
 
-        logger.Collector.Count.Should().Be(shouldLog ? 1 : 0);
+        logger.Collector.Count.ShouldBe(shouldLog ? 1 : 0);
     }
 
     [Theory]
@@ -48,7 +48,7 @@ public class DLoggerTests(SettingsFixture settingsFixture)
 
         dLogger.LogDetailed("whatever");
 
-        logger.Collector.Count.Should().Be(shouldLog ? 1 : 0);
+        logger.Collector.Count.ShouldBe(shouldLog ? 1 : 0);
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class DLoggerTests(SettingsFixture settingsFixture)
 
         var progressLogger = dLogger.GetProgressLogger();
 
-        progressLogger.Should().NotBeNull();
+        progressLogger.ShouldNotBeNull();
     }
 
     private (DLogger<object>, FakeLogger<object>) GetDLogger(LoggingLevel loggingLevel)

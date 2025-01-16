@@ -19,7 +19,7 @@ public abstract class ICommercialFeatureBaseTests
         var name = commercialFeature.Name;
 
         // Assert
-        name.Should().NotBeNullOrEmpty();
+        name.ShouldNotBeNullOrEmpty();
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public abstract class ICommercialFeatureBaseTests
         var urls = commercialFeature.Urls;
 
         // Assert
-        urls.Should().NotBeNullOrEmpty();
+        urls.ShouldNotBeEmpty();
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public abstract class ICommercialFeatureBaseTests
         var isEnabled = commercialFeature.IsEnabled(EnabledSettings);
 
         // Assert
-        isEnabled.Should().BeTrue();
+        isEnabled.ShouldBeTrue();
     }
 
     [Fact]
@@ -58,6 +58,6 @@ public abstract class ICommercialFeatureBaseTests
         var isEnabled = commercialFeature.IsEnabled(DisabledSettings);
 
         // Assert
-        isEnabled.Should().BeFalse();
+        isEnabled.ShouldBeFalse();
     }
 }

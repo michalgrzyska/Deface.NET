@@ -34,7 +34,7 @@ public class UltraFaceDetectorTests : IDisposable
 
         var result = _detector.Detect(frame, settings);
 
-        result.Count.Should().Be(expectedFaces);
+        result.Count.ShouldBe(expectedFaces);
     }
 
     public void Dispose() => _detector.Dispose();

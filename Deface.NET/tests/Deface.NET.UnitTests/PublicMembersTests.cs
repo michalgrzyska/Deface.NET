@@ -8,6 +8,6 @@ public class PublicMembersTests
         var assembly = typeof(DefaceService).Assembly;
         var publicTypes = assembly.GetExportedTypes();
 
-        publicTypes.Should().OnlyContain(x => x.Namespace == "Deface.NET");
+        publicTypes.ShouldAllBe(x => x.Namespace == "Deface.NET");
     }
 }

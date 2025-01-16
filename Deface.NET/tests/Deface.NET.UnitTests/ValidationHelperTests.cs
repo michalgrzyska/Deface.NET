@@ -10,7 +10,7 @@ public class ValidationHelperTests
     public void MustBeGreaterOrEqualTo_WithValidValues_ShouldNotThrow(int prop, int value)
     {
         var act = () => ValidationHelper.MustBeGreaterOrEqualTo(prop, value, nameof(prop));
-        act.Should().NotThrow();
+        act.ShouldNotThrow();
     }
 
     [Fact]
@@ -20,7 +20,7 @@ public class ValidationHelperTests
         var value = 5;
 
         var act = () => ValidationHelper.MustBeGreaterOrEqualTo(prop, value, nameof(prop));
-        act.Should().Throw<ArgumentOutOfRangeException>();
+        act.ShouldThrow<ArgumentOutOfRangeException>();
     }
 
     [Theory]
@@ -29,7 +29,7 @@ public class ValidationHelperTests
     public void MustBeLessThanOrEqualTo_WithValidValues_ShouldNotThrow(int prop, int value)
     {
         var act = () => ValidationHelper.MustBeLessThanOrEqualTo(prop, value, nameof(prop));
-        act.Should().NotThrow();
+        act.ShouldNotThrow();
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class ValidationHelperTests
         var value = 5;
 
         var act = () => ValidationHelper.MustBeLessThanOrEqualTo(prop, value, nameof(prop));
-        act.Should().Throw<ArgumentOutOfRangeException>();
+        act.ShouldThrow<ArgumentOutOfRangeException>();
     }
 
     [Theory]
@@ -48,7 +48,7 @@ public class ValidationHelperTests
     public void MustNotBeNullOrWhiteSpace_WithValidStrings_ShouldNotThrow(string prop)
     {
         var act = () => ValidationHelper.MustNotBeNullOrWhiteSpace(prop, nameof(prop));
-        act.Should().NotThrow();
+        act.ShouldNotThrow();
     }
 
     [Theory]
@@ -58,7 +58,7 @@ public class ValidationHelperTests
     public void MustNotBeNullOrWhiteSpace_WithInvalidStrings_ShouldThrowArgumentNullException(string? prop)
     {
         var act = () => ValidationHelper.MustNotBeNullOrWhiteSpace(prop!, nameof(prop));
-        act.Should().Throw<ArgumentNullException>();
+        act.ShouldThrow<ArgumentNullException>();
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class ValidationHelperTests
         var existingFilePath = Path.GetTempFileName();
 
         var act = () => ValidationHelper.FileMustExist(existingFilePath, nameof(existingFilePath));
-        act.Should().NotThrow();
+        act.ShouldNotThrow();
 
         File.Delete(existingFilePath);
     }
@@ -78,7 +78,7 @@ public class ValidationHelperTests
         var nonExistentFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         var act = () => ValidationHelper.FileMustExist(nonExistentFilePath, nameof(nonExistentFilePath));
-        act.Should().Throw<FileNotFoundException>();
+        act.ShouldThrow<FileNotFoundException>();
     }
 
     [Fact]
@@ -87,7 +87,7 @@ public class ValidationHelperTests
         string existingDirectoryPath = Path.GetTempPath();
 
         var act = () => ValidationHelper.DirectoryMustExist(existingDirectoryPath, nameof(existingDirectoryPath));
-        act.Should().NotThrow();
+        act.ShouldNotThrow();
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public class ValidationHelperTests
         var nonExistentDirectoryPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         var act = () => ValidationHelper.DirectoryMustExist(nonExistentDirectoryPath, nameof(nonExistentDirectoryPath));
-        act.Should().Throw<DirectoryNotFoundException>();
+        act.ShouldThrow<DirectoryNotFoundException>();
     }
 
     [Fact]
@@ -105,7 +105,7 @@ public class ValidationHelperTests
         string existingFilePath = Path.GetTempFileName();
 
         var act = () => ValidationHelper.ValidateFilePath(existingFilePath, nameof(existingFilePath));
-        act.Should().NotThrow();
+        act.ShouldNotThrow();
 
         File.Delete(existingFilePath);
     }
@@ -117,7 +117,7 @@ public class ValidationHelperTests
     public void ValidateFilePath_WithInvalidPath_ShouldThrowArgumentNullException(string? path)
     {
         var act = () => ValidationHelper.ValidateFilePath(path!, nameof(path));
-        act.Should().Throw<ArgumentNullException>();
+        act.ShouldThrow<ArgumentNullException>();
     }
 
     [Fact]
@@ -126,7 +126,7 @@ public class ValidationHelperTests
         var nonExistentFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         var act = () => ValidationHelper.ValidateFilePath(nonExistentFilePath, nameof(nonExistentFilePath));
-        act.Should().Throw<FileNotFoundException>();
+        act.ShouldThrow<FileNotFoundException>();
     }
 
     [Fact]
@@ -135,7 +135,7 @@ public class ValidationHelperTests
         var existingDirectoryPath = Path.GetTempPath();
 
         var act = () => ValidationHelper.ValidateDirectoryPath(existingDirectoryPath, nameof(existingDirectoryPath));
-        act.Should().NotThrow();
+        act.ShouldNotThrow();
     }
 
     [Theory]
@@ -145,7 +145,7 @@ public class ValidationHelperTests
     public void ValidateDirectoryPath_WithInvalidPath_ShouldThrowArgumentNullException(string? path)
     {
         var act = () => ValidationHelper.ValidateDirectoryPath(path!, nameof(path));
-        act.Should().Throw<ArgumentNullException>();
+        act.ShouldThrow<ArgumentNullException>();
     }
 
     [Fact]
@@ -154,6 +154,6 @@ public class ValidationHelperTests
         string nonExistentDirectoryPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         var act = () => ValidationHelper.ValidateDirectoryPath(nonExistentDirectoryPath, nameof(nonExistentDirectoryPath));
-        act.Should().Throw<DirectoryNotFoundException>();
+        act.ShouldThrow<DirectoryNotFoundException>();
     }
 }

@@ -30,7 +30,7 @@ public class ServiceScopeFactoryExtensionsTests
 
         // Assert
 
-        result.Should().Be(serviceScope);
+        result.ShouldBe(serviceScope);
         scopedSettingsProvider.Received(1).Init(customSettings);
     }
 
@@ -55,7 +55,7 @@ public class ServiceScopeFactoryExtensionsTests
 
         // Assert
 
-        result.Should().Be(serviceScope);
+        result.ShouldBe(serviceScope);
         scopedSettingsProvider.Received(1).Init(Arg.Any<Action<Settings>>());
     }
 }

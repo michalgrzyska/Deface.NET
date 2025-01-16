@@ -23,7 +23,7 @@ public class SettingsTests(SettingsFixture settingsFixture)
 
         var testAction = () => settings.ApplyAction(settingsAction);
 
-        testAction.Should().Throw<ArgumentOutOfRangeException>();
+        testAction.ShouldThrow<ArgumentOutOfRangeException>();
     }
 
     [Theory]
@@ -59,7 +59,7 @@ public class SettingsTests(SettingsFixture settingsFixture)
 
         var action = () => settings.ApplyAction(settingsAction);
 
-        action.Should().Throw<ArgumentOutOfRangeException>();
+        action.ShouldThrow<ArgumentOutOfRangeException>();
     }
 
     [Theory]
@@ -99,7 +99,7 @@ public class SettingsTests(SettingsFixture settingsFixture)
 
         var action = () => settings.ApplyAction(settingsAction);
 
-        action.Should().Throw<ArgumentOutOfRangeException>();
+        action.ShouldThrow<ArgumentOutOfRangeException>();
     }
 
     [Theory]
@@ -133,7 +133,7 @@ public class SettingsTests(SettingsFixture settingsFixture)
         };
 
         var action = () => settings.ApplyAction(settingsAction);
-        action.Should().Throw<ArgumentNullException>();
+        action.ShouldThrow<ArgumentNullException>();
     }
 
     [Theory]
@@ -150,6 +150,6 @@ public class SettingsTests(SettingsFixture settingsFixture)
         };
 
         var action = () => settings.ApplyAction(settingsAction);
-        action.Should().Throw<ArgumentNullException>();
+        action.ShouldThrow<ArgumentNullException>();
     }
 }
