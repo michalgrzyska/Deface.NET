@@ -11,6 +11,6 @@ public class UnitTest1
             options.FFProbePath = "ffprobe";
         });
 
-        var result = defaceService.ProcessVideo(TestResources.TestResources.Video_Very_Short_480p, "\"C://DefaceTest//testt.mp4");
+        var result = defaceService.ProcessVideo(TestResources.TestResources.Video_Very_Short_480p, "test");
     }
 }

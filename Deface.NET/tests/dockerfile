@@ -1,0 +1,14 @@
+# Use an official .NET SDK base image for building and testing
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+# Install FFmpeg
+RUN apt-get update && apt-get install -y ffmpeg
+
+# Set working directory
+WORKDIR /app
+
+# Copy the test project files
+COPY ./Deface.NET.IntegrationTests IntegrationTests
+
+# Entry point for running tests
+CMD ["dotnet", "test", "--no-build", "IntegrationTests", "--logger:console"]
