@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C848643C-D471-4293-A8AA-07E8D176765A}"
 	ProjectSection(SolutionItems) = preProject
 		tests\Deface.NET.UnitTests\code-coverage-report.ps1 = tests\Deface.NET.UnitTests\code-coverage-report.ps1
+		tests\dockerfile = tests\dockerfile
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deface.NET.PerformanceTestRunner", "tests\Deface.NET.PerformanceTestRunner\Deface.NET.PerformanceTestRunner.csproj", "{A53CE0D6-9C18-45FA-9E40-F8A6AFA654BE}"
@@ -17,6 +18,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deface.NET.UnitTests", "tests\Deface.NET.UnitTests\Deface.NET.UnitTests.csproj", "{80E1EA70-C703-44A0-BEDA-5A081F483BE9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deface.NET.Playground", "tests\Deface.NET.Playground\Deface.NET.Playground.csproj", "{C1938B95-F609-4F9B-B92D-3A718D520870}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deface.NET.IntegrationTests", "tests\Deface.NET.IntegrationTests\Deface.NET.IntegrationTests.csproj", "{764ACF6D-2600-4F2B-9D7E-310AE4C7B86A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deface.NET.IntegrationTests.Runner", "tests\Deface.NET.IntegrationTests.Runner\Deface.NET.IntegrationTests.Runner.csproj", "{46566CC7-6656-4647-84A3-A7D858228AF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +71,22 @@ Global
 		{C1938B95-F609-4F9B-B92D-3A718D520870}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C1938B95-F609-4F9B-B92D-3A718D520870}.Release|x64.ActiveCfg = Release|Any CPU
 		{C1938B95-F609-4F9B-B92D-3A718D520870}.Release|x64.Build.0 = Release|Any CPU
+		{764ACF6D-2600-4F2B-9D7E-310AE4C7B86A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{764ACF6D-2600-4F2B-9D7E-310AE4C7B86A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{764ACF6D-2600-4F2B-9D7E-310AE4C7B86A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{764ACF6D-2600-4F2B-9D7E-310AE4C7B86A}.Debug|x64.Build.0 = Debug|Any CPU
+		{764ACF6D-2600-4F2B-9D7E-310AE4C7B86A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{764ACF6D-2600-4F2B-9D7E-310AE4C7B86A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{764ACF6D-2600-4F2B-9D7E-310AE4C7B86A}.Release|x64.ActiveCfg = Release|Any CPU
+		{764ACF6D-2600-4F2B-9D7E-310AE4C7B86A}.Release|x64.Build.0 = Release|Any CPU
+		{46566CC7-6656-4647-84A3-A7D858228AF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46566CC7-6656-4647-84A3-A7D858228AF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46566CC7-6656-4647-84A3-A7D858228AF7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{46566CC7-6656-4647-84A3-A7D858228AF7}.Debug|x64.Build.0 = Debug|Any CPU
+		{46566CC7-6656-4647-84A3-A7D858228AF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46566CC7-6656-4647-84A3-A7D858228AF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46566CC7-6656-4647-84A3-A7D858228AF7}.Release|x64.ActiveCfg = Release|Any CPU
+		{46566CC7-6656-4647-84A3-A7D858228AF7}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +96,8 @@ Global
 		{23BD3810-0A54-4290-A8DB-239A188D0B6F} = {C848643C-D471-4293-A8AA-07E8D176765A}
 		{80E1EA70-C703-44A0-BEDA-5A081F483BE9} = {C848643C-D471-4293-A8AA-07E8D176765A}
 		{C1938B95-F609-4F9B-B92D-3A718D520870} = {C848643C-D471-4293-A8AA-07E8D176765A}
+		{764ACF6D-2600-4F2B-9D7E-310AE4C7B86A} = {C848643C-D471-4293-A8AA-07E8D176765A}
+		{46566CC7-6656-4647-84A3-A7D858228AF7} = {C848643C-D471-4293-A8AA-07E8D176765A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D2B8B0D1-CAEA-4348-9745-0C0EF7C1D8FA}

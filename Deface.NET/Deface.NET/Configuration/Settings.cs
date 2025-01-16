@@ -110,8 +110,8 @@ public class Settings : IValidable
 
         ValidationHelper.MustBeGreaterOrEqualTo(MaskScale, 1, nameof(MaskScale));
 
-        ValidationHelper.ValidateFilePath(FFMpegPath, nameof(FFMpegPath));
-        ValidationHelper.ValidateFilePath(FFProbePath, nameof(FFProbePath));
+        ValidationHelper.MustNotBeNullOrWhiteSpace(FFMpegPath, nameof(FFMpegPath));
+        ValidationHelper.MustNotBeNullOrWhiteSpace(FFProbePath, nameof(FFProbePath));
 
         ImageFormat.Validate();
     }
