@@ -1,5 +1,4 @@
-﻿
-namespace Deface.NET.Configuration.Provider;
+﻿namespace Deface.NET.Configuration.Provider.Interfaces;
 
 internal interface IScopedSettingsProvider
 {

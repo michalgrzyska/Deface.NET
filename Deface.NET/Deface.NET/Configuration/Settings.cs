@@ -5,7 +5,7 @@ namespace Deface.NET;
 /// <summary>
 /// Deface settings.
 /// </summary>
-public class Settings : IValidable
+public class Settings
 {
     /// <summary>
     /// Specifies amount of information provided via logging mechanism. 
@@ -91,28 +91,11 @@ public class Settings : IValidable
         if (builderAction is not null)
         {
             builderAction(this);
-            Validate();
         }
     }
 
     internal Settings Clone()
     {
         return (Settings)MemberwiseClone();
-    }
-
-    /// <inheritdoc/>
-    public void Validate()
-    {
-        ValidationHelper.MustBeGreaterOrEqualTo(Threshold, 0, nameof(Threshold));
-        ValidationHelper.MustBeLessThanOrEqualTo(Threshold, 1, nameof(Threshold));
-
-        ValidationHelper.MustBeGreaterOrEqualTo(RunDetectionEachNFrames, 1, nameof(RunDetectionEachNFrames));
-
-        ValidationHelper.MustBeGreaterOrEqualTo(MaskScale, 1, nameof(MaskScale));
-
-        ValidationHelper.MustNotBeNullOrWhiteSpace(FFMpegPath, nameof(FFMpegPath));
-        ValidationHelper.MustNotBeNullOrWhiteSpace(FFProbePath, nameof(FFProbePath));
-
-        ImageFormat.Validate();
     }
 }

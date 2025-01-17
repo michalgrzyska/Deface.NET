@@ -1,8 +1,12 @@
-﻿namespace Deface.NET.Configuration.Provider;
+﻿using Deface.NET.Configuration.Provider.Interfaces;
+using Deface.NET.Configuration.Validation;
 
-internal class ScopedSettingsProvider(Settings settings) : IScopedSettingsProvider
+namespace Deface.NET.Configuration.Provider;
+
+internal class ScopedSettingsProvider(ISettingsProvider settingsProvider, ISettingsValidator settingsValidator) : IScopedSettingsProvider
 {
-    private readonly Settings _settings = settings;
+    private readonly ISettingsValidator settingsValidator = settingsValidator;
+    private readonly Settings _settings = settingsProvider.Settings;
 
     private Settings? _scopedSettings;
     private bool _isInitiated;
@@ -21,6 +25,7 @@ internal class ScopedSettingsProvider(Settings settings) : IScopedSettingsProvid
         if (action != null) 
         {
             settingsClone.ApplyAction(action);
+            settingsValidator.Validate(settingsClone);
         }
 
         _scopedSettings = settingsClone;

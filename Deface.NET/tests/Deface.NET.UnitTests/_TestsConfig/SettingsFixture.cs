@@ -1,4 +1,4 @@
-﻿using Deface.NET.Configuration.Provider;
+﻿using Deface.NET.Configuration.Provider.Interfaces;
 using NSubstitute;
 
 namespace Deface.NET.UnitTests._TestsConfig;

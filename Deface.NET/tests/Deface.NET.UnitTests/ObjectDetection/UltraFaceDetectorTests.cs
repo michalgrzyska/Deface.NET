@@ -1,4 +1,5 @@
-﻿using Deface.NET.ObjectDetection.ONNX;
+﻿using Deface.NET.Configuration.Provider.Interfaces;
+using Deface.NET.ObjectDetection.ONNX;
 using Deface.NET.ObjectDetection.UltraFace;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
@@ -15,7 +16,11 @@ public class UltraFaceDetectorTests : IDisposable
     public UltraFaceDetectorTests(SettingsFixture settingsFixture)
     {
         _settingsFixture = settingsFixture;
-        _detector = new(GetOnnxProvider(), _settingsFixture.Settings);
+
+        var settingsProvider = Substitute.For<ISettingsProvider>();
+        settingsProvider.Settings.Returns(_settingsFixture.Settings);
+
+        _detector = new(GetOnnxProvider(), settingsProvider);
     }
 
     [Theory]

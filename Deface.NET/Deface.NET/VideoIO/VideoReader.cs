@@ -1,4 +1,4 @@
-﻿using Deface.NET.Configuration.Provider;
+﻿using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.System.ExternalProcessing;
 using Deface.NET.VideoIO.Interfaces;
 using Deface.NET.VideoIO.Models;

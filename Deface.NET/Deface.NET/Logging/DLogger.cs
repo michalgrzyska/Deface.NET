@@ -1,4 +1,4 @@
-﻿using Deface.NET.Configuration.Provider;
+﻿using Deface.NET.Configuration.Provider.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Deface.NET.Logging;

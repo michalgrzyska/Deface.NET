@@ -1,11 +1,21 @@
-﻿using Deface.NET.UnitTests._TestsConfig;
+﻿using Deface.NET.Configuration.Validation;
+using Deface.NET.UnitTests._TestsConfig;
 
-namespace Deface.NET.UnitTests.Configuration;
+namespace Deface.NET.UnitTests.Validation;
 
 [Collection(nameof(SettingsCollection))]
-public class SettingsTests(SettingsFixture settingsFixture)
+public class SettingsValidatorUnitTests
 {
-    private readonly SettingsFixture _settingsFixture = settingsFixture;
+    private readonly SettingsFixture _settingsFixture;
+    private readonly SettingsValidator _settingsValidator;
+
+    private Settings Settings => _settingsFixture.Settings.Clone();
+
+    public SettingsValidatorUnitTests(SettingsFixture settingsFixture)
+    {
+        _settingsFixture = settingsFixture;
+        _settingsValidator = new();
+    }
 
     [Theory]
     [InlineData(-1)]
@@ -14,16 +24,16 @@ public class SettingsTests(SettingsFixture settingsFixture)
     [InlineData(101)]
     public void Threshold_IncorrectValues_ThrowsArgumentOutOfRangeException(float threshold)
     {
-        var settings = _settingsFixture.Settings;
+        var settings = Settings;
 
-        Action<Settings> settingsAction = settings =>
+        settings.ApplyAction(settings =>
         {
             settings.Threshold = threshold;
-        };
+        });
 
-        var testAction = () => settings.ApplyAction(settingsAction);
+        var action = () => _settingsValidator.Validate(settings);
 
-        testAction.ShouldThrow<ArgumentOutOfRangeException>();
+        action.ShouldThrow<ArgumentOutOfRangeException>();
     }
 
     [Theory]
@@ -34,14 +44,16 @@ public class SettingsTests(SettingsFixture settingsFixture)
     [InlineData(1)]
     public void Threshold_CorrectValues_NoExceptionThrown(float threshold)
     {
-        var settings = _settingsFixture.Settings;
+        var settings = Settings;
 
-        Action<Settings> settingsAction = settings =>
+        settings.ApplyAction(settings =>
         {
             settings.Threshold = threshold;
-        };
+        });
 
-        settings.ApplyAction(settingsAction);
+        var action = () => _settingsValidator.Validate(settings);
+
+        action.ShouldNotThrow();
     }
 
     [Theory]
@@ -50,14 +62,14 @@ public class SettingsTests(SettingsFixture settingsFixture)
     [InlineData(-1000)]
     public void RunDetectionEachNFrames_IncorrectData_ThrowsArgumentOutOfRangeException(int runDetectionEachNFrames)
     {
-        var settings = _settingsFixture.Settings;
+        var settings = Settings;
 
-        Action<Settings> settingsAction = settings =>
+        settings.ApplyAction(settings =>
         {
             settings.RunDetectionEachNFrames = runDetectionEachNFrames;
-        };
+        });
 
-        var action = () => settings.ApplyAction(settingsAction);
+        var action = () => _settingsValidator.Validate(settings);
 
         action.ShouldThrow<ArgumentOutOfRangeException>();
     }
@@ -71,14 +83,16 @@ public class SettingsTests(SettingsFixture settingsFixture)
     [InlineData(1000)]
     public void RunDetectionEachNFrames_CorrectData_NoExceptionThrown(int runDetectionEachNFrames)
     {
-        var settings = _settingsFixture.Settings;
+        var settings = Settings;
 
-        Action<Settings> settingsAction = settings =>
+        settings.ApplyAction(settings =>
         {
             settings.RunDetectionEachNFrames = runDetectionEachNFrames;
-        };
+        });
 
-        settings.ApplyAction(settingsAction);
+        var action = () => _settingsValidator.Validate(settings);
+
+        action.ShouldNotThrow();
     }
 
     [Theory]
@@ -90,14 +104,14 @@ public class SettingsTests(SettingsFixture settingsFixture)
     [InlineData(-100)]
     public void MaskScale_IncorrectData_ThrowsArgumentOutOfRangeException(float maskScale)
     {
-        var settings = _settingsFixture.Settings;
+        var settings = Settings;
 
-        Action<Settings> settingsAction = settings =>
+        settings.ApplyAction(settings =>
         {
             settings.MaskScale = maskScale;
-        };
+        });
 
-        var action = () => settings.ApplyAction(settingsAction);
+        var action = () => _settingsValidator.Validate(settings);
 
         action.ShouldThrow<ArgumentOutOfRangeException>();
     }
@@ -109,14 +123,16 @@ public class SettingsTests(SettingsFixture settingsFixture)
     [InlineData(500f)]
     public void MaskScale_CorrectData_NoExceptionThrown(float maskScale)
     {
-        var settings = _settingsFixture.Settings;
+        var settings = Settings;
 
-        Action<Settings> settingsAction = settings =>
+        settings.ApplyAction(settings =>
         {
             settings.MaskScale = maskScale;
-        };
+        });
 
-        settings.ApplyAction(settingsAction);
+        var action = () => _settingsValidator.Validate(settings);
+
+        action.ShouldNotThrow();
     }
 
     [Theory]
@@ -125,16 +141,18 @@ public class SettingsTests(SettingsFixture settingsFixture)
     [InlineData(" ")]
     public void FFMpegPath_NullOrWhitespace_ArgumentNullExceptionThrown(string? value)
     {
-        var settings = _settingsFixture.Settings;
+        var settings = Settings;
 
-        Action<Settings> settingsAction = settings =>
+        settings.ApplyAction(settings =>
         {
             settings.FFMpegPath = value!;
-        };
+        });
 
-        var action = () => settings.ApplyAction(settingsAction);
+        var action = () => _settingsValidator.Validate(settings);
+
         action.ShouldThrow<ArgumentNullException>();
     }
+
 
     [Theory]
     [InlineData(null)]
@@ -142,14 +160,15 @@ public class SettingsTests(SettingsFixture settingsFixture)
     [InlineData(" ")]
     public void FFProbePath_NullOrWhitespace_ArgumentNullExceptionThrown(string? value)
     {
-        var settings = _settingsFixture.Settings;
+        var settings = Settings;
 
-        Action<Settings> settingsAction = settings =>
+        settings.ApplyAction(settings =>
         {
             settings.FFProbePath = value!;
-        };
+        });
 
-        var action = () => settings.ApplyAction(settingsAction);
+        var action = () => _settingsValidator.Validate(settings);
+
         action.ShouldThrow<ArgumentNullException>();
     }
 }

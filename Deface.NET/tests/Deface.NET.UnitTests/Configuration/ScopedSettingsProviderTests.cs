@@ -1,5 +1,8 @@
 ﻿using Deface.NET.Configuration.Provider;
+using Deface.NET.Configuration.Provider.Interfaces;
+using Deface.NET.Configuration.Validation;
 using Deface.NET.UnitTests._TestsConfig;
+using NSubstitute;
 
 namespace Deface.NET.UnitTests.Configuration;
 
@@ -12,7 +15,7 @@ public class ScopedSettingsProviderTests(SettingsFixture settingsFixture)
     public void DefaultSettings_IsASampleDefaultValueOk()
     {
         var settings = _settingsFixture.Settings;
-        ScopedSettingsProvider provider = new(settings);
+        var provider = GetScopedSettingsProvider();
 
         provider.Settings.Threshold.ShouldBe(settings.Threshold);
     }
@@ -22,8 +25,7 @@ public class ScopedSettingsProviderTests(SettingsFixture settingsFixture)
     {
         float threshold = 0.99f;
 
-        var settings = _settingsFixture.Settings;
-        ScopedSettingsProvider provider = new(settings);
+        var provider = GetScopedSettingsProvider();
 
         provider.Init(x =>
         {
@@ -38,8 +40,7 @@ public class ScopedSettingsProviderTests(SettingsFixture settingsFixture)
     {
         float threshold = 0.3f;
 
-        var settings = _settingsFixture.Settings;
-        ScopedSettingsProvider provider = new(settings);
+        var provider = GetScopedSettingsProvider();
 
         provider.Init(x =>
         {
@@ -52,5 +53,15 @@ public class ScopedSettingsProviderTests(SettingsFixture settingsFixture)
         });
 
         provider.Settings.Threshold.ShouldBe(threshold);
+    }
+
+    private ScopedSettingsProvider GetScopedSettingsProvider(Action<Settings>? action = null)
+    {
+        var settings = _settingsFixture.Settings;
+
+        var settingsProvider = Substitute.For<ISettingsProvider>();
+        settingsProvider.Settings.Returns(settings);
+
+        return new(settingsProvider, Substitute.For<ISettingsValidator>());
     }
 }

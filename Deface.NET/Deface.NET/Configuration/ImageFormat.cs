@@ -10,7 +10,7 @@ namespace Deface.NET;
 /// but output path points to ".png" file, an image will be saved with
 /// ".png" extension but with JPEG compression.
 /// </summary>
-public readonly struct ImageFormat : IValidable
+public readonly struct ImageFormat
 {
     internal SKEncodedImageFormat Format { get; private init; } = SKEncodedImageFormat.Png;
     internal int Quality { get; private init; } = 100;

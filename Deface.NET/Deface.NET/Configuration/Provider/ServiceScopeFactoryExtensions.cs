@@ -1,4 +1,5 @@
 ﻿using Deface.NET.CommercialFeatures.Interfaces;
+using Deface.NET.Configuration.Provider.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Deface.NET.Configuration.Provider;

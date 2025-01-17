@@ -1,4 +1,4 @@
-﻿using Deface.NET.Configuration.Provider;
+﻿using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.Graphics;
 using Deface.NET.Graphics.ShapeDrawers;
 using Deface.NET.UnitTests._TestsConfig;

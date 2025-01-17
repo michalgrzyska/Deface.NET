@@ -1,5 +1,5 @@
 ﻿using Deface.NET.CommercialFeatures.Interfaces;
-using Deface.NET.Configuration.Provider;
+using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.Processing;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;

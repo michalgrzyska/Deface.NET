@@ -1,5 +1,5 @@
 ﻿using Deface.NET.Configuration;
-using Deface.NET.Configuration.Provider;
+using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.ShapeDrawers;
 

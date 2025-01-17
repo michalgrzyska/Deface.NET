@@ -1,4 +1,5 @@
 ﻿using Deface.NET.Common;
+using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection.ONNX;
 using Microsoft.ML;
@@ -14,11 +15,14 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
     private const int Height = 480;
     private const float IouThreshold = 0.5f;
 
-    public UltraFaceDetector(IOnnxProvider onnxProvider, Settings settings) : base(onnxProvider, settings, AppFiles.UltraFaceONNX)
+    // GpuDeviceId goes from global settings
+    public UltraFaceDetector(IOnnxProvider onnxProvider, ISettingsProvider settingsProvider) 
+        : base(onnxProvider, settingsProvider.Settings, AppFiles.UltraFaceONNX)
     {
         _predictionEngine = GetPredictionEngine();
     }
 
+    // We can pass other values from scoped settings if needed
     public List<DetectedObject> Detect(Frame frame, Settings settings)
     {
         var preprocessedImage = PreprocessImage(frame);
