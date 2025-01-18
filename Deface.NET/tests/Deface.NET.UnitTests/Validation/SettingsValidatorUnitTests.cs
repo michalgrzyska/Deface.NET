@@ -1,5 +1,7 @@
 ﻿using Deface.NET.Configuration.Validation;
+using Deface.NET.System.ExternalProcessing;
 using Deface.NET.UnitTests._TestsConfig;
+using NSubstitute;
 
 namespace Deface.NET.UnitTests.Validation;
 
@@ -7,14 +9,12 @@ namespace Deface.NET.UnitTests.Validation;
 public class SettingsValidatorUnitTests
 {
     private readonly SettingsFixture _settingsFixture;
-    private readonly SettingsValidator _settingsValidator;
 
     private Settings Settings => _settingsFixture.Settings.Clone();
 
     public SettingsValidatorUnitTests(SettingsFixture settingsFixture)
     {
         _settingsFixture = settingsFixture;
-        _settingsValidator = new();
     }
 
     [Theory]
@@ -31,7 +31,9 @@ public class SettingsValidatorUnitTests
             settings.Threshold = threshold;
         });
 
-        var action = () => _settingsValidator.Validate(settings);
+        SettingsValidator validator = new(GetExternalProcessFactory(settings));
+
+        var action = () => validator.Validate(settings);
 
         action.ShouldThrow<ArgumentOutOfRangeException>();
     }
@@ -51,7 +53,9 @@ public class SettingsValidatorUnitTests
             settings.Threshold = threshold;
         });
 
-        var action = () => _settingsValidator.Validate(settings);
+        SettingsValidator validator = new(GetExternalProcessFactory(settings));
+
+        var action = () => validator.Validate(settings);
 
         action.ShouldNotThrow();
     }
@@ -69,7 +73,9 @@ public class SettingsValidatorUnitTests
             settings.RunDetectionEachNFrames = runDetectionEachNFrames;
         });
 
-        var action = () => _settingsValidator.Validate(settings);
+        SettingsValidator validator = new(GetExternalProcessFactory(settings));
+
+        var action = () => validator.Validate(settings);
 
         action.ShouldThrow<ArgumentOutOfRangeException>();
     }
@@ -90,7 +96,9 @@ public class SettingsValidatorUnitTests
             settings.RunDetectionEachNFrames = runDetectionEachNFrames;
         });
 
-        var action = () => _settingsValidator.Validate(settings);
+        SettingsValidator validator = new(GetExternalProcessFactory(settings));
+
+        var action = () => validator.Validate(settings);
 
         action.ShouldNotThrow();
     }
@@ -111,7 +119,9 @@ public class SettingsValidatorUnitTests
             settings.MaskScale = maskScale;
         });
 
-        var action = () => _settingsValidator.Validate(settings);
+        SettingsValidator validator = new(GetExternalProcessFactory(settings));
+
+        var action = () => validator.Validate(settings);
 
         action.ShouldThrow<ArgumentOutOfRangeException>();
     }
@@ -130,7 +140,9 @@ public class SettingsValidatorUnitTests
             settings.MaskScale = maskScale;
         });
 
-        var action = () => _settingsValidator.Validate(settings);
+        SettingsValidator validator = new(GetExternalProcessFactory(settings));
+
+        var action = () => validator.Validate(settings);
 
         action.ShouldNotThrow();
     }
@@ -148,7 +160,9 @@ public class SettingsValidatorUnitTests
             settings.FFMpegPath = value!;
         });
 
-        var action = () => _settingsValidator.Validate(settings);
+        SettingsValidator validator = new(GetExternalProcessFactory(settings));
+
+        var action = () => validator.Validate(settings);
 
         action.ShouldThrow<ArgumentNullException>();
     }
@@ -167,8 +181,26 @@ public class SettingsValidatorUnitTests
             settings.FFProbePath = value!;
         });
 
-        var action = () => _settingsValidator.Validate(settings);
+        SettingsValidator validator = new(GetExternalProcessFactory(settings));
+
+        var action = () => validator.Validate(settings);
 
         action.ShouldThrow<ArgumentNullException>();
+    }
+
+    private IExternalProcessFactory GetExternalProcessFactory(Settings settings)
+    {
+        var externalProcessFactory = Substitute.For<IExternalProcessFactory>();
+
+        var ffmpegProcess = Substitute.For<IExternalProcess>();
+        ffmpegProcess.ExecuteWithOutput().Returns("ffmpeg version 4.4.1");
+
+        var ffprobeProcess = Substitute.For<IExternalProcess>();
+        ffprobeProcess.ExecuteWithOutput().Returns("ffprobe version 4.4.1");
+
+        externalProcessFactory.CreateExternalProcess(settings.FFMpegPath, "-version").Returns(ffmpegProcess);
+        externalProcessFactory.CreateExternalProcess(settings.FFProbePath, "-version").Returns(ffprobeProcess);
+
+        return externalProcessFactory;
     }
 }

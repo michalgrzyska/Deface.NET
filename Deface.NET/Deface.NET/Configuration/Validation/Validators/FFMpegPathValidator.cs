@@ -1,12 +1,28 @@
 ﻿using Deface.NET.Common;
-using Google.Protobuf.WellKnownTypes;
+using Deface.NET.System.ExternalProcessing;
 
 namespace Deface.NET.Configuration.Validation.Validators;
 
-internal class FFMpegPathValidator : ISettingsPropertyValidator
+internal class FFMpegPathValidator(IExternalProcessFactory externalProcessFactory) : ISettingsPropertyValidator
 {
+    private readonly IExternalProcessFactory _externalProcessFactory = externalProcessFactory;
+
     public void Validate(Settings settings)
     {
         ValidationHelper.MustNotBeNullOrWhiteSpace(settings.FFMpegPath, nameof(Settings.FFMpegPath));
+        ValidateFFMpegExecutable(settings.FFMpegPath);
+    }
+
+    private void ValidateFFMpegExecutable(string ffmpegPath)
+    {
+        var process = _externalProcessFactory.CreateExternalProcess(ffmpegPath, "-version");
+        process.Start();
+
+        var output = process.ExecuteWithOutput();
+
+        if (!output.StartsWith("ffmpeg version"))
+        {
+            throw new ArgumentException($"The provided FFMpeg path '{ffmpegPath}' is not a valid FFMpeg executable.");
+        }
     }
 }
