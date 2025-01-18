@@ -33,7 +33,6 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider, IExternalPr
     {
         var ffmpegPath = _settings.FFMpegPath;
         var codec = CodecHelper.GetCodecName(_settings.EncodingCodec);
-        var extension = CodecHelper.GetCodecExtension(_settings.EncodingCodec);
 
         var args = string.Join(" ",
         [
@@ -46,7 +45,7 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider, IExternalPr
             "-i", "-",
             "-c:v", codec, "-speed 8",
             "-pix_fmt", "yuv420p",
-            $"\"{outputPath}.{extension}\""
+            $"\"{outputPath}\""
         ]);
 
         return _externalProcessFactory.CreateExternalProcess(ffmpegPath, args, redirectStandardInput: true);

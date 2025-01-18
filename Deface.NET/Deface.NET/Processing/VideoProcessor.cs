@@ -4,6 +4,7 @@ using Deface.NET.Graphics.Models;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
 using Deface.NET.Processing.Models;
+using Deface.NET.VideoIO.Helpers;
 using Deface.NET.VideoIO.Interfaces;
 using Deface.NET.VideoIO.Models;
 
@@ -49,10 +50,13 @@ internal sealed class VideoProcessor
         var processedFrames = GetProcessedFrames(inputPath);
 
         LogSavingVideo(inputPath);
-        _videoWriter.WriteVideo(processedFrames.Frames, processedFrames.VideoInfo, outputPath);
 
-        LogVideoProcessed(inputPath, processedFrames, outputPath);
-        return GetProcessingResult(inputPath, outputPath, processedFrames);
+        var targetOutputPath = GetTargetOutputPath(outputPath, _settings.EncodingCodec);
+
+        _videoWriter.WriteVideo(processedFrames.Frames, processedFrames.VideoInfo, targetOutputPath);
+
+        LogVideoProcessed(inputPath, processedFrames, targetOutputPath);
+        return GetProcessingResult(inputPath, targetOutputPath, processedFrames);
     }
 
     private ProcessedFrames GetProcessedFrames(string inputPath)
@@ -73,6 +77,12 @@ internal sealed class VideoProcessor
 
         var processingTime = progressLogger.Stop();
         return new(processedFrames, videoReadResult.VideoInfo, processingTime);
+    }
+
+    private static string GetTargetOutputPath(string outputPath, EncodingCodec encodingCodec)
+    {
+        var extension = CodecHelper.GetCodecExtension(encodingCodec);
+        return Path.ChangeExtension(outputPath, extension);
     }
 
     private Frame ProcessFrame(byte[] frameBytes, VideoInfo videoInfo, int index)
