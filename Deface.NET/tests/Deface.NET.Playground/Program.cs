@@ -5,12 +5,6 @@ Console.WriteLine(Directory.GetCurrentDirectory());
 
 IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
 {
-    options.FFMpegPath = "C://ffmpeg//ffmpeg.exe";
-    options.FFProbePath = "C://ffmpeg//ffprobe.exe";
-
-    //options.FFMpegPath = "/usr/bin/ffmpeg";
-    //options.FFProbePath = "/usr/bin/ffprobe";
-
     options.AnonimizationMethod = AnonimizationMethod.Mosaic;
     options.AnonimizationShape = AnonimizationShape.Ellipse;
     options.Hardware = Hardware.Cuda(0);
