@@ -57,14 +57,14 @@ public class Settings
     public ImageFormat ImageFormat { get; set; } = ImageFormat.Png;
 
     /// <summary>
-    /// Location of FFMpeg executable file.
+    /// Location of FFMpeg executable file. At default it points to "ffmpeg" as a global command.
     /// </summary>
-    public string FFMpegPath { get; set; } = string.Empty;
+    public string FFMpegPath { get; set; } = "ffmpeg";
 
     /// <summary>
-    /// Location of FFProbe executable file.
+    /// Location of FFProbe executable file. At default it points to "ffprobe" as a global command.
     /// </summary>
-    public string FFProbePath { get; set; } = string.Empty;
+    public string FFProbePath { get; set; } = "ffprobe";
 
     /// <summary>
     /// Hardware used for the object detection. NOTE: Cannot be overriden locally, Deface.NET always uses global setting.
