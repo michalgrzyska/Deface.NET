@@ -26,7 +26,7 @@ public static class DependencyInjection
     /// <summary>
     /// Adds Deface module to DI container
     /// </summary>
-    public static IServiceCollection AddDeface(this IServiceCollection services, Action<Settings> builder)
+    public static IServiceCollection AddDeface(this IServiceCollection services, Action<Settings>? builder)
     {
         services.AddSingleton<IObjectDetector, ObjectDetector>();
         services.AddSingleton<IFileSystem, FileSystem>();
@@ -55,7 +55,7 @@ public static class DependencyInjection
         return services;
     }
 
-    private static void AddSettingsProvider(this IServiceCollection services, Action<Settings> builder)
+    private static void AddSettingsProvider(this IServiceCollection services, Action<Settings>? builder)
     {
         services.AddSingleton<ISettingsProvider, SettingsProvider>();
 

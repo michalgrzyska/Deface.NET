@@ -11,34 +11,55 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
 
     public ProcessingResult ProcessVideo(string inputPath, string outputPath, Action<Settings>? customSettings = default)
     {
-        ValidationHelper.ValidateFilePath(inputPath, nameof(inputPath));
-        ValidationHelper.MustNotBeNullOrWhiteSpace(outputPath, nameof(outputPath));
+        try
+        {
+            ValidationHelper.ValidateFilePath(inputPath, nameof(inputPath));
+            ValidationHelper.MustNotBeNullOrWhiteSpace(outputPath, nameof(outputPath));
 
-        using var scope = _scopeFactory.CreateUserScope(customSettings);
-        var processor = scope.ServiceProvider.GetRequiredService<IVideoProcessor>();
+            using var scope = _scopeFactory.CreateUserScope(customSettings);
+            var processor = scope.ServiceProvider.GetRequiredService<IVideoProcessor>();
 
-        return processor.Process(inputPath, outputPath);
+            return processor.Process(inputPath, outputPath);
+        }
+        catch (Exception ex)
+        {
+            throw new DefaceException(ex.Message, ex);
+        }
     }
 
     public ProcessingResult ProcessImage(string inputPath, string outputPath, Action<Settings>? customSettings = default)
     {
-        ValidationHelper.ValidateFilePath(inputPath, nameof(inputPath));
-        ValidationHelper.MustNotBeNullOrWhiteSpace(outputPath, nameof(outputPath));
+        try
+        {
+            ValidationHelper.ValidateFilePath(inputPath, nameof(inputPath));
+            ValidationHelper.MustNotBeNullOrWhiteSpace(outputPath, nameof(outputPath));
 
-        using var scope = _scopeFactory.CreateUserScope(customSettings);
-        var processor = scope.ServiceProvider.GetRequiredService<IImageProcessor>();
+            using var scope = _scopeFactory.CreateUserScope(customSettings);
+            var processor = scope.ServiceProvider.GetRequiredService<IImageProcessor>();
 
-        return processor.Process(inputPath, outputPath);
+            return processor.Process(inputPath, outputPath);
+        }
+        catch (Exception ex)
+        {
+            throw new DefaceException(ex.Message, ex);
+        }
     }
 
     public IEnumerable<ProcessingResult> ProcessImages(string inputDirectory, string outputDirectory, Action<Settings>? customSettings = null)
     {
-        ValidationHelper.ValidateDirectoryPath(inputDirectory, nameof(inputDirectory));
-        ValidationHelper.ValidateDirectoryPath(outputDirectory, nameof(outputDirectory));
+        try
+        {
+            ValidationHelper.ValidateDirectoryPath(inputDirectory, nameof(inputDirectory));
+            ValidationHelper.ValidateDirectoryPath(outputDirectory, nameof(outputDirectory));
 
-        using var scope = _scopeFactory.CreateUserScope(customSettings);
-        var processor = scope.ServiceProvider.GetRequiredService<IImageProcessor>();
+            using var scope = _scopeFactory.CreateUserScope(customSettings);
+            var processor = scope.ServiceProvider.GetRequiredService<IImageProcessor>();
 
-        return processor.ProcessMany(inputDirectory, outputDirectory);
+            return processor.ProcessMany(inputDirectory, outputDirectory);
+        }
+        catch (Exception ex)
+        {
+            throw new DefaceException(ex.Message, ex);
+        }
     }
 }

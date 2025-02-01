@@ -27,7 +27,7 @@ internal static class ValidationHelper
     {
         if (string.IsNullOrWhiteSpace(prop))
         {
-            throw new ArgumentNullException(nameOfProp, $"{nameOfProp} must not be null or whitespace/empty");
+            throw new ArgumentException(nameOfProp, $"{nameOfProp} must not be null or whitespace/empty");
         }
     }
 

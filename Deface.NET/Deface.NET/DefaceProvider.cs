@@ -11,7 +11,7 @@ public static class DefaceProvider
     /// Creates a new instance of <see cref="IDefaceService"/>. This is not recommended way
     /// of using Deface. If possible, use DI method instead.
     /// </summary>
-    public static IDefaceService GetDefaceService(Action<Settings> settings)
+    public static IDefaceService GetDefaceService(Action<Settings>? settings = default)
     {
         ServiceCollection services = new();
         services.AddDeface(settings);

@@ -17,16 +17,14 @@ internal class FrameCreator(IFileSystem fileSystem) : IFrameCreator
 
     public Frame FromFile(string path)
     {
-        try
-        {
-            using var stream = _fileSystem.OpenRead(path);
-            var bitmap = SKBitmap.Decode(stream);
+        using var stream = _fileSystem.OpenRead(path);
+        var bitmap = SKBitmap.Decode(stream);
 
-            return (Frame)bitmap;
-        }
-        catch (Exception e)
+        if (bitmap == null)
         {
-            throw new DefaceException($"Could not open image {path}.", e);
+            throw new InvalidOperationException($"Failed to decode image from file '{path}'.");
         }
+
+        return (Frame)bitmap;
     }
 }

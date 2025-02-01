@@ -15,7 +15,7 @@ internal class SettingsProvider(ISettingsValidator settingsValidator) : ISetting
         private set => _settings = value;
     }
 
-    public void Initialize(Action<Settings> builder)
+    public void Initialize(Action<Settings>? builder)
     {
         if (_settings is not null) 
         {
