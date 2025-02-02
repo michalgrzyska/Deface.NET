@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using Deface.NET.UnitTests._TestsConfig;
+using NSubstitute;
 
 namespace Deface.NET.UnitTests.DefaceServiceTests;
 
@@ -29,7 +30,7 @@ public partial class DefaceServiceTests
     public void ProcessVideo_InputNotExisting_ThrowsFileNotFoundException()
     {
         var action = () => _service.ProcessVideo("test", "file");
-        action.ShouldThrow<FileNotFoundException>();
+        action.ShouldThrow<DefaceException>().WithInnerException<FileNotFoundException>();
     }
 
     [Theory]
@@ -37,10 +38,10 @@ public partial class DefaceServiceTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("  ")]
-    public void ProcessVideo_InvalidInputString_ThrowsArgumentNullException(string? inputString)
+    public void ProcessVideo_InvalidInputString_ThrowsArgumenException(string? inputString)
     {
         var action = () => _service.ProcessVideo(inputString!, "file");
-        action.ShouldThrow<ArgumentNullException>();
+        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
     }
 
     [Theory]
@@ -48,7 +49,7 @@ public partial class DefaceServiceTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("  ")]
-    public void ProcessVideo_InvalidOutputString_ThrowsArgumentNullException(string? outputString)
+    public void ProcessVideo_InvalidOutputString_ThrowsArgumentException(string? outputString)
     {
         // Arrange
 
@@ -60,7 +61,7 @@ public partial class DefaceServiceTests
 
         // Assert
 
-        action.ShouldThrow<ArgumentNullException>();
+        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
 
         // Cleanup
 

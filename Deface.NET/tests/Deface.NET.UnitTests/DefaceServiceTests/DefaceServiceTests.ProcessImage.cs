@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using Deface.NET.UnitTests._TestsConfig;
+using NSubstitute;
 
 namespace Deface.NET.UnitTests.DefaceServiceTests;
 
@@ -30,7 +31,7 @@ public partial class DefaceServiceTests
     {
         var action = () => _service.ProcessImage("test", "file");
 
-        action.ShouldThrow<FileNotFoundException>();
+        action.ShouldThrow<DefaceException>().WithInnerException<FileNotFoundException>();
     }
 
     [Theory]
@@ -38,11 +39,11 @@ public partial class DefaceServiceTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("  ")]
-    public void ProcessImage_InvalidInputString_ThrowsArgumentNullException(string? inputString)
+    public void ProcessImage_InvalidInputString_ThrowsArgumentException(string? inputString)
     {
         var action = () => _service.ProcessImage(inputString!, "file");
 
-        action.ShouldThrow<ArgumentNullException>();
+        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
     }
 
     [Theory]
@@ -50,7 +51,7 @@ public partial class DefaceServiceTests
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("  ")]
-    public void ProcessImage_InvalidOutputString_ThrowsArgumentNullException(string? outputString)
+    public void ProcessImage_InvalidOutputString_ThrowsArgumentException(string? outputString)
     {
         // Arrange
 
@@ -62,7 +63,7 @@ public partial class DefaceServiceTests
 
         // Assert
 
-        action.ShouldThrow<ArgumentNullException>();
+        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
 
         // Cleanup
 
