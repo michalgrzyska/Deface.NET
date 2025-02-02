@@ -27,7 +27,7 @@ internal class SettingsValidator : ISettingsValidator
         }
         catch (Exception ex)
         {
-            throw new DefaceException(ex.Message, ex);
+            throw new DefaceException(ex);
         }
     }
 

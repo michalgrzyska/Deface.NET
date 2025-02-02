@@ -23,7 +23,7 @@ internal class VideoEncoderChecker(IScopedSettingsProvider settingsProvider, IEx
 
         if (!encoders.Contains(currentCodec))
         {
-            throw new DefaceException($"Encoder {_settings.EncodingCodec} is not available in your FFMpeg build.");
+            throw new InvalidOperationException($"Encoder {_settings.EncodingCodec} is not available in your FFMpeg build.");
         }
     }
 

@@ -23,7 +23,7 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
         }
         catch (Exception ex)
         {
-            throw new DefaceException(ex.Message, ex);
+            throw new DefaceException(ex);
         }
     }
 
@@ -41,7 +41,7 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
         }
         catch (Exception ex)
         {
-            throw new DefaceException(ex.Message, ex);
+            throw new DefaceException(ex);
         }
     }
 
@@ -59,7 +59,7 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
         }
         catch (Exception ex)
         {
-            throw new DefaceException(ex.Message, ex);
+            throw new DefaceException(ex);
         }
     }
 }

@@ -47,7 +47,7 @@ internal abstract class OnnxDetectorBase<TInput, TOutput>
         catch (Exception e) 
         when (e is GpuUnavailableException || e is GpuIdNotFoundException || e is CpuUnavailableException)
         {
-            throw new DefaceException(e.Message);
+            throw new InvalidOperationException(e.Message, e);
         }
     }
 

@@ -26,13 +26,13 @@ public class VideoEncoderCheckerUnitTests(SettingsFixture settingsFixture)
     [InlineData(VideoCheckerUnitTestsContants.NoH264, EncodingCodec.H264)]
     [InlineData(VideoCheckerUnitTestsContants.NoBoth, EncodingCodec.VP9)]
     [InlineData(VideoCheckerUnitTestsContants.NoBoth, EncodingCodec.H264)]
-    public void CheckFfmpegCodecs_NoCodecAvailable_ShouldThrowDefaceException(string output, EncodingCodec encodingCodec)
+    public void CheckFfmpegCodecs_NoCodecAvailable_ShouldThrowException(string output, EncodingCodec encodingCodec)
     {
         var checker = GetVideoEncoderChecker(encodingCodec, output);
 
         var action = checker.CheckFfmpegCodecs;
 
-        action.ShouldThrow<DefaceException>();
+        action.ShouldThrow<InvalidOperationException>();
     }
 
     [Theory]
