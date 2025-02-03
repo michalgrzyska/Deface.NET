@@ -31,7 +31,7 @@ internal class CommercialFeaturesReporter(IDLogger<IDefaceService> logger, IScop
 
     private static string GetFullMessage(List<ICommercialFeature> enabledFeatures)
     {
-        var message = new StringBuilder();
+        StringBuilder message = new();
 
         message.AppendLine($"There are {enabledFeatures.Count} commercial feature(s) enabled. Make sure you have a proper license to use them:");
 

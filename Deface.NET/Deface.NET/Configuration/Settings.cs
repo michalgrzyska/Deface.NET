@@ -1,6 +1,4 @@
-﻿using Deface.NET.Common;
-
-namespace Deface.NET;
+﻿namespace Deface.NET;
 
 /// <summary>
 /// Deface settings.
