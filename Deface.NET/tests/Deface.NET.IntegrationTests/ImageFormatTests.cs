@@ -63,4 +63,29 @@ public class ImageFormatTests
 
         File.Delete(result.OutputFile);
     }
+
+    [Theory]
+    [InlineData(65)]
+    [InlineData(50)]
+    public void ProcessImage_SettingJpgFormat_FileShouldBeCompressed(int imageQuality)
+    {
+        var deface = DefaceProvider.GetDefaceService(options =>
+        {
+            options.ImageFormat = ImageFormat.Jpeg(imageQuality);
+        });
+
+        var inputFileDir = TestResources.TestResources.Photo4;
+
+        var result = deface.ProcessImage(inputFileDir, "output.jpg");
+
+        FileInfo inputFileInfo = new(inputFileDir);
+        var inputFileSize = inputFileInfo.Length;
+
+        FileInfo outputFileInfo = new(result.OutputFile);
+        var outputFileSize = outputFileInfo.Length;
+
+        outputFileSize.ShouldBeLessThanOrEqualTo(inputFileSize);
+
+        File.Delete(result.OutputFile);
+    }
 }
