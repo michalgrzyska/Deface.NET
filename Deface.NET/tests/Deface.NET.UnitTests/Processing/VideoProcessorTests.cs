@@ -64,7 +64,7 @@ public class VideoProcessorTests
 
         var processor = GetVideoProcessor();
         var inputFile = "input";
-        var outputFile = "output";
+        var outputFile = "output.webm";
 
         SetupVideoReader();
 

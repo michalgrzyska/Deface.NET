@@ -18,9 +18,16 @@ internal class SettingsValidator : ISettingsValidator
 
     public void Validate(Settings settings)
     {
-        foreach (var validator in _validators)
+        try
         {
-            validator.Validate(settings);
+            foreach (var validator in _validators)
+            {
+                validator.Validate(settings);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new DefaceException(ex);
         }
     }
 

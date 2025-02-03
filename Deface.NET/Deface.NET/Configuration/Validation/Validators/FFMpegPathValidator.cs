@@ -15,21 +15,14 @@ internal class FFMpegPathValidator(IExternalProcessFactory externalProcessFactor
 
     private void ValidateFFMpegExecutable(string ffmpegPath)
     {
-        try
-        {
-            var process = _externalProcessFactory.CreateExternalProcess(ffmpegPath, "-version");
-            process.Start();
+        var process = _externalProcessFactory.CreateExternalProcess(ffmpegPath, "-version");
+        process.Start();
 
-            var output = process.ExecuteWithOutput();
+        var output = process.ExecuteWithOutput();
 
-            if (!output.StartsWith("ffmpeg version"))
-            {
-                throw new Exception("Returned test string from FFMpeg is invalid. Check your FFMpeg with -version parameter to make sure it works.");
-            }
-        }
-        catch (Exception ex)
+        if (!output.StartsWith("ffmpeg version"))
         {
-            throw new DefaceException($"The provided FFMpeg path '{ffmpegPath}' is not a valid FFMpeg executable.", ex);
+            throw new Exception("Returned test string from FFMpeg is invalid. Check your FFMpeg with -version parameter to make sure it works.");
         }
     }
 }

@@ -15,21 +15,14 @@ internal class FFProbePathValidator(IExternalProcessFactory externalProcessFacto
 
     private void ValidateFFProbeExecutable(string ffprobePath)
     {
-        try
-        {
-            var process = _externalProcessFactory.CreateExternalProcess(ffprobePath, "-version");
-            process.Start();
+        var process = _externalProcessFactory.CreateExternalProcess(ffprobePath, "-version");
+        process.Start();
 
-            var output = process.ExecuteWithOutput();
+        var output = process.ExecuteWithOutput();
 
-            if (!output.StartsWith("ffprobe version"))
-            {
-                throw new Exception("Returned test string from FFProbe is invalid. Check your FFProbe with -version parameter to make sure it works.");
-            }
-        }
-        catch (Exception ex)
+        if (!output.StartsWith("ffprobe version"))
         {
-            throw new DefaceException($"The provided FFProbe path '{ffprobePath}' is not a valid FFProbe executable.", ex);
+            throw new Exception("Returned test string from FFProbe is invalid. Check your FFProbe with -version parameter to make sure it works.");
         }
     }
 }

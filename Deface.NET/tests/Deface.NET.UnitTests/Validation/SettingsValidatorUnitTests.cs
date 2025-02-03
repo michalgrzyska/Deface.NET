@@ -35,7 +35,7 @@ public class SettingsValidatorUnitTests
 
         var action = () => validator.Validate(settings);
 
-        action.ShouldThrow<ArgumentOutOfRangeException>();
+        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentOutOfRangeException>();
     }
 
     [Theory]
@@ -77,7 +77,7 @@ public class SettingsValidatorUnitTests
 
         var action = () => validator.Validate(settings);
 
-        action.ShouldThrow<ArgumentOutOfRangeException>();
+        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentOutOfRangeException>();
     }
 
     [Theory]
@@ -123,7 +123,7 @@ public class SettingsValidatorUnitTests
 
         var action = () => validator.Validate(settings);
 
-        action.ShouldThrow<ArgumentOutOfRangeException>();
+        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentOutOfRangeException>();
     }
 
     [Theory]
@@ -151,7 +151,7 @@ public class SettingsValidatorUnitTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void FFMpegPath_NullOrWhitespace_ArgumentNullExceptionThrown(string? value)
+    public void FFMpegPath_NullOrWhitespace_ArgumentExceptionThrown(string? value)
     {
         var settings = Settings;
 
@@ -164,7 +164,7 @@ public class SettingsValidatorUnitTests
 
         var action = () => validator.Validate(settings);
 
-        action.ShouldThrow<ArgumentNullException>();
+        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
     }
 
 
@@ -172,7 +172,7 @@ public class SettingsValidatorUnitTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void FFProbePath_NullOrWhitespace_ArgumentNullExceptionThrown(string? value)
+    public void FFProbePath_NullOrWhitespace_ArgumentExceptionThrown(string? value)
     {
         var settings = Settings;
 
@@ -185,7 +185,7 @@ public class SettingsValidatorUnitTests
 
         var action = () => validator.Validate(settings);
 
-        action.ShouldThrow<ArgumentNullException>();
+        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
     }
 
     private IExternalProcessFactory GetExternalProcessFactory(Settings settings)

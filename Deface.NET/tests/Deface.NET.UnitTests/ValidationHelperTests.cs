@@ -55,10 +55,10 @@ public class ValidationHelperTests
     [InlineData("")]
     [InlineData("   ")]
     [InlineData(null)]
-    public void MustNotBeNullOrWhiteSpace_WithInvalidStrings_ShouldThrowArgumentNullException(string? prop)
+    public void MustNotBeNullOrWhiteSpace_WithInvalidStrings_ShouldThrowArgumentException(string? prop)
     {
         var act = () => ValidationHelper.MustNotBeNullOrWhiteSpace(prop!, nameof(prop));
-        act.ShouldThrow<ArgumentNullException>();
+        act.ShouldThrow<ArgumentException>();
     }
 
     [Fact]
@@ -114,10 +114,10 @@ public class ValidationHelperTests
     [InlineData("")]
     [InlineData("   ")]
     [InlineData(null)]
-    public void ValidateFilePath_WithInvalidPath_ShouldThrowArgumentNullException(string? path)
+    public void ValidateFilePath_WithInvalidPath_ShouldThrowArgumentException(string? path)
     {
         var act = () => ValidationHelper.ValidateFilePath(path!, nameof(path));
-        act.ShouldThrow<ArgumentNullException>();
+        act.ShouldThrow<ArgumentException>();
     }
 
     [Fact]
@@ -142,10 +142,10 @@ public class ValidationHelperTests
     [InlineData("")]
     [InlineData("   ")]
     [InlineData(null)]
-    public void ValidateDirectoryPath_WithInvalidPath_ShouldThrowArgumentNullException(string? path)
+    public void ValidateDirectoryPath_WithInvalidPath_ShouldThrowArgumentException(string? path)
     {
         var act = () => ValidationHelper.ValidateDirectoryPath(path!, nameof(path));
-        act.ShouldThrow<ArgumentNullException>();
+        act.ShouldThrow<ArgumentException>();
     }
 
     [Fact]

@@ -5,5 +5,5 @@
 /// </summary>
 public class DefaceException : Exception
 {
-    internal DefaceException(string message, Exception? ex = default) : base(message, ex) { }
+    internal DefaceException(Exception ex) : base("An error occured while processing media. Check the inner exception for more details.", ex) { }
 }

@@ -26,13 +26,13 @@ public class FrameCreatorTests
     }
 
     [Fact]
-    public void FromFile_InvalidPath_ThrowsDefaceException()
+    public void FromFile_InvalidPath_ThrowsFileNotFoundException()
     {
         var path = Guid.NewGuid().ToString();
 
         var action = () => _frameCreator.FromFile(path);
 
-        action.ShouldThrow<DefaceException>();
+        action.ShouldThrow<FileNotFoundException>();
     }
 
     [Fact]
