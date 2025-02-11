@@ -15,12 +15,14 @@ using Deface.NET.System.ExternalProcessing;
 using Deface.NET.VideoIO;
 using Deface.NET.VideoIO.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Deface.NET;
 
 /// <summary>
 /// Dependency injection extension for Deface
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class DependencyInjection
 {
     /// <summary>

@@ -13,7 +13,7 @@ internal class ScopedSettingsProvider(ISettingsProvider settingsProvider, ISetti
 
     public Settings Settings => _scopedSettings ?? _settings;
 
-    public void Init(Action<Settings>? action = default)
+    public void LoadForCurrentScope(ProcessingType processingType, Action<Settings>? action = default)
     {
         if (_isInitiated)
         {
@@ -25,7 +25,7 @@ internal class ScopedSettingsProvider(ISettingsProvider settingsProvider, ISetti
         if (action != null) 
         {
             settingsClone.ApplyAction(action);
-            settingsValidator.Validate(settingsClone);
+            settingsValidator.Validate(settingsClone, processingType);
         }
 
         _scopedSettings = settingsClone;

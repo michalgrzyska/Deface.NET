@@ -1,4 +1,5 @@
-﻿using Deface.NET.Configuration.Validation;
+﻿using Deface.NET.Configuration;
+using Deface.NET.Configuration.Validation;
 using Deface.NET.System.ExternalProcessing;
 using Deface.NET.UnitTests._TestsConfig;
 using NSubstitute;
@@ -33,7 +34,7 @@ public class SettingsValidatorUnitTests
 
         SettingsValidator validator = new(GetExternalProcessFactory(settings));
 
-        var action = () => validator.Validate(settings);
+        var action = () => validator.Validate(settings, ProcessingType.Image);
 
         action.ShouldThrow<DefaceException>().WithInnerException<ArgumentOutOfRangeException>();
     }
@@ -55,7 +56,7 @@ public class SettingsValidatorUnitTests
 
         SettingsValidator validator = new(GetExternalProcessFactory(settings));
 
-        var action = () => validator.Validate(settings);
+        var action = () => validator.Validate(settings, ProcessingType.Image);
 
         action.ShouldNotThrow();
     }
@@ -75,7 +76,7 @@ public class SettingsValidatorUnitTests
 
         SettingsValidator validator = new(GetExternalProcessFactory(settings));
 
-        var action = () => validator.Validate(settings);
+        var action = () => validator.Validate(settings, ProcessingType.Video);
 
         action.ShouldThrow<DefaceException>().WithInnerException<ArgumentOutOfRangeException>();
     }
@@ -98,7 +99,7 @@ public class SettingsValidatorUnitTests
 
         SettingsValidator validator = new(GetExternalProcessFactory(settings));
 
-        var action = () => validator.Validate(settings);
+        var action = () => validator.Validate(settings, ProcessingType.Video);
 
         action.ShouldNotThrow();
     }
@@ -121,7 +122,7 @@ public class SettingsValidatorUnitTests
 
         SettingsValidator validator = new(GetExternalProcessFactory(settings));
 
-        var action = () => validator.Validate(settings);
+        var action = () => validator.Validate(settings, ProcessingType.Image);
 
         action.ShouldThrow<DefaceException>().WithInnerException<ArgumentOutOfRangeException>();
     }
@@ -142,7 +143,7 @@ public class SettingsValidatorUnitTests
 
         SettingsValidator validator = new(GetExternalProcessFactory(settings));
 
-        var action = () => validator.Validate(settings);
+        var action = () => validator.Validate(settings, ProcessingType.Image);
 
         action.ShouldNotThrow();
     }
@@ -162,7 +163,7 @@ public class SettingsValidatorUnitTests
 
         SettingsValidator validator = new(GetExternalProcessFactory(settings));
 
-        var action = () => validator.Validate(settings);
+        var action = () => validator.Validate(settings, ProcessingType.Video);
 
         action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
     }
@@ -183,7 +184,7 @@ public class SettingsValidatorUnitTests
 
         SettingsValidator validator = new(GetExternalProcessFactory(settings));
 
-        var action = () => validator.Validate(settings);
+        var action = () => validator.Validate(settings, ProcessingType.Video);
 
         action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
     }

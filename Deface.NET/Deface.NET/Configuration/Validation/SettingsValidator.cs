@@ -16,13 +16,13 @@ internal class SettingsValidator : ISettingsValidator
         RegisterValidator(new FFProbePathValidator(externalProcessFactory));
     }
 
-    public void Validate(Settings settings)
+    public void Validate(Settings settings, ProcessingType processingType)
     {
         try
         {
             foreach (var validator in _validators)
             {
-                validator.Validate(settings);
+                validator.Validate(settings, processingType);
             }
         }
         catch (Exception ex)

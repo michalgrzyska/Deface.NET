@@ -1,4 +1,5 @@
-﻿using Deface.NET.Configuration.Provider;
+﻿using Deface.NET.Configuration;
+using Deface.NET.Configuration.Provider;
 using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.Configuration.Validation;
 using Deface.NET.UnitTests._TestsConfig;
@@ -27,7 +28,7 @@ public class ScopedSettingsProviderTests(SettingsFixture settingsFixture)
 
         var provider = GetScopedSettingsProvider();
 
-        provider.Init(x =>
+        provider.LoadForCurrentScope(ProcessingType.Image, x =>
         {
             x.Threshold = threshold;
         });
@@ -42,12 +43,12 @@ public class ScopedSettingsProviderTests(SettingsFixture settingsFixture)
 
         var provider = GetScopedSettingsProvider();
 
-        provider.Init(x =>
+        provider.LoadForCurrentScope(ProcessingType.Image, x =>
         {
             x.Threshold = threshold;
         });
 
-        provider.Init(x =>
+        provider.LoadForCurrentScope(ProcessingType.Image, x =>
         {
             x.Threshold = 0.4f;
         });

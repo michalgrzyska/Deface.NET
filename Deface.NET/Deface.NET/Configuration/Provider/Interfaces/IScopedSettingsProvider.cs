@@ -4,5 +4,5 @@ internal interface IScopedSettingsProvider
 {
     Settings Settings { get; }
 
-    void Init(Action<Settings>? action = null);
+    void LoadForCurrentScope(ProcessingType processingType, Action<Settings>? action = null);
 }

@@ -7,8 +7,13 @@ internal class FFProbePathValidator(IExternalProcessFactory externalProcessFacto
 {
     private readonly IExternalProcessFactory _externalProcessFactory = externalProcessFactory;
 
-    public void Validate(Settings settings)
+    public void Validate(Settings settings, ProcessingType processingType)
     {
+        if (processingType != ProcessingType.Video)
+        {
+            return;
+        }
+
         ValidationHelper.MustNotBeNullOrWhiteSpace(settings.FFProbePath, nameof(Settings.FFProbePath));
         ValidateFFProbeExecutable(settings.FFProbePath);
     }

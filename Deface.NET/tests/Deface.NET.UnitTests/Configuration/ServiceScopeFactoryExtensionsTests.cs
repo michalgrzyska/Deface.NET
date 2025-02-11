@@ -1,4 +1,5 @@
 ﻿using Deface.NET.CommercialFeatures.Interfaces;
+using Deface.NET.Configuration;
 using Deface.NET.Configuration.Provider;
 using Deface.NET.Configuration.Provider.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,12 +28,12 @@ public class ServiceScopeFactoryExtensionsTests
 
         // Act
 
-        var result = serviceScopeFactory.CreateUserScope(customSettings);
+        var result = serviceScopeFactory.CreateUserScope(ProcessingType.Video, customSettings);
 
         // Assert
 
         result.ShouldBe(serviceScope);
-        scopedSettingsProvider.Received(1).Init(customSettings);
+        scopedSettingsProvider.Received(1).LoadForCurrentScope(Arg.Any<ProcessingType>(), customSettings);
     }
 
     [Fact]
@@ -52,11 +53,11 @@ public class ServiceScopeFactoryExtensionsTests
 
         // Act
 
-        var result = serviceScopeFactory.CreateUserScope(null);
+        var result = serviceScopeFactory.CreateUserScope(ProcessingType.Video, null);
 
         // Assert
 
         result.ShouldBe(serviceScope);
-        scopedSettingsProvider.Received(1).Init(Arg.Any<Action<Settings>>());
+        scopedSettingsProvider.Received(1).LoadForCurrentScope(Arg.Any<ProcessingType>(), Arg.Any<Action<Settings>>());
     }
 }

@@ -6,12 +6,15 @@ namespace Deface.NET.Configuration.Provider;
 
 internal static class ServiceScopeFactoryExtensions
 {
-    public static IServiceScope CreateUserScope(this IServiceScopeFactory serviceScopeFactory, Action<Settings>? customSettings)
+    public static IServiceScope CreateUserScope(
+        this IServiceScopeFactory serviceScopeFactory, 
+        ProcessingType processingType, 
+        Action<Settings>? scopedSettings)
     {
         var scope = serviceScopeFactory.CreateScope();
 
         var scopedSettingsProvider = scope.ServiceProvider.GetRequiredService<IScopedSettingsProvider>();
-        scopedSettingsProvider.Init(customSettings);
+        scopedSettingsProvider.LoadForCurrentScope(processingType, scopedSettings);
 
         var commercialFeaturesReporter = scope.ServiceProvider.GetRequiredService<ICommercialFeaturesReporter>();
         commercialFeaturesReporter.ReportCommercialFeatures();

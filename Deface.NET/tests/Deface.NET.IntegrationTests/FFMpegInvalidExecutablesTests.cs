@@ -12,10 +12,12 @@ public class FFMpegInvalidExecutablesTests
     [InlineData("whatever")]
     public void InvalidFFMpegPath_ShouldThrowDefaceException(string path)
     {
-        var action = () => DefaceProvider.GetDefaceService(x =>
+        var service = DefaceProvider.GetDefaceService(x =>
         {
             x.FFMpegPath = path;
         });
+
+        var action = () => service.ProcessVideo("", "");
 
         action.ShouldThrow<DefaceException>();
     }
@@ -27,10 +29,12 @@ public class FFMpegInvalidExecutablesTests
     [InlineData("whatever")]
     public void InvalidFFProbePath_ShouldThrowDefaceException(string path)
     {
-        var action = () => DefaceProvider.GetDefaceService(x =>
+        var service = DefaceProvider.GetDefaceService(x =>
         {
             x.FFProbePath = path;
         });
+
+        var action = () => service.ProcessVideo("", "");
 
         action.ShouldThrow<DefaceException>();
     }

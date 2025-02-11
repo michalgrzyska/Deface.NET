@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Deface.NET;
 
 /// <summary>
 /// Provides <see cref="IDefaceService"/> for non-DI apps.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class DefaceProvider
 {
     /// <summary>

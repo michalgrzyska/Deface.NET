@@ -2,6 +2,6 @@
 {
     internal interface ISettingsValidator
     {
-        void Validate(Settings settings);
+        void Validate(Settings settings, ProcessingType processingType);
     }
 }

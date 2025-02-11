@@ -7,8 +7,13 @@ internal class FFMpegPathValidator(IExternalProcessFactory externalProcessFactor
 {
     private readonly IExternalProcessFactory _externalProcessFactory = externalProcessFactory;
 
-    public void Validate(Settings settings)
+    public void Validate(Settings settings, ProcessingType processingType)
     {
+        if (processingType != ProcessingType.Video)
+        {
+            return;
+        }
+
         ValidationHelper.MustNotBeNullOrWhiteSpace(settings.FFMpegPath, nameof(Settings.FFMpegPath));
         ValidateFFMpegExecutable(settings.FFMpegPath);
     }

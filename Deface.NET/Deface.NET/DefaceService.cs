@@ -1,4 +1,5 @@
 ﻿using Deface.NET.Common;
+using Deface.NET.Configuration;
 using Deface.NET.Configuration.Provider;
 using Deface.NET.Processing;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,7 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
             ValidationHelper.ValidateFilePath(inputPath, nameof(inputPath));
             ValidationHelper.MustNotBeNullOrWhiteSpace(outputPath, nameof(outputPath));
 
-            using var scope = _scopeFactory.CreateUserScope(customSettings);
+            using var scope = _scopeFactory.CreateUserScope(ProcessingType.Video, customSettings);
             var processor = scope.ServiceProvider.GetRequiredService<IVideoProcessor>();
 
             return processor.Process(inputPath, outputPath);
@@ -34,7 +35,7 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
             ValidationHelper.ValidateFilePath(inputPath, nameof(inputPath));
             ValidationHelper.MustNotBeNullOrWhiteSpace(outputPath, nameof(outputPath));
 
-            using var scope = _scopeFactory.CreateUserScope(customSettings);
+            using var scope = _scopeFactory.CreateUserScope(ProcessingType.Image, customSettings);
             var processor = scope.ServiceProvider.GetRequiredService<IImageProcessor>();
 
             return processor.Process(inputPath, outputPath);
@@ -52,7 +53,7 @@ internal sealed class DefaceService(IServiceScopeFactory scopeFactory) : IDeface
             ValidationHelper.ValidateDirectoryPath(inputDirectory, nameof(inputDirectory));
             ValidationHelper.ValidateDirectoryPath(outputDirectory, nameof(outputDirectory));
 
-            using var scope = _scopeFactory.CreateUserScope(customSettings);
+            using var scope = _scopeFactory.CreateUserScope(ProcessingType.Image, customSettings);
             var processor = scope.ServiceProvider.GetRequiredService<IImageProcessor>();
 
             return processor.ProcessMany(inputDirectory, outputDirectory);
