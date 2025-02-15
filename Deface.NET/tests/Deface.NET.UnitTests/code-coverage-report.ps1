@@ -9,7 +9,7 @@ if (Test-Path -Path ".\coverageReport") {
 }
 
 dotnet test --collect:"XPlat Code Coverage"
-& "$env:USERPROFILE\.dotnet\tools\reportgenerator" -reports:TestResults/**/coverage.cobertura.xml -targetdir:./coverageReport -reporttypes:Html
+reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:coverageReport
 
 if (Test-Path -Path "./coverageReport/index.html") {
     Start-Process "./coverageReport/index.html"
