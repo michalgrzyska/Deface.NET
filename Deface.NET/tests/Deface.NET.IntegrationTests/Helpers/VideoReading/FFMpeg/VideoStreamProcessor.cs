@@ -1,4 +1,4 @@
-﻿namespace Deface.NET.IntegrationTests.Helpers.VideoReader;
+﻿namespace Deface.NET.IntegrationTests.Helpers.VideoReading.FFMpeg;
 
 internal class VideoStreamProcessor
 {
