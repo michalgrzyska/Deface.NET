@@ -1,4 +1,5 @@
 ﻿using Deface.NET.IntegrationTests.Helpers;
+using Deface.NET.IntegrationTests.Helpers.VideoReading;
 
 namespace Deface.NET.IntegrationTests;
 
@@ -58,5 +59,11 @@ public class FFMpegInvalidSourceFileTests
         var action = () => deface.ProcessVideo(TestData.Videos.CorruptedMP4, "output.mp4");
 
         action.ShouldThrow<DefaceException>().WithInnerException<InvalidOperationException>();
+    }
+
+    [Fact]
+    public async Task X()
+    {
+        var x = await TestVideo.Get(TestResources.TestResources.Video_Kappa);
     }
 }

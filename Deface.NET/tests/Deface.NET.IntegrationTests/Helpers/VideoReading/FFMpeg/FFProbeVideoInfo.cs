@@ -34,7 +34,7 @@ internal class FFProbeVideoInfo
         var stream = videoInfo.Streams.FirstOrDefault();
         var totalFrames = int.TryParse(stream.NbFrames, out int frames) ? frames : 0;
 
-        return new(stream.Width, stream.Height, totalFrames, videoInfo.Format.Size, ParseFrameRateString(stream.AverageFrameRate));
+        return new(stream.Width, stream.Height, totalFrames, long.Parse(videoInfo.Format.Size), ParseFrameRateString(stream.AverageFrameRate));
     }
 
     private static Process GetProcess(string videoPath)

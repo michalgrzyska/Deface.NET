@@ -28,4 +28,16 @@ internal class TestVideo
 
         return new(ffprobeInfo, ffmpegVideo);
     }
+
+    public TestFrame FrameAt(int ms)
+    {
+        var frameIndex = (int)(ms / 1000 * FrameRate);
+
+        if (frameIndex >= Frames.Count)
+        {
+            return null;
+        }
+
+        return Frames[frameIndex];
+    }
 }
