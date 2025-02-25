@@ -1,7 +1,4 @@
-﻿using Deface.NET.IntegrationTests.Resources;
-using Shouldly;
-
-namespace Deface.NET.IntegrationTests;
+﻿namespace Deface.NET.IntegrationTests;
 
 public class FFMpegInvalidExecutablesTests
 {

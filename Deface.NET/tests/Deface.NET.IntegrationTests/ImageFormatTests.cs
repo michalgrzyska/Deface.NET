@@ -2,7 +2,7 @@
 
 namespace Deface.NET.IntegrationTests;
 
-public class ImageFormatTests : IOTest
+public class ImageFormatTests : BaseIntegrationTest
 {
     [Fact]
     public void ProcessImage_SettingPngFormat_ShouldSaveFileAsPng()
@@ -11,7 +11,7 @@ public class ImageFormatTests : IOTest
 
         try
         {
-            var deface = DefaceProvider.GetDefaceService(options =>
+            var deface = DefaceService(options =>
             {
                 options.ImageFormat = ImageFormat.Png;
             });
@@ -22,7 +22,7 @@ public class ImageFormatTests : IOTest
         }
         finally
         {
-            Cleanup(result?.OutputFile);
+            CleanupFiles(result?.OutputFile);
         }
     }
 
@@ -33,7 +33,7 @@ public class ImageFormatTests : IOTest
 
         try
         {
-            var deface = DefaceProvider.GetDefaceService(options =>
+            var deface = DefaceService(options =>
             {
                 options.ImageFormat = ImageFormat.Jpeg();
             });
@@ -44,7 +44,7 @@ public class ImageFormatTests : IOTest
         }
         finally
         {
-            Cleanup(result?.OutputFile);
+            CleanupFiles(result?.OutputFile);
         }
     }
 
@@ -55,7 +55,7 @@ public class ImageFormatTests : IOTest
 
         try
         {
-            var deface = DefaceProvider.GetDefaceService(options =>
+            var deface = DefaceService(options =>
             {
                 options.ImageFormat = ImageFormat.Png;
             });
@@ -66,7 +66,7 @@ public class ImageFormatTests : IOTest
         }
         finally
         {
-            Cleanup(result?.OutputFile);
+            CleanupFiles(result?.OutputFile);
         }
     }
 
@@ -77,7 +77,7 @@ public class ImageFormatTests : IOTest
 
         try
         {
-            var deface = DefaceProvider.GetDefaceService(options =>
+            var deface = DefaceService(options =>
             {
                 options.ImageFormat = ImageFormat.Jpeg();
             });
@@ -88,7 +88,7 @@ public class ImageFormatTests : IOTest
         }
         finally
         {
-            Cleanup(result?.OutputFile);
+            CleanupFiles(result?.OutputFile);
         }
     }
 }
