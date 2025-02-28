@@ -20,6 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Deface.NET.Tests.Shared\Deface.NET.Tests.Shared.csproj" />
 		<ProjectReference Include="..\..\Deface.NET\Deface.NET.csproj" />
 		<ProjectReference Include="..\Deface.NET.TestResources\Deface.NET.TestResources.csproj" />
 	</ItemGroup>
