@@ -1,4 +1,6 @@
-# `Deface.NET`: Video and photo anonymization library for .NET
+# Deface.NET: Video and photo anonymization library for .NET
+
+![NuGet](https://img.shields.io/nuget/v/Deface.NET.svg)
 
 Deface.NET is an MIT licensed library for photo and video processing to achieve anonymized resources. It is based on [Ultraface](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB) ONNX model for face detection and [SkiaSharp](https://github.com/mono/SkiaSharp) + [FFMpeg](https://www.ffmpeg.org/) image processing.
 
