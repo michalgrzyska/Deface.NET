@@ -1,6 +1,7 @@
 ﻿using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection;
+using Deface.NET.Tests.Shared.Helpers;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
 
@@ -35,7 +36,7 @@ public abstract class ShapeDrawerTestsBase(SettingsFixture settingsFixture)
         WithTestData(AnonimizationShape.Rectangle, (settings, frame, drawer) =>
         {
             var result = drawer.Draw(frame, [Object1]);
-            ShapeTestHelper.ValidateRectangle(result, Object1, p => ValidatePixel(p, settings));
+            ShapeValidationHelper.ValidateRectangle(result, Object1, p => ValidatePixel(p, settings));
         });
     }
 

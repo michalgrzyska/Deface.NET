@@ -6,4 +6,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+	  <ProjectReference Include="..\Deface.NET\Deface.NET.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+		  <_Parameter1>Deface.NET.UnitTests</_Parameter1>
+	  </AssemblyAttribute>
+
+	  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+		  <_Parameter1>Deface.NET.IntegrationTests</_Parameter1>
+	  </AssemblyAttribute>
+  </ItemGroup>
+
 </Project>

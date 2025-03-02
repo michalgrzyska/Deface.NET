@@ -2,6 +2,7 @@
 using Deface.NET.Graphics.Models;
 using Deface.NET.Graphics.ShapeDrawers;
 using Deface.NET.ObjectDetection;
+using Deface.NET.Tests.Shared.Helpers;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
 
@@ -94,7 +95,7 @@ public class MosaicShapeDrawerTests(SettingsFixture settingsFixture) : ShapeDraw
         Action<Frame, DetectedObject, Action<PixelData>> validateFn = settings.AnonimizationShape switch
         {
             AnonimizationShape.Ellipse => ShapeTestHelper.ValidateEllipse,
-            AnonimizationShape.Rectangle => ShapeTestHelper.ValidateRectangle,
+            AnonimizationShape.Rectangle => ShapeValidationHelper.ValidateRectangle,
             _ => throw new NotImplementedException(),
         };
 

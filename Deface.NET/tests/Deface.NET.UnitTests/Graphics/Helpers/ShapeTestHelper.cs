@@ -1,6 +1,7 @@
 ﻿using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection;
 using SkiaSharp;
+using Deface.NET.Tests.Shared.Helpers;
 
 namespace Deface.NET.UnitTests.Graphics.Helpers;
 
@@ -16,19 +17,6 @@ internal static class ShapeTestHelper
         for (int y = 0; y < frame.Height; y++)
         {
             for (int x = 0; x < frame.Width; x++)
-            {
-                ValidatePixel(x, y, action, nativeElement);
-            }
-        }
-    }
-
-    public static void ValidateRectangle(Frame frame, DetectedObject detectedObject, Action<PixelData> action)
-    {
-        var nativeElement = (SKBitmap)frame;
-
-        for (int y = detectedObject.Y1; y < detectedObject.Y2; y++)
-        {
-            for (int x = detectedObject.X1; x < detectedObject.X2; x++)
             {
                 ValidatePixel(x, y, action, nativeElement);
             }

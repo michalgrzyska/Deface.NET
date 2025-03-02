@@ -1,7 +1,7 @@
 ﻿using Deface.NET.IntegrationTests.Helpers;
 using Deface.NET.IntegrationTests.Helpers.VideoReading;
+using Deface.NET.Tests.Shared.Helpers;
 using SkiaSharp;
-using static Deface.NET.IntegrationTests.Resources.TestData;
 
 namespace Deface.NET.IntegrationTests;
 
@@ -33,14 +33,27 @@ public class AnonimizationTests : BaseIntegrationTest
             var testVideo = await TestVideo.Get(outputFileName);
             SKColor color = new(red, green, blue);
 
-            testVideo.Frames.ElementAt(1).HasRectangle(103, 84, 271, 300, color);
-            testVideo.Frames.ElementAt(33).HasRectangle(1039, 81, 1205, 303, color);
-            testVideo.Frames.ElementAt(63).HasRectangle(1039, 457, 1203, 681, color);
-            testVideo.Frames.ElementAt(95).HasRectangle(105, 461, 269, 683, color);
+            ValidateRectangle(testVideo.Frames.ElementAt(1), 103, 84, 271, 300, color);
+            ValidateRectangle(testVideo.Frames.ElementAt(33), 1039, 81, 1205, 303, color);
+            ValidateRectangle(testVideo.Frames.ElementAt(63), 1039, 457, 1203, 681, color);
+            ValidateRectangle(testVideo.Frames.ElementAt(95), 105, 461, 269, 683, color);
         }
         finally
         {
             CleanupFiles(result?.OutputFile);
         }
+    }
+
+    private void ValidateRectangle(TestFrame frame, int x1, int y1, int x2, int y2, SKColor color)
+    {
+        ShapeValidationHelper.ValidateRectangle(frame, x1, y1, x2, y2, pixel =>
+        {
+            var colorsMatch =
+                pixel.R == color.Red &&
+                pixel.G == color.Green &&
+                pixel.B == color.Blue;
+
+            colorsMatch.ShouldBeTrue();
+        });
     }
 }

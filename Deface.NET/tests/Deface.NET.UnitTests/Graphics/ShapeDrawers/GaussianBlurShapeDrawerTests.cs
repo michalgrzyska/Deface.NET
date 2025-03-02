@@ -1,9 +1,9 @@
 ﻿using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.Graphics.ShapeDrawers;
+using Deface.NET.Tests.Shared.Helpers;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
-using Shouldly;
 
 namespace Deface.NET.UnitTests.Graphics.ShapeDrawers;
 
