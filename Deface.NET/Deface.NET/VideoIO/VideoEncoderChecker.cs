@@ -38,7 +38,7 @@ internal class VideoEncoderChecker(IScopedSettingsProvider settingsProvider, IEx
     private static string[] GetVideoEncodersFromOutput(string output)
     {
         var encodersAllLines = output
-            .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+            .Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries)
             .Select(x => x.Trim())
             .ToList();
 
