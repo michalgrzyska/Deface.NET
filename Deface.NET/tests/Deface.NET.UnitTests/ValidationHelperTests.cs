@@ -14,13 +14,13 @@ public class ValidationHelperTests
     }
 
     [Fact]
-    public void MustBeGreaterOrEqualTo_WithInvalidValue_ShouldThrowArgumentOutOfRangeException()
+    public void MustBeGreaterOrEqualTo_WithInvalidValue_ShouldThrowArgumentException()
     {
         var prop = 2;
         var value = 5;
 
         var act = () => ValidationHelper.MustBeGreaterOrEqualTo(prop, value, nameof(prop));
-        act.ShouldThrow<ArgumentOutOfRangeException>();
+        act.ShouldThrow<ArgumentException>(string.Format(ExceptionMessages.MustBeGreaterOrEqualTo, nameof(prop)));
     }
 
     [Theory]
@@ -33,13 +33,13 @@ public class ValidationHelperTests
     }
 
     [Fact]
-    public void MustBeLessThanOrEqualTo_WithInvalidValue_ShouldThrowArgumentOutOfRangeException()
+    public void MustBeLessThanOrEqualTo_WithInvalidValue_ShouldThrowArgumentException()
     {
         var prop = 7;
         var value = 5;
 
         var act = () => ValidationHelper.MustBeLessThanOrEqualTo(prop, value, nameof(prop));
-        act.ShouldThrow<ArgumentOutOfRangeException>();
+        act.ShouldThrow<ArgumentException>(string.Format(ExceptionMessages.MustBeLessThanOrEqualTo, nameof(prop)));
     }
 
     [Theory]
@@ -58,7 +58,7 @@ public class ValidationHelperTests
     public void MustNotBeNullOrWhiteSpace_WithInvalidStrings_ShouldThrowArgumentException(string? prop)
     {
         var act = () => ValidationHelper.MustNotBeNullOrWhiteSpace(prop!, nameof(prop));
-        act.ShouldThrow<ArgumentException>();
+        act.ShouldThrow<ArgumentException>(string.Format(ExceptionMessages.MustNotBeNullOrWhiteSpace, nameof(prop)));
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public class ValidationHelperTests
         var nonExistentFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         var act = () => ValidationHelper.FileMustExist(nonExistentFilePath, nameof(nonExistentFilePath));
-        act.ShouldThrow<FileNotFoundException>();
+        act.ShouldThrow<FileNotFoundException>(string.Format(ExceptionMessages.FileMustExist, nameof(nonExistentFilePath)));
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public class ValidationHelperTests
         var nonExistentDirectoryPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         var act = () => ValidationHelper.DirectoryMustExist(nonExistentDirectoryPath, nameof(nonExistentDirectoryPath));
-        act.ShouldThrow<DirectoryNotFoundException>();
+        act.ShouldThrow<DirectoryNotFoundException>(string.Format(ExceptionMessages.DirectoryMustExist, nameof(nonExistentDirectoryPath)));
     }
 
     [Fact]
@@ -117,7 +117,7 @@ public class ValidationHelperTests
     public void ValidateFilePath_WithInvalidPath_ShouldThrowArgumentException(string? path)
     {
         var act = () => ValidationHelper.ValidateFilePath(path!, nameof(path));
-        act.ShouldThrow<ArgumentException>();
+        act.ShouldThrow<ArgumentException>(string.Format(ExceptionMessages.FileMustExist, nameof(path)));
     }
 
     [Fact]
@@ -126,7 +126,7 @@ public class ValidationHelperTests
         var nonExistentFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         var act = () => ValidationHelper.ValidateFilePath(nonExistentFilePath, nameof(nonExistentFilePath));
-        act.ShouldThrow<FileNotFoundException>();
+        act.ShouldThrow<FileNotFoundException>(string.Format(ExceptionMessages.FileMustExist, nameof(nonExistentFilePath)));
     }
 
     [Fact]
@@ -145,7 +145,7 @@ public class ValidationHelperTests
     public void ValidateDirectoryPath_WithInvalidPath_ShouldThrowArgumentException(string? path)
     {
         var act = () => ValidationHelper.ValidateDirectoryPath(path!, nameof(path));
-        act.ShouldThrow<ArgumentException>();
+        act.ShouldThrow<ArgumentException>(string.Format(ExceptionMessages.DirectoryMustExist, nameof(path)));
     }
 
     [Fact]
@@ -154,6 +154,6 @@ public class ValidationHelperTests
         string nonExistentDirectoryPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         var act = () => ValidationHelper.ValidateDirectoryPath(nonExistentDirectoryPath, nameof(nonExistentDirectoryPath));
-        act.ShouldThrow<DirectoryNotFoundException>();
+        act.ShouldThrow<DirectoryNotFoundException>(string.Format(ExceptionMessages.DirectoryMustExist, nameof(nonExistentDirectoryPath)));
     }
 }

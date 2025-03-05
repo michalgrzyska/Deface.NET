@@ -27,7 +27,7 @@ internal class FFMpegPathValidator(IExternalProcessFactory externalProcessFactor
 
         if (!output.StartsWith("ffmpeg version"))
         {
-            throw new Exception("Returned test string from FFMpeg is invalid. Check your FFMpeg with -version parameter to make sure it works.");
+            throw new Exception(ExceptionMessages.InvalidFFMpegTestOutput);
         }
     }
 }

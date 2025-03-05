@@ -1,4 +1,5 @@
-﻿using Deface.NET.Configuration;
+﻿using Deface.NET.Common;
+using Deface.NET.Configuration;
 using Deface.NET.Configuration.Validation;
 using Deface.NET.System.ExternalProcessing;
 using Deface.NET.UnitTests._TestsConfig;
@@ -21,9 +22,27 @@ public class SettingsValidatorUnitTests
     [Theory]
     [InlineData(-1)]
     [InlineData(-0.01)]
-    [InlineData(100.1)]
-    [InlineData(101)]
-    public void Threshold_IncorrectValues_ThrowsArgumentOutOfRangeException(float threshold)
+    public void Threshold_IncorrectNegativeValues_ThrowsArgumentException(float threshold)
+    {
+        var settings = Settings;
+
+        settings.ApplyAction(settings =>
+        {
+            settings.Threshold = threshold;
+        });
+
+        SettingsValidator validator = new(GetExternalProcessFactory(settings));
+
+        var action = () => validator.Validate(settings, ProcessingType.Image);
+        action
+        .ShouldThrow<DefaceException>()
+            .WithInnerException<ArgumentException>(string.Format(ExceptionMessages.MustBeGreaterOrEqualTo, 0));
+    }
+
+    [Theory]
+    [InlineData(1.1)]
+    [InlineData(1.01)]
+    public void Threshold_IncorrectPositiveValues_ThrowsArgumentException(float threshold)
     {
         var settings = Settings;
 
@@ -36,7 +55,9 @@ public class SettingsValidatorUnitTests
 
         var action = () => validator.Validate(settings, ProcessingType.Image);
 
-        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentOutOfRangeException>();
+        action
+            .ShouldThrow<DefaceException>()
+            .WithInnerException<ArgumentException>(string.Format(ExceptionMessages.MustBeLessThanOrEqualTo, 1));
     }
 
     [Theory]
@@ -65,7 +86,7 @@ public class SettingsValidatorUnitTests
     [InlineData(0)]
     [InlineData(-1)]
     [InlineData(-1000)]
-    public void RunDetectionEachNFrames_IncorrectData_ThrowsArgumentOutOfRangeException(int runDetectionEachNFrames)
+    public void RunDetectionEachNFrames_IncorrectData_ThrowsArgumentException(int runDetectionEachNFrames)
     {
         var settings = Settings;
 
@@ -78,7 +99,9 @@ public class SettingsValidatorUnitTests
 
         var action = () => validator.Validate(settings, ProcessingType.Video);
 
-        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentOutOfRangeException>();
+        action
+            .ShouldThrow<DefaceException>()
+            .WithInnerException<ArgumentException>(string.Format(ExceptionMessages.MustBeGreaterOrEqualTo, 1));
     }
 
     [Theory]
@@ -111,7 +134,7 @@ public class SettingsValidatorUnitTests
     [InlineData(0.1)]
     [InlineData(-1)]
     [InlineData(-100)]
-    public void MaskScale_IncorrectData_ThrowsArgumentOutOfRangeException(float maskScale)
+    public void MaskScale_IncorrectData_ThrowsArgumentException(float maskScale)
     {
         var settings = Settings;
 
@@ -124,7 +147,9 @@ public class SettingsValidatorUnitTests
 
         var action = () => validator.Validate(settings, ProcessingType.Image);
 
-        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentOutOfRangeException>();
+        action
+            .ShouldThrow<DefaceException>()
+            .WithInnerException<ArgumentException>(string.Format(ExceptionMessages.MustBeGreaterOrEqualTo, 1));
     }
 
     [Theory]
@@ -165,7 +190,9 @@ public class SettingsValidatorUnitTests
 
         var action = () => validator.Validate(settings, ProcessingType.Video);
 
-        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
+        action
+            .ShouldThrow<DefaceException>()
+            .WithInnerException<ArgumentException>(string.Format(ExceptionMessages.MustNotBeNullOrWhiteSpace, nameof(Settings.FFMpegPath)));
     }
 
 
@@ -186,7 +213,9 @@ public class SettingsValidatorUnitTests
 
         var action = () => validator.Validate(settings, ProcessingType.Video);
 
-        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
+        action
+            .ShouldThrow<DefaceException>()
+            .WithInnerException<ArgumentException>(string.Format(ExceptionMessages.MustNotBeNullOrWhiteSpace, nameof(Settings.FFProbePath)));
     }
 
     private IExternalProcessFactory GetExternalProcessFactory(Settings settings)

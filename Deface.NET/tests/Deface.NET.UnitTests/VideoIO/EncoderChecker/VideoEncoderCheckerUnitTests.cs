@@ -1,4 +1,5 @@
-﻿using Deface.NET.Configuration.Provider.Interfaces;
+﻿using Deface.NET.Common;
+using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.System.ExternalProcessing;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.VideoIO;
@@ -32,7 +33,7 @@ public class VideoEncoderCheckerUnitTests(SettingsFixture settingsFixture)
 
         var action = checker.CheckFfmpegCodecs;
 
-        action.ShouldThrow<InvalidOperationException>();
+        action.ShouldThrow<InvalidOperationException>(string.Format(ExceptionMessages.EncoderNotFound, encodingCodec));
     }
 
     [Theory]
@@ -50,7 +51,7 @@ public class VideoEncoderCheckerUnitTests(SettingsFixture settingsFixture)
 
         var action = checker.CheckFfmpegCodecs;
 
-        action.ShouldThrow<InvalidOperationException>();
+        action.ShouldThrow<InvalidOperationException>(ExceptionMessages.SeparatorNotFound);
     }
 
     private VideoEncoderChecker GetVideoEncoderChecker(EncodingCodec codec, string output)

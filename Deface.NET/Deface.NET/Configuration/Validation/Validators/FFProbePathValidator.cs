@@ -27,7 +27,7 @@ internal class FFProbePathValidator(IExternalProcessFactory externalProcessFacto
 
         if (!output.StartsWith("ffprobe version"))
         {
-            throw new Exception("Returned test string from FFProbe is invalid. Check your FFProbe with -version parameter to make sure it works.");
+            throw new Exception(ExceptionMessages.InvalidFFProbeTestOutput);
         }
     }
 }

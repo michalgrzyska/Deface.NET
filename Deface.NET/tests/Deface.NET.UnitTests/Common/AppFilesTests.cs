@@ -23,7 +23,8 @@ public class AppFilesTests
         AppFiles appFiles = new(fileSystem);
 
         // Act & Assert
-        Should.Throw<FileNotFoundException>(() => _ = appFiles.UltraFaceONNX);
+        var action = () => _ = appFiles.UltraFaceONNX;
+        action.ShouldThrow<FileNotFoundException>(string.Format(ExceptionMessages.AppFileNotFound, FileName));
     }
 
     [Fact]

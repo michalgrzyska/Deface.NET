@@ -1,4 +1,6 @@
-﻿using SkiaSharp;
+﻿using Deface.NET.Common;
+using Google.Protobuf.WellKnownTypes;
+using SkiaSharp;
 
 namespace Deface.NET.UnitTests.Configuration;
 
@@ -30,14 +32,23 @@ public class ImageFormatTests
     [InlineData(0)]
     [InlineData(-1)]
     [InlineData(-100)]
+    public void Jpeg_InvalidTooSmallQuality_ThrowsArgumentException(int quality)
+    {
+        var imageFormat = ImageFormat.Jpeg(quality);
+        var action = imageFormat.Validate;
+
+        action.ShouldThrow<ArgumentException>(string.Format(ExceptionMessages.MustBeGreaterOrEqualTo, quality));
+    }
+
+    [Theory]
     [InlineData(101)]
     [InlineData(200)]
-    public void Jpeg_InvalidQuality_ThrowsArgumentOutOfRangeException(int quality)
+    public void Jpeg_InvalidTooBigQuality_ThrowsArgumentException(int quality)
     {
         var imageFormat = ImageFormat.Jpeg(quality);
 
-        var action = () => imageFormat.Validate();
+        var action = imageFormat.Validate;
 
-        action.ShouldThrow<ArgumentOutOfRangeException>();
+        action.ShouldThrow<ArgumentException>(string.Format(ExceptionMessages.MustBeLessThanOrEqualTo, quality));
     }
 }

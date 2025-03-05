@@ -1,4 +1,5 @@
-﻿using Deface.NET.Configuration.Provider.Interfaces;
+﻿using Deface.NET.Common;
+using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.System.ExternalProcessing;
 using Deface.NET.VideoIO.Helpers;
 using Deface.NET.VideoIO.Interfaces;
@@ -23,7 +24,7 @@ internal class VideoEncoderChecker(IScopedSettingsProvider settingsProvider, IEx
 
         if (!encoders.Contains(currentCodec))
         {
-            throw new InvalidOperationException($"Encoder {_settings.EncodingCodec} is not available in your FFMpeg build.");
+            throw new InvalidOperationException(string.Format(ExceptionMessages.EncoderNotFound, _settings.EncodingCodec));
         }
     }
 
@@ -46,7 +47,7 @@ internal class VideoEncoderChecker(IScopedSettingsProvider settingsProvider, IEx
 
         if (separatorIndex == -1)
         {
-            throw new InvalidOperationException("Separator not found. FFMpeg result may be corruped.");
+            throw new InvalidOperationException(ExceptionMessages.SeparatorNotFound);
         }
 
         var encodersLines = encodersAllLines.Skip(separatorIndex + 1);

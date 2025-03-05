@@ -1,4 +1,5 @@
-﻿using Deface.NET.UnitTests._TestsConfig;
+﻿using Deface.NET.Common;
+using Deface.NET.UnitTests._TestsConfig;
 using NSubstitute;
 
 namespace Deface.NET.UnitTests.DefaceServiceTests;
@@ -32,7 +33,9 @@ public partial class DefaceServiceTests
     {
         var action = () => _service.ProcessImages("test", "file");
 
-        action.ShouldThrow<DefaceException>().WithInnerException<DirectoryNotFoundException>();
+        action
+            .ShouldThrow<DefaceException>()
+            .WithInnerException<DirectoryNotFoundException>(string.Format(ExceptionMessages.DirectoryMustExist, "inputDirectory"));
     }
 
     [Theory]
@@ -44,7 +47,9 @@ public partial class DefaceServiceTests
     {
         var action = () => _service.ProcessImages(inputString!, "file");
 
-        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
+        action
+            .ShouldThrow<DefaceException>()
+            .WithInnerException<ArgumentException>(string.Format(ExceptionMessages.MustNotBeNullOrWhiteSpace, "inputDirectory"));
     }
 
     [Theory]
@@ -64,7 +69,9 @@ public partial class DefaceServiceTests
 
         // Assert
 
-        action.ShouldThrow<DefaceException>().WithInnerException<ArgumentException>();
+        action
+            .ShouldThrow<DefaceException>()
+            .WithInnerException<ArgumentException>(string.Format(ExceptionMessages.MustNotBeNullOrWhiteSpace, "outputDirectory"));
 
         // Cleanup
 

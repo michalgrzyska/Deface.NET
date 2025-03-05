@@ -1,4 +1,5 @@
-﻿using Deface.NET.UnitTests.Graphics.Helpers;
+﻿using Deface.NET.Common;
+using Deface.NET.UnitTests.Graphics.Helpers;
 using Deface.NET.VideoIO.Helpers;
 using Deface.NET.VideoIO.Models;
 using NSubstitute.ExceptionExtensions;
@@ -55,7 +56,7 @@ public class VideoInfoHelperTests
 
         // Assert
 
-        action.ShouldThrow<InvalidOperationException>();
+        action.ShouldThrow<InvalidOperationException>(ExceptionMessages.VideoHasNoStreams);
     }
 
     [Fact]

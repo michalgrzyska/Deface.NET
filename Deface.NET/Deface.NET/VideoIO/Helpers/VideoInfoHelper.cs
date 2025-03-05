@@ -1,4 +1,5 @@
-﻿using Deface.NET.VideoIO.Models;
+﻿using Deface.NET.Common;
+using Deface.NET.VideoIO.Models;
 
 namespace Deface.NET.VideoIO.Helpers;
 
@@ -6,7 +7,7 @@ internal static class VideoInfoHelper
 {
     public static VideoInfo ConvertOutputToVideoInfo(VideoInfoOutput output, string filePath)
     {
-        var stream = output.Streams.FirstOrDefault() ?? throw new InvalidOperationException("Video has no streams.");
+        var stream = output.Streams.FirstOrDefault() ?? throw new InvalidOperationException(ExceptionMessages.VideoHasNoStreams);
 
         var width = stream.Width;
         var height = stream.Height;

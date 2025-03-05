@@ -1,4 +1,5 @@
 ﻿
+using Deface.NET.Common;
 using Deface.NET.Configuration.Provider;
 
 namespace Deface.NET.UnitTests.Configuration;
@@ -10,7 +11,7 @@ public class SettingsProviderTests
     {
         var settingsProvider = new SettingsProvider();
 
-        Should.Throw<InvalidOperationException>(() => settingsProvider.Settings);
+        Should.Throw<InvalidOperationException>(() => settingsProvider.Settings, ExceptionMessages.SettingsNotInitalized);
     }
 
     [Fact]
@@ -23,6 +24,6 @@ public class SettingsProviderTests
         var action = 
             () => settingsProvider.Initialize(settings => settings.AnonimizationMethod = AnonimizationMethod.Mosaic);
 
-        action.ShouldThrow<InvalidOperationException>();
+        action.ShouldThrow<InvalidOperationException>(ExceptionMessages.SettingsAlreadyInitalized);
     }
 }

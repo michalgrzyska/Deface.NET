@@ -1,4 +1,7 @@
-﻿namespace Deface.NET.IntegrationTests;
+﻿using Deface.NET.Common;
+using Deface.NET.IntegrationTests.Helpers;
+
+namespace Deface.NET.IntegrationTests;
 
 public class FFMpegInvalidExecutablesTests
 {
@@ -16,7 +19,9 @@ public class FFMpegInvalidExecutablesTests
 
         var action = () => service.ProcessVideo("", "");
 
-        action.ShouldThrow<DefaceException>();
+        action
+            .ShouldThrow<DefaceException>()
+            .WithInnerException<ArgumentException>(string.Format(ExceptionMessages.MustNotBeNullOrWhiteSpace, "inputPath"));
     }
 
     [Theory]
@@ -33,6 +38,8 @@ public class FFMpegInvalidExecutablesTests
 
         var action = () => service.ProcessVideo("", "");
 
-        action.ShouldThrow<DefaceException>();
+        action
+            .ShouldThrow<DefaceException>()
+            .WithInnerException<ArgumentException>(string.Format(ExceptionMessages.MustNotBeNullOrWhiteSpace, "inputPath"));
     }
 }

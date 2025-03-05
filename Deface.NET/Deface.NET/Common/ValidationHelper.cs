@@ -11,7 +11,7 @@ internal static class ValidationHelper
     {
         if (prop < value)
         {
-            throw new ArgumentOutOfRangeException(nameOfProp, $"Value must be greater or equal to {value}");
+            throw new ArgumentException(string.Format(ExceptionMessages.MustBeGreaterOrEqualTo, value));
         }
     }
 
@@ -19,7 +19,7 @@ internal static class ValidationHelper
     {
         if (prop > value)
         {
-            throw new ArgumentOutOfRangeException(nameOfProp, $"Value must be less than or equal to {value}");
+            throw new ArgumentException(string.Format(ExceptionMessages.MustBeLessThanOrEqualTo, value));
         }
     }
 
@@ -27,7 +27,7 @@ internal static class ValidationHelper
     {
         if (string.IsNullOrWhiteSpace(prop))
         {
-            throw new ArgumentException(nameOfProp, $"{nameOfProp} must not be null or whitespace/empty");
+            throw new ArgumentException(string.Format(ExceptionMessages.MustNotBeNullOrWhiteSpace, nameOfProp));
         }
     }
 
@@ -35,7 +35,7 @@ internal static class ValidationHelper
     {
         if (!File.Exists(path))
         {
-            throw new FileNotFoundException($"{nameOfProp} does not contain a name of existing file");
+            throw new FileNotFoundException(string.Format(ExceptionMessages.FileMustExist, nameOfProp));
         }
     }
 
@@ -43,7 +43,7 @@ internal static class ValidationHelper
     {
         if (!Directory.Exists(path))
         {
-            throw new DirectoryNotFoundException($"{nameOfProp} does not contain a name of existing directory");
+            throw new DirectoryNotFoundException(string.Format(ExceptionMessages.DirectoryMustExist, nameOfProp));
         }
     }
 

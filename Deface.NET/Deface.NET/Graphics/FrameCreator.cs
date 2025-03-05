@@ -1,4 +1,5 @@
-﻿using Deface.NET.Graphics.Interfaces;
+﻿using Deface.NET.Common;
+using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.System;
 using SkiaSharp;
@@ -22,7 +23,7 @@ internal class FrameCreator(IFileSystem fileSystem) : IFrameCreator
 
         if (bitmap == null)
         {
-            throw new InvalidOperationException($"Failed to decode image from file '{path}'.");
+            throw new InvalidOperationException(string.Format(ExceptionMessages.FailedToDecodeImage, path));
         }
 
         return (Frame)bitmap;

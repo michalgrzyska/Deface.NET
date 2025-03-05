@@ -1,4 +1,5 @@
-﻿using Deface.NET.Configuration.Provider.Interfaces;
+﻿using Deface.NET.Common;
+using Deface.NET.Configuration.Provider.Interfaces;
 
 namespace Deface.NET.Configuration.Provider;
 
@@ -8,7 +9,7 @@ internal class SettingsProvider : ISettingsProvider
 
     public Settings Settings
     {
-        get => _settings ?? throw new InvalidOperationException("Settings are not initialized.");
+        get => _settings ?? throw new InvalidOperationException(ExceptionMessages.SettingsNotInitalized);
         private set => _settings = value;
     }
 
@@ -16,7 +17,7 @@ internal class SettingsProvider : ISettingsProvider
     {
         if (_settings is not null) 
         {
-            throw new InvalidOperationException("Settings are already initialized.");
+            throw new InvalidOperationException(ExceptionMessages.SettingsAlreadyInitalized);
         }
 
         Settings = new(builder);

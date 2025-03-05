@@ -1,4 +1,5 @@
-﻿using Deface.NET.Configuration.Provider.Interfaces;
+﻿using Deface.NET.Common;
+using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.System.ExternalProcessing;
 using Deface.NET.VideoIO.Helpers;
@@ -33,7 +34,7 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider, IExternalPr
         {
             if (frameIndex == 0 || frameIndex == 1)
             {
-                throw new InvalidOperationException("An error occured while writing frames to a target destination. Ensure your target file destination is valid and accessible by FFMpeg process.");
+                throw new InvalidOperationException(ExceptionMessages.ErrorWhileWritingFrames);
             }
         }
 

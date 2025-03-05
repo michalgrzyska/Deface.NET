@@ -1,5 +1,4 @@
 ﻿using Deface.NET.Common;
-using Google.Protobuf.WellKnownTypes;
 
 namespace Deface.NET.Configuration.Validation.Validators;
 
