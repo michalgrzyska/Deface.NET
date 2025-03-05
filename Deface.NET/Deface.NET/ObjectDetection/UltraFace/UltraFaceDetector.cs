@@ -22,7 +22,6 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
         _predictionEngine = GetPredictionEngine();
     }
 
-    // We can pass other values from scoped settings if needed
     public List<DetectedObject> Detect(Frame frame, Settings settings)
     {
         var preprocessedImage = PreprocessImage(frame);

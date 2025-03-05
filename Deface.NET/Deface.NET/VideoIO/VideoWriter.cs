@@ -19,10 +19,22 @@ internal class VideoWriter(IScopedSettingsProvider settingsProvider, IExternalPr
         ffmpegProcess.Start();
 
         using var ffmpegInput = ffmpegProcess.InputStream;
+        var frameIndex = 0;
 
-        foreach (var frame in frames)
+        try
         {
-            ffmpegInput.Write(frame.Bytes);
+            foreach (var frame in frames)
+            {
+                ffmpegInput.Write(frame.Bytes);
+                frameIndex++;
+            }
+        }
+        catch (IOException)
+        {
+            if (frameIndex == 0 || frameIndex == 1)
+            {
+                throw new InvalidOperationException("An error occured while writing frames to a target destination. Ensure your target file destination is valid and accessible by FFMpeg process.");
+            }
         }
 
         ffmpegInput.Close();
