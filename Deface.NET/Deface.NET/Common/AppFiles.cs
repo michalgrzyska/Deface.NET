@@ -16,7 +16,7 @@ internal class AppFiles(IFileSystem fileSystem) : IAppFiles
 
         if (!_fileSystem.Exists(fullPath))
         {
-            throw new FileNotFoundException($"Could not find the required file: {filename}. This error may occur because the parent application uses a different base directory than the actual application's folder. Refer to https://github.com/michalgrzyska/Deface.NET?tab=readme-ov-file#faq--known-issues to learn how to use the {nameof(Settings)}.{nameof(Settings.CustomBaseDirectory)} property to resolve this issue.");
+            throw new FileNotFoundException($"Could not find the required file: {filename}. This error may occur because the parent application uses a different base directory than the actual application's folder. Refer to https://github.com/michalgrzyska/Deface.NET?tab=readme-ov-file#3-custombasedirectory to learn how to use the {nameof(Settings)}.{nameof(Settings.CustomBaseDirectory)} property to resolve this issue.");
         }
 
         return fullPath;
