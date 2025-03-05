@@ -1,18 +1,13 @@
-﻿using Deface.NET;
-using Deface.NET.TestResources;
+﻿// Don't want to create a test project to test Deface.NET? Just use this playground.
 
-Console.WriteLine(Directory.GetCurrentDirectory());
+using Deface.NET;
+using Deface.NET.TestResources;
 
 IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
 {
-    options.AnonimizationMethod = AnonimizationMethod.Mosaic;
-    options.AnonimizationShape = AnonimizationShape.Ellipse;
-    options.Hardware = Hardware.Cuda(0);
-    options.EncodingCodec = EncodingCodec.H264;
+    // Provide your own options here
 });
 
-var result = defaceService.ProcessVideo(TestResources.Video_Very_Short_480p, "\"C://DefaceTest//testt");
-
-//var result = defaceService.ProcessImage(TestResources.Photo3, "C://DefaceTest//4.png");
+var result = defaceService.ProcessVideo(TestResources.Video_Very_Short_480p, "your target path here");
 
 Console.ReadKey();
