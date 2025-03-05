@@ -16,8 +16,8 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
     private const float IouThreshold = 0.5f;
 
     // GpuDeviceId goes from global settings
-    public UltraFaceDetector(IOnnxProvider onnxProvider, ISettingsProvider settingsProvider) 
-        : base(onnxProvider, settingsProvider.Settings, AppFiles.UltraFaceONNX)
+    public UltraFaceDetector(IOnnxProvider onnxProvider, ISettingsProvider settingsProvider, IAppFiles appFiles) 
+        : base(onnxProvider, settingsProvider.Settings, appFiles.UltraFaceONNX)
     {
         _predictionEngine = GetPredictionEngine();
     }

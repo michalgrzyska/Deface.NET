@@ -67,20 +67,21 @@ services.AddDeface(settings =>
 
 To find out more informatiom, read the XML comments for a given option property/value.
 
-| Option                       | Value                                      | Required    | Additional info                |
-| ---------------------------- | ------------------------------------------ | ----------- | ------------------------------ |
-| `FFMpegPath`                 | `string`                                   | videos only | -                              |
+| Option                       | Value                                      | Required    | Additional info                        |
+| ---------------------------- | ------------------------------------------ | ----------- | -------------------------------------- |
+| `FFMpegPath`                 | `string`                                   | videos only | -                                      |
 | `FFProbePath`                | `string`                                   | videos only |
-| `LoggingLevel`               | `None`, `Basic`, `Detailed`                |             | -                              |
-| `AnonimizationShape`         | `Ellipse`, `Rectangle`                     |             | -                              |
-| `AnonimizationMethod`        | `GaussianBlur`, `Mosaic`, `Color(r, g, b)` |             | -                              |
-| `Threshold`                  | `float`                                    |             | `0 <= Threshold <= 1`          |
-| `RunDetectionEachNFrames`    | `int`                                      |             | `1 <= RunDetectionEachNFrames` |
-| `MaskScale`                  | `float`                                    |             | `1 <= MaskScale`               |
-| `ImageFormat`                | `Png`, `Jpeg(quality)`                     |             | -                              |
-| `Hardware`                   | `Cpu()`, `Cuda(gpuDeviceId)`               |             | -                              |
-| `EncodingCodec`              | `VP9`, `H264`                              |             | -                              |
-| `HideCommercialFeaturesInfo` | `bool`                                     |             | -                              |
+| `LoggingLevel`               | `None`, `Basic`, `Detailed`                |             | -                                      |
+| `AnonimizationShape`         | `Ellipse`, `Rectangle`                     |             | -                                      |
+| `AnonimizationMethod`        | `GaussianBlur`, `Mosaic`, `Color(r, g, b)` |             | -                                      |
+| `Threshold`                  | `float`                                    |             | `0 <= Threshold <= 1`                  |
+| `RunDetectionEachNFrames`    | `int`                                      |             | `1 <= RunDetectionEachNFrames`         |
+| `MaskScale`                  | `float`                                    |             | `1 <= MaskScale`                       |
+| `ImageFormat`                | `Png`, `Jpeg(quality)`                     |             | -                                      |
+| `Hardware`                   | `Cpu()`, `Cuda(gpuDeviceId)`               |             | -                                      |
+| `EncodingCodec`              | `VP9`, `H264`                              |             | -                                      |
+| `HideCommercialFeaturesInfo` | `bool`                                     |             | -                                      |
+| `CustomBaseDirectory`        | `string`                                   |             | See FAQ's CustomBaseDirectory section. |
 
 ## Commercial Features
 
@@ -103,3 +104,9 @@ Videos may not be processed correctly on Windows if the destination path exceeds
 #### 2. GPU performance
 
 Currently, the Ultraface model used in Deface.NET achieves only ~30% performance improvement when running on a GPU. We are working on optimizing it.
+
+#### 3. `CustomBaseDirectory`
+
+In some cases (such as with Azure Functions), Deface.NET may throw a `FileNotFoundException` indicating that `Settings.CustomBaseDirectory` should be overridden. This happens because the native static method `AppContext.BaseDirectory` from the `System` namespace may not return the actual directory containing the application DLLs.
+
+To resolve this, set the `CustomBaseDirectory` property when registering Deface.NET. In such cases, applications often provide the correct application directory as an environment variable.

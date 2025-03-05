@@ -1,0 +1,46 @@
+﻿using Deface.NET.Common;
+using Deface.NET.System;
+using NSubstitute;
+
+namespace Deface.NET.UnitTests.Common;
+
+public class AppFilesTests
+{
+    private const string BaseDirectory = "/app";
+    private const string FileName = "ultraface.onnx";
+    private const string FullPath = BaseDirectory + @"\Resources\" + FileName;
+
+
+    [Fact]
+    public void UltraFaceONNX_ShouldThrowFileNotFoundException_WhenFileDoesNotExist()
+    {
+        // Arrange
+        var fileSystem = Substitute.For<IFileSystem>();
+
+        fileSystem.BaseDirectory.Returns(BaseDirectory);
+        fileSystem.Exists(Arg.Any<string>()).Returns(false);
+
+        AppFiles appFiles = new(fileSystem);
+
+        // Act & Assert
+        Should.Throw<FileNotFoundException>(() => _ = appFiles.UltraFaceONNX);
+    }
+
+    [Fact]
+    public void UltraFaceONNX_ShouldReturnFullPathWhenFileExists()
+    {
+        // Arrange
+        var fileSystem = Substitute.For<IFileSystem>();
+
+        fileSystem.BaseDirectory.Returns(BaseDirectory);
+        fileSystem.Exists(Arg.Any<string>()).Returns(true);
+
+        AppFiles appFiles = new(fileSystem);
+
+        // Act
+        var result = appFiles.UltraFaceONNX;
+
+        // Assert
+        result.ShouldBe(FullPath);
+    }
+}

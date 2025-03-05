@@ -1,5 +1,6 @@
 ﻿using Deface.NET.CommercialFeatures;
 using Deface.NET.CommercialFeatures.Interfaces;
+using Deface.NET.Common;
 using Deface.NET.Configuration.Provider;
 using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.Configuration.Validation;
@@ -37,6 +38,7 @@ public static class DependencyInjection
         services.AddSingleton<IExternalProcessFactory, ExternalProcessFactory>();
         services.AddSingleton<IOnnxProvider, OnnxProvider>();
         services.AddSingleton<ISettingsValidator, SettingsValidator>();
+        services.AddSingleton<IAppFiles, AppFiles>();
 
         services.AddSettingsProvider(builder);
 

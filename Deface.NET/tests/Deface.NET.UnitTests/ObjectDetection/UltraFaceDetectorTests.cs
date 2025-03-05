@@ -1,6 +1,8 @@
-﻿using Deface.NET.Configuration.Provider.Interfaces;
+﻿using Deface.NET.Common;
+using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.ObjectDetection.ONNX;
 using Deface.NET.ObjectDetection.UltraFace;
+using Deface.NET.System;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
 using NSubstitute;
@@ -20,7 +22,13 @@ public class UltraFaceDetectorTests : IDisposable
         var settingsProvider = Substitute.For<ISettingsProvider>();
         settingsProvider.Settings.Returns(_settingsFixture.Settings);
 
-        _detector = new(GetOnnxProvider(), settingsProvider);
+        var fileSystem = Substitute.For<IFileSystem>();
+        fileSystem.BaseDirectory.Returns(AppContext.BaseDirectory);
+        fileSystem.Exists(Arg.Any<string>()).Returns(true);
+
+        AppFiles appFiles = new(fileSystem);
+
+        _detector = new(GetOnnxProvider(), settingsProvider, appFiles);
     }
 
     [Theory]

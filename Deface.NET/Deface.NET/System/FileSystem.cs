@@ -31,4 +31,10 @@ internal class FileSystem : IFileSystem
     {
         return Directory.GetFiles(path);
     }
+
+    [ExcludeFromCodeCoverage]
+    public bool Exists(string path)
+    {
+        return File.Exists(path);
+    }
 }
