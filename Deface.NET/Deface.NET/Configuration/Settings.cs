@@ -79,6 +79,13 @@ public class Settings
     /// </summary>
     public bool HideCommercialFeaturesInfo { get; set; } = false;
 
+    /// <summary>
+    /// For some cases (e.g. Azure Functions) Deface.NET may not work with default settings for working directory.
+    /// In that case a custom working directory may be provided.
+    /// <para>NOTE: Cannot be overriden locally, Deface.NET always uses global setting.</para>
+    /// </summary>
+    public string? CustomBaseDirectory { get; set; }
+
     internal Settings(Action<Settings>? builderAction)
     {
         ApplyAction(builderAction);

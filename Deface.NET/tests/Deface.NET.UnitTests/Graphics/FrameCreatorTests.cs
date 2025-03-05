@@ -1,26 +1,22 @@
 ﻿using Deface.NET.Graphics;
 using Deface.NET.Graphics.Models;
 using Deface.NET.System;
+using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
 
 namespace Deface.NET.UnitTests.Graphics;
 
-public class FrameCreatorTests
+[Collection(nameof(SettingsCollection))]
+public class FrameCreatorTests(SettingsFixture settingsFixture)
 {
-    private readonly FrameCreator _frameCreator;
-
-    public FrameCreatorTests()
-    {
-        FileSystem fileSystem = new();
-        _frameCreator = new FrameCreator(fileSystem);
-    }
+    private readonly SettingsFixture _settingsFixture = settingsFixture;
 
     [Fact]
     public void FromFile_ProperImagePath_CreatesFrame()
     {
         var path = TestResources.TestResources.Photo1;
 
-        var frame = _frameCreator.FromFile(path);
+        var frame = GetFrameCreator().FromFile(path);
 
         frame.ShouldBe(1280, 946);
     }
@@ -30,7 +26,7 @@ public class FrameCreatorTests
     {
         var path = Guid.NewGuid().ToString();
 
-        var action = () => _frameCreator.FromFile(path);
+        var action = () => GetFrameCreator().FromFile(path);
 
         action.ShouldThrow<FileNotFoundException>();
     }
@@ -47,7 +43,7 @@ public class FrameCreatorTests
 
         // Act
 
-        var result = _frameCreator.FromBgraArray(bgraArray, width, height);
+        var result = GetFrameCreator().FromBgraArray(bgraArray, width, height);
 
         // Assert
 
@@ -75,5 +71,13 @@ public class FrameCreatorTests
         }
 
         return imageData;
+    }
+
+    private FrameCreator GetFrameCreator(Action<Settings>? action = null)
+    {
+        var settingsProvider = _settingsFixture.GetSettingsProvider(action);
+        FileSystem fileSystem = new(settingsProvider);
+
+        return new FrameCreator(fileSystem);
     }
 }
