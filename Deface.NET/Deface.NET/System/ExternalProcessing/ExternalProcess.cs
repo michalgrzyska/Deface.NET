@@ -20,7 +20,8 @@ internal class ExternalProcess : IExternalProcess
             UseShellExecute = false,
             CreateNoWindow = true,
             RedirectStandardOutput = true,
-            RedirectStandardInput = redirectStandardInput
+            RedirectStandardInput = redirectStandardInput,
+            RedirectStandardError = true
         };
 
         _process = new()

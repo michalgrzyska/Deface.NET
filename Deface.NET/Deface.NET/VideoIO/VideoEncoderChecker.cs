@@ -17,7 +17,6 @@ internal class VideoEncoderChecker(IScopedSettingsProvider settingsProvider, IEx
     public void CheckFfmpegCodecs()
     {
         using var process = GetProcess();
-
         var processOutput = process.ExecuteWithOutput();
         var encoders = GetVideoEncodersFromOutput(processOutput);
         var currentCodec = CodecHelper.GetCodecName(_settings.EncodingCodec);
@@ -39,7 +38,7 @@ internal class VideoEncoderChecker(IScopedSettingsProvider settingsProvider, IEx
     private static string[] GetVideoEncodersFromOutput(string output)
     {
         var encodersAllLines = output
-            .Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries)
+            .Split([ "\n", "\r" ], StringSplitOptions.RemoveEmptyEntries)
             .Select(x => x.Trim())
             .ToList();
 
