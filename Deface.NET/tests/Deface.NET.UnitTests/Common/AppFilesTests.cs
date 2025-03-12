@@ -8,8 +8,7 @@ public class AppFilesTests
 {
     private const string BaseDirectory = "/app";
     private const string FileName = "ultraface.onnx";
-    private const string FullPath = BaseDirectory + @"\Resources\" + FileName;
-
+    private readonly string FullPath = Path.Combine(BaseDirectory, "Resources", FileName);
 
     [Fact]
     public void UltraFaceONNX_ShouldThrowFileNotFoundException_WhenFileDoesNotExist()

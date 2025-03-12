@@ -56,7 +56,7 @@ public class DProgressLoggerTests
         var dLogger = GetDProgressLogger(loggingLevel);
 
         dLogger.Start();
-        await Task.Delay(1000);
+        await Task.Delay(1250);
 
         dLogger.Log(1, "", 1);
 
