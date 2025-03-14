@@ -1,4 +1,5 @@
-﻿using Deface.NET.Configuration.Provider.Interfaces;
+﻿using Deface.NET.Common;
+using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Graphics.Models;
 using Deface.NET.Logging;
@@ -69,7 +70,16 @@ internal sealed class ImageProcessor
         using var result = _shapeDrawerProvider.ShapeDrawer.Draw(image, detectedObjects);
 
         var resultBytes = result.ToByteArray(_settings.ImageFormat);
-        _fileSystem.Save(outputPath, resultBytes);
+
+        try
+        {
+            _fileSystem.Save(outputPath, resultBytes);
+        }
+        catch
+        {
+            var errorMessage = string.Format(ExceptionMessages.InvalidOutputPath, outputPath);
+            throw new InvalidOperationException(errorMessage);
+        }
     }
 
     private static string GetOutputPath(string inputPath, string outputDirPath)

@@ -23,4 +23,6 @@ internal static class ExceptionMessages
     public const string EncoderNotFound = "Encoder {0} is not available in your FFMpeg build.";
 
     public const string ErrorWhileWritingFrames = "An error occured while writing frames to a target destination. Ensure your target file destination is valid and accessible by FFMpeg process.";
+
+    public const string InvalidOutputPath = "Could not save a result file to '{0}'. Ensure the path is valid and accessible by the application.";
 }
