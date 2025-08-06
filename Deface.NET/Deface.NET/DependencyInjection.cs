@@ -8,6 +8,7 @@ using Deface.NET.Graphics;
 using Deface.NET.Graphics.Interfaces;
 using Deface.NET.Logging;
 using Deface.NET.ObjectDetection;
+using Deface.NET.ObjectDetection.LicensePlates;
 using Deface.NET.ObjectDetection.ONNX;
 using Deface.NET.ObjectDetection.UltraFace;
 using Deface.NET.Processing;
@@ -35,6 +36,7 @@ public static class DependencyInjection
         services.AddSingleton<IFileSystem, FileSystem>();
         services.AddSingleton<IFrameCreator, FrameCreator>();
         services.AddSingleton<IUltraFaceDetector, UltraFaceDetector>();
+        services.AddSingleton<ILicensePlatesDetector, LicensePlatesDetector>();
         services.AddSingleton<IExternalProcessFactory, ExternalProcessFactory>();
         services.AddSingleton<IOnnxProvider, OnnxProvider>();
         services.AddSingleton<ISettingsValidator, SettingsValidator>();

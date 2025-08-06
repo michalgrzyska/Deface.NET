@@ -60,4 +60,13 @@
 		<None Include="Resources\**\*" Pack="true" PackagePath="Resources\%(RecursiveDir)%(Filename)%(Extension)" Visible="false" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Resources\license-plates.onnx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\ultraface.onnx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

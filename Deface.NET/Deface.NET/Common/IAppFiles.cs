@@ -3,4 +3,5 @@
 internal interface IAppFiles
 {
     string UltraFaceONNX { get; }
+    string LicensePlatesONNX { get; }
 }
