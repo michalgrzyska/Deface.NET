@@ -7,7 +7,11 @@ namespace Deface.NET.ObjectDetection.LicensePlates;
 [ExcludeFromCodeCoverage]
 internal class Output
 {
-    [VectorType(1, 25200, 6)]
-    [ColumnName("output0")]
+    [VectorType(8400, 4)]
+    [ColumnName("boxes")]
+    public float[] Boxes { get; set; } = [];
+
+    [VectorType(8400, 1)]
+    [ColumnName("scores")]
     public float[] Scores { get; set; } = [];
 }

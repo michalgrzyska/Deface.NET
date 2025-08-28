@@ -34,6 +34,9 @@
 		<None Update="Res\Photos\photo6.jpg">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Res\Videos\cars_and_people1.mp4">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Res\Videos\kappa.mp4">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

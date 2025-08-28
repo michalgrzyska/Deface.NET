@@ -15,6 +15,8 @@ public static class TestResources
     public const string Video_Very_Short_480p = $"{VideosDir}/very_short_480p.mp4";
     public const string Video_Kappa = $"{VideosDir}/kappa.mp4";
 
+    public const string Video_Cars_And_People1 = $"{VideosDir}/cars_and_people1.mp4";
+
     public const string Photo1 = $"{PhotosDir}/photo1.jpg";
     public const string Photo2 = $"{PhotosDir}/photo2.jpg";
     public const string Photo3 = $"{PhotosDir}/photo3.jpg";

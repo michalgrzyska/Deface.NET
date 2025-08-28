@@ -14,6 +14,7 @@ internal class LicensePlatesDetector : OnnxDetectorBase<Input, Output>, ILicense
     private const int Width = 640;
     private const int Height = 640;
     private const float IouThreshold = 0.5f;
+    private const int ParametersCount = 7;
 
     public LicensePlatesDetector(IOnnxProvider onnxProvider, ISettingsProvider settingsProvider, IAppFiles appFiles) 
         : base(onnxProvider, settingsProvider.Settings, appFiles.LicensePlatesONNX)
@@ -35,7 +36,7 @@ internal class LicensePlatesDetector : OnnxDetectorBase<Input, Output>, ILicense
         Input input = new(preprocessedImage);
 
         var output = _predictionEngine.Predict(input);
-        var result = PostProcess(output.Scores, frame.Width, frame.Height, settings.Threshold);
+        var result = PostProcess(output, frame.Width, frame.Height, settings.Threshold);
 
         return result;
     }
@@ -43,71 +44,56 @@ internal class LicensePlatesDetector : OnnxDetectorBase<Input, Output>, ILicense
     private static float[] PreprocessImage(Frame frame)
     {
         var resized = (SKBitmap)frame.AsRescaledWithPadding(Width, Height);
-        var imageData = new float[1 * 3 * Height * Width];
+        int size = 3 * Height * Width;
+        var imageData = new float[size];
 
         unsafe
         {
             var pixels = (byte*)resized.GetPixels();
-
-            var totalPixels = Height * Width;
-            var offsetR = 0;
-            var offsetG = totalPixels;
-            var offsetB = 2 * totalPixels;
+            int totalPixels = Height * Width;
 
             for (int i = 0; i < totalPixels; i++)
             {
                 byte* pixel = pixels + i * 4;
 
-                imageData[offsetR + i] = (pixel[0] - 127) / 128f;
-                imageData[offsetG + i] = (pixel[1] - 127) / 128f;
-                imageData[offsetB + i] = (pixel[2] - 127) / 128f;
+                // No normalization, just cast to float
+                imageData[i] = (float)pixel[0];               // channel 0
+                imageData[i + totalPixels] = (float)pixel[1]; // channel 1
+                imageData[i + totalPixels * 2] = (float)pixel[2]; // channel 2
             }
         }
 
         return imageData;
     }
 
-    private static List<DetectedObject> PostProcess(float[] scores, int originalW, int originalH, float confidenceThreshold)
+    private static List<DetectedObject> PostProcess(Output output, int originalW, int originalH, float confidenceThreshold)
     {
-        List<DetectedObject> faces = [];
-        var numBoxes = scores.Length / 6;
+        var results = new List<DetectedObject>();
+        var numBoxes = output.Scores.Length;
 
         for (int i = 0; i < numBoxes; i++)
         {
-            var score = scores[i * 6 + 4];
+            var score = output.Scores[i];
 
-            if (score > confidenceThreshold)
+            if (score < confidenceThreshold)
             {
-                var idx = i * 6;
-                var test = scores[idx..(idx + 6)];
-
-                var yCenter = scores[i * 6];
-                var xCenter = scores[i * 6 + 1];
-
-                var h = scores[i * 6 + 2] / 10;
-                var w = scores[i * 6 + 3];
-
-                var y1 = scores[i * 6];
-                var x1 = scores[i * 6 + 1];
-
-                var x2 = x1 - w;
-                var y2 = y1 + 2*h;
-
-
-                //var x1 = xCenter - (w / 2);
-                //var y1 = yCenter - (h / 2);
-                //var x2 = xCenter + (w / 2);
-                //var y2 = yCenter + (h / 2);
-
-                faces.Add(new((int)x1, (int)y1, (int)x2, (int)y2, score));
+                continue;
             }
+
+            var x1 = output.Boxes[i * 4 + 0];
+            var y1 = output.Boxes[i * 4 + 1];
+            var x2 = output.Boxes[i * 4 + 2];
+            var y2 = output.Boxes[i * 4 + 3];
+
+            results.Add(new DetectedObject((int)x1, (int)y1, (int)x2, (int)y2, score));
         }
 
-        var boxesNms = NMS(faces, IouThreshold);
+        var boxesNms = NMS(results, IouThreshold);
         var rescaledBoxes = RescaleBoundingBoxes(boxesNms, originalW, originalH);
 
         return rescaledBoxes;
     }
+
 
     private static List<DetectedObject> NMS(List<DetectedObject> faces, float iouThreshold)
     {
