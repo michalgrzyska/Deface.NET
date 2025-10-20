@@ -6,9 +6,10 @@ Console.WriteLine(Directory.GetCurrentDirectory());
 
 IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
 {
-    options.AnonimizationMethod = AnonimizationMethod.Mosaic;
-    options.AnonimizationShape = AnonimizationShape.Ellipse;
+    options.AnonimizationMethod = AnonimizationMethod.Color(255, 0, 0);
+    options.AnonimizationShape = AnonimizationShape.Rectangle;
     options.EncodingCodec = EncodingCodec.H264;
+    options.Threshold = 0.1f;
 });
 
 //var result = defaceService.ProcessVideo(TestResources.Video_Short_640_360_24fps, "C://DefaceTest/testtttt");
@@ -17,6 +18,6 @@ IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
 //    "/tmp/result.mp4"
 //);
 
-var result = defaceService.ProcessImage(TestResources.Photo3, "C://DefaceTest/");
+var result = defaceService.ProcessImage(TestResources.Photo5, "C://DefaceTest/test11111.jpg");
 
 Console.ReadKey();

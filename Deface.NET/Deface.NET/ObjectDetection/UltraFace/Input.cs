@@ -3,10 +3,22 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Deface.NET.ObjectDetection.UltraFace;
 
-[ExcludeFromCodeCoverage]
-internal class Input(float[] image)
+//[ExcludeFromCodeCoverage]
+//internal class Input(float[] image)
+//{
+//    [VectorType(1, 3, 480, 640)]
+//    [ColumnName(UltraFaceConstants.Input)]
+//    public float[] Image { get; set; } = image;
+//}
+
+internal class Input
 {
-    [VectorType(1, 3, 480, 640)]
-    [ColumnName(UltraFaceConstants.Input)]
-    public float[] Image { get; set; } = image;
+    [ColumnName("input")]
+    [VectorType(1, 3, 640, 640)]
+    public byte[] Image { get; set; }
+
+    public Input(byte[] image)
+    {
+        Image = image;
+    }
 }

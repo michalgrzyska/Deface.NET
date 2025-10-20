@@ -60,4 +60,13 @@
 		<None Include="Resources\**\*" Pack="true" PackagePath="Resources\%(RecursiveDir)%(Filename)%(Extension)" Visible="false" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Resources\yolo_nas2.onnx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\yolo_nas_new.onnx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

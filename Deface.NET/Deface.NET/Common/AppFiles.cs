@@ -8,7 +8,7 @@ internal class AppFiles(IFileSystem fileSystem) : IAppFiles
 
     private readonly IFileSystem _fileSystem = fileSystem;
 
-    public string UltraFaceONNX => TryGet("ultraface.onnx");
+    public string UltraFaceONNX => TryGet("yolo_nas2.onnx");
 
     private string TryGet(string filename)
     {

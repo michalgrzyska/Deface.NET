@@ -4,6 +4,7 @@ using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection.ONNX;
 using Microsoft.ML;
 using SkiaSharp;
+using System.Runtime.CompilerServices;
 
 namespace Deface.NET.ObjectDetection.UltraFace;
 
@@ -12,7 +13,7 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
     private readonly PredictionEngine<Input, Output> _predictionEngine;
 
     private const int Width = 640;
-    private const int Height = 480;
+    private const int Height = 640;
     private const float IouThreshold = 0.5f;
 
     // GpuDeviceId goes from global settings
@@ -28,7 +29,8 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
         Input input = new(preprocessedImage);
 
         var output = _predictionEngine.Predict(input);
-        var result = PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height, settings.Threshold);
+        //var result = PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height, settings.Threshold);
+        var result = PostProcess(output, frame.Width, frame.Height, settings.Threshold);
 
         return result;
     }
@@ -41,31 +43,56 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
         return _mlContext.Model.CreatePredictionEngine<Input, Output>(model);
     }
 
-    private static float[] PreprocessImage(Frame frame)
+    private static byte[] PreprocessImage(Frame frame)
     {
         var resized = (SKBitmap)frame.AsRescaledWithPadding(Width, Height);
-        var imageData = new float[1 * 3 * Height * Width];
+        var imageData = new byte[1 * 3 * Height * Width];
 
         unsafe
         {
             var pixels = (byte*)resized.GetPixels();
+            int total = Width * Height;
 
-            var totalPixels = Height * Width;
-            var offsetR = 0;
-            var offsetG = totalPixels;
-            var offsetB = 2 * totalPixels;
+            int offsetR = 0;
+            int offsetG = total;
+            int offsetB = 2 * total;
 
-            for (int i = 0; i < totalPixels; i++)
+            for (int i = 0; i < total; i++)
             {
-                byte* pixel = pixels + i * 4;
+                byte* p = pixels + i * 4; // BGRA order in memory
 
-                imageData[offsetR + i] = (pixel[0] - 127) / 128f;
-                imageData[offsetG + i] = (pixel[1] - 127) / 128f;
-                imageData[offsetB + i] = (pixel[2] - 127) / 128f;
+                // Convert BGRA → RGB (channel-first)
+                imageData[offsetR + i] = p[2]; // R
+                imageData[offsetG + i] = p[1]; // G
+                imageData[offsetB + i] = p[0]; // B
             }
         }
 
         return imageData;
+    }
+
+    private static List<DetectedObject> PostProcess(Output output, int originalW, int originalH, float confidenceThreshold)
+    {
+        List<DetectedObject> faces = [];
+
+        int num = (int)output.NumPredictions[0];
+
+        for (int i = 0; i < num; i++)
+        {
+            float x1 = output.Boxes[i * 4 + 0];
+            float y1 = output.Boxes[i * 4 + 1];
+            float x2 = output.Boxes[i * 4 + 2];
+            float y2 = output.Boxes[i * 4 + 3];
+            float score = output.Scores[i];
+            long cls = output.Classes[i];
+
+            if (score > confidenceThreshold)
+            {
+                faces.Add(new((int)x1, (int)y1, (int)x2, (int)y2, score));
+            }
+        }
+
+        return RescaleBoundingBoxes(faces, originalW, originalH);
     }
 
     private static List<DetectedObject> PostProcess(float[] scores, float[] boxes, int originalW, int originalH, float confidenceThreshold)

@@ -10,6 +10,9 @@
 		<None Update="Res\Photos\200x200_red.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Res\Photos\car1.jpg">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Res\Photos\photo1.jpg">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
