@@ -4,7 +4,6 @@ using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection.ONNX;
 using Microsoft.ML;
 using SkiaSharp;
-using System.Runtime.CompilerServices;
 
 namespace Deface.NET.ObjectDetection.UltraFace;
 
@@ -14,7 +13,7 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
 
     private const int Width = 640;
     private const int Height = 640;
-    private const float IouThreshold = 0.5f;
+    private const float IouThreshold = 0.4f;
 
     // GpuDeviceId goes from global settings
     public UltraFaceDetector(IOnnxProvider onnxProvider, ISettingsProvider settingsProvider, IAppFiles appFiles) 
@@ -29,7 +28,6 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
         Input input = new(preprocessedImage);
 
         var output = _predictionEngine.Predict(input);
-        //var result = PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height, settings.Threshold);
         var result = PostProcess(output, frame.Width, frame.Height, settings.Threshold);
 
         return result;
@@ -71,28 +69,61 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
         return imageData;
     }
 
-    private static List<DetectedObject> PostProcess(Output output, int originalW, int originalH, float confidenceThreshold)
+    private static List<DetectedObject> PostProcess(Output output, int originalW, int originalH, float confThreshold)
     {
-        List<DetectedObject> faces = [];
+        var detections = new List<DetectedObject>();
 
-        int num = (int)output.NumPredictions[0];
+        int numBoxes = (int)output.NumPredictions[0];
 
-        for (int i = 0; i < num; i++)
+        for (int i = 0; i < numBoxes; i++)
         {
+            float score = output.Scores[i];
+            if (score < confThreshold)
+                continue;
+
+            long cls = output.Classes[i];
+
             float x1 = output.Boxes[i * 4 + 0];
             float y1 = output.Boxes[i * 4 + 1];
             float x2 = output.Boxes[i * 4 + 2];
             float y2 = output.Boxes[i * 4 + 3];
-            float score = output.Scores[i];
-            long cls = output.Classes[i];
 
-            if (score > confidenceThreshold)
-            {
-                faces.Add(new((int)x1, (int)y1, (int)x2, (int)y2, score));
-            }
+            detections.Add(new DetectedObject(x1, y1, x2, y2, score));
         }
 
-        return RescaleBoundingBoxes(faces, originalW, originalH);
+        // Optionally reapply NMS if you want stricter filtering
+        //var boxesNms = NMS(detections, IouThreshold);
+        var rescaledBoxes = RescaleBoundingBoxes(detections, originalW, originalH);
+
+        return rescaledBoxes;
+    }
+
+
+    private static int[] GetClasses(float[] scores, int numAnchors, int numClasses)
+    {
+        int[] classes = new int[numAnchors];
+
+        for (int i = 0; i < numAnchors; i++)
+        {
+            float bestScore = float.MinValue;
+            int bestClass = -1;
+
+            for (int c = 0; c < numClasses; c++)
+            {
+                // Apply sigmoid to convert logit → probability
+                float prob = 1f / (1f + MathF.Exp(-scores[i * numClasses + c]));
+
+                if (prob > bestScore)
+                {
+                    bestScore = prob;
+                    bestClass = c;
+                }
+            }
+
+            classes[i] = bestClass;
+        }
+
+        return classes;
     }
 
     private static List<DetectedObject> PostProcess(float[] scores, float[] boxes, int originalW, int originalH, float confidenceThreshold)
