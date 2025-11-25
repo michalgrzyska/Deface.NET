@@ -5,21 +5,19 @@ using Deface.NET.ObjectDetection.ONNX;
 using Microsoft.ML;
 using SkiaSharp;
 
-namespace Deface.NET.ObjectDetection.YoloNasLicensePlates;
+namespace Deface.NET.ObjectDetection.UltraFace;
 
-internal class LicensePlateDetector : OnnxDetectorBase<Input, Output>, ILicensePlateDetector
+internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDetector
 {
     private readonly PredictionEngine<Input, Output> _predictionEngine;
 
     private const int Width = 640;
-    private const int Height = 640;
-    private const float IouThreshold = 0.4f;
-    private const int NumAnchors = 8400;
-    private const int BoxStride = 4;
+    private const int Height = 480;
+    private const float IouThreshold = 0.5f;
 
     // GpuDeviceId goes from global settings
-    public LicensePlateDetector(IOnnxProvider onnxProvider, ISettingsProvider settingsProvider, IAppFiles appFiles) 
-        : base(onnxProvider, settingsProvider.Settings, appFiles.LicensePlatesONNX)
+    public UltraFaceDetector(IOnnxProvider onnxProvider, ISettingsProvider settingsProvider, IAppFiles appFiles) 
+        : base(onnxProvider, settingsProvider.Settings, appFiles.UltraFaceONNX)
     {
         _predictionEngine = GetPredictionEngine();
     }
@@ -30,7 +28,7 @@ internal class LicensePlateDetector : OnnxDetectorBase<Input, Output>, ILicenseP
         Input input = new(preprocessedImage);
 
         var output = _predictionEngine.Predict(input);
-        var result = PostProcess(output, frame.Width, frame.Height, settings.Threshold);
+        var result = PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height, settings.Threshold);
 
         return result;
     }
@@ -42,59 +40,58 @@ internal class LicensePlateDetector : OnnxDetectorBase<Input, Output>, ILicenseP
         var model = _pipeline.Fit(_mlContext.Data.LoadFromEnumerable(new List<Input>()));
         return _mlContext.Model.CreatePredictionEngine<Input, Output>(model);
     }
+
     private static float[] PreprocessImage(Frame frame)
     {
         var resized = (SKBitmap)frame.AsRescaledWithPadding(Width, Height);
-        float[] imageData = new float[1 * 3 * Height * Width];
+        var imageData = new float[1 * 3 * Height * Width];
 
         unsafe
         {
             var pixels = (byte*)resized.GetPixels();
-            int total = Width * Height;
 
-            int offsetR = 0;
-            int offsetG = total;
-            int offsetB = 2 * total;
+            var totalPixels = Height * Width;
+            var offsetR = 0;
+            var offsetG = totalPixels;
+            var offsetB = 2 * totalPixels;
 
-            for (int i = 0; i < total; i++)
+            for (int i = 0; i < totalPixels; i++)
             {
-                byte* p = pixels + i * 4; // BGRA memory
+                byte* pixel = pixels + i * 4;
 
-                imageData[offsetR + i] = p[2] / 255f; // R
-                imageData[offsetG + i] = p[1] / 255f; // G
-                imageData[offsetB + i] = p[0] / 255f; // B
+                imageData[offsetR + i] = (pixel[0] - 127) / 128f;
+                imageData[offsetG + i] = (pixel[1] - 127) / 128f;
+                imageData[offsetB + i] = (pixel[2] - 127) / 128f;
             }
         }
 
         return imageData;
     }
 
-    private static List<DetectedObject> PostProcess(Output output, int originalW, int originalH, float confThreshold)
+    private static List<DetectedObject> PostProcess(float[] scores, float[] boxes, int originalW, int originalH, float confidenceThreshold)
     {
-        float[] rawBoxes = output.Boxes;
-        float[] rawScores = output.Scores;
+        List<DetectedObject> faces = [];
+        var numBoxes = scores.Length / 2;
 
-        var detections = new List<DetectedObject>();
-
-        for (int i = 0; i < NumAnchors; i++)
+        for (int i = 0; i < numBoxes; i++)
         {
-            float score = rawScores[i];
+            var score = scores[i * 2 + 1];
 
-            if (score < confThreshold)
-                continue;
+            if (score > confidenceThreshold)
+            {
+                var x1 = boxes[i * 4] * Width;
+                var y1 = boxes[i * 4 + 1] * Height;
+                var x2 = boxes[i * 4 + 2] * Width;
+                var y2 = boxes[i * 4 + 3] * Height;
 
-            int b = i * BoxStride;
-
-            float x1 = rawBoxes[b + 0];
-            float y1 = rawBoxes[b + 1];
-            float x2 = rawBoxes[b + 2];
-            float y2 = rawBoxes[b + 3];
-
-            detections.Add(new DetectedObject(x1, y1, x2, y2, score));
+                faces.Add(new((int)x1, (int)y1, (int)x2, (int)y2, score));
+            }
         }
 
-        detections = NMS(detections, 0.45f);
-        return RescaleBoundingBoxes(detections, originalW, originalH);
+        var boxesNms = NMS(faces, IouThreshold);
+        var rescaledBoxes = RescaleBoundingBoxes(boxesNms, originalW, originalH);
+
+        return rescaledBoxes;
     }
 
     private static List<DetectedObject> NMS(List<DetectedObject> faces, float iouThreshold)
@@ -129,6 +126,7 @@ internal class LicensePlateDetector : OnnxDetectorBase<Input, Output>, ILicenseP
 
         return (float)intersectionArea / unionArea;
     }
+
     private static List<DetectedObject> RescaleBoundingBoxes(List<DetectedObject> scaledBoxes, int originalWidth, int originalHeight)
     {
         var scale = Math.Min((float)Width / originalWidth, (float)Height / originalHeight);

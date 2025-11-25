@@ -1,7 +1,9 @@
 ﻿using Microsoft.ML.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Deface.NET.ObjectDetection.YoloNasLicensePlates;
 
+[ExcludeFromCodeCoverage]
 internal class Output
 {
     [ColumnName("output")]

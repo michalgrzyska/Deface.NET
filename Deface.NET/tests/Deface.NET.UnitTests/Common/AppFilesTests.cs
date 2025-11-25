@@ -38,7 +38,7 @@ public class AppFilesTests
         AppFiles appFiles = new(fileSystem);
 
         // Act
-        var result = appFiles.LicensePlatesONNX;
+        var result = appFiles.UltraFaceONNX;
 
         // Assert
         result.ShouldBe(FullPath);

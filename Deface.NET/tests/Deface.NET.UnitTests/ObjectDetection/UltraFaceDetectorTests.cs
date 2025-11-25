@@ -1,7 +1,7 @@
 ﻿using Deface.NET.Common;
 using Deface.NET.Configuration.Provider.Interfaces;
 using Deface.NET.ObjectDetection.ONNX;
-using Deface.NET.ObjectDetection.YoloNasLicensePlates;
+using Deface.NET.ObjectDetection.UltraFace;
 using Deface.NET.System;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
@@ -12,7 +12,7 @@ namespace Deface.NET.UnitTests.ObjectDetection;
 [Collection(nameof(SettingsCollection))]
 public class UltraFaceDetectorTests : IDisposable
 {
-    private readonly LicensePlateDetector _detector;
+    private readonly UltraFaceDetector _detector;
     private readonly SettingsFixture _settingsFixture;
 
     public UltraFaceDetectorTests(SettingsFixture settingsFixture)

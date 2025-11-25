@@ -10,6 +10,8 @@ internal class AppFiles(IFileSystem fileSystem) : IAppFiles
 
     public string LicensePlatesONNX => TryGet("license-plate-yolo-nas.onnx");
 
+    public string UltraFaceONNX => TryGet("ultraface.onnx");
+
     private string TryGet(string filename)
     {
         var fullPath = Path.Combine(_fileSystem.BaseDirectory, FilesDir, filename);
