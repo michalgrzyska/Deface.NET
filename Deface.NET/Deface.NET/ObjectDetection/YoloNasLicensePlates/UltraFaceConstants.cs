@@ -1,4 +1,4 @@
-﻿namespace Deface.NET.ObjectDetection.UltraFace;
+﻿namespace Deface.NET.ObjectDetection.YoloNasLicensePlates;
 
 internal static class UltraFaceConstants
 {

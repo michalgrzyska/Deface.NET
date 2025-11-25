@@ -1,18 +1,18 @@
 ﻿using Deface.NET.Graphics.Models;
-using Deface.NET.ObjectDetection.UltraFace;
+using Deface.NET.ObjectDetection.YoloNasLicensePlates;
 
 namespace Deface.NET.ObjectDetection;
 
 /// <summary>
 /// This is the foundation for multiple models if needed (which is planned).
 /// </summary>
-internal class ObjectDetector(IUltraFaceDetector ultraFaceDetector) : IObjectDetector
+internal class ObjectDetector(ILicensePlateDetector licensePlatesDetector) : IObjectDetector
 {
-    private readonly IUltraFaceDetector _ultraFaceDetector = ultraFaceDetector;
+    private readonly ILicensePlateDetector _licensePlatesDetector = licensePlatesDetector;
 
     public List<DetectedObject> Detect(Frame frame, Settings settings)
     {
-        var objects = _ultraFaceDetector.Detect(frame, settings);
+        var objects = _licensePlatesDetector.Detect(frame, settings);
         return objects.Select(x => x.GetResized(settings.MaskScale)).ToList();
     }
 }

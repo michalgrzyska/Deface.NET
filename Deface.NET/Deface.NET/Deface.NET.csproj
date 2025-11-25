@@ -60,10 +60,4 @@
 		<None Include="Resources\**\*" Pack="true" PackagePath="Resources\%(RecursiveDir)%(Filename)%(Extension)" Visible="false" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Update="Resources\model.onnx">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
 </Project>

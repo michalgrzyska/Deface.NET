@@ -1,6 +1,6 @@
 ﻿using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection;
-using Deface.NET.ObjectDetection.UltraFace;
+using Deface.NET.ObjectDetection.YoloNasLicensePlates;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
 using NSubstitute;
@@ -12,7 +12,7 @@ public class ObjectDetectorTests
 {
     private readonly SettingsFixture _settingsFixture;
 
-    private readonly IUltraFaceDetector _faceDetector;
+    private readonly ILicensePlateDetector _faceDetector;
     private readonly ObjectDetector _objectDetector;
 
     private readonly List<DetectedObject> testData =
@@ -27,7 +27,7 @@ public class ObjectDetectorTests
     {
         _settingsFixture = settingsFixture;
 
-        _faceDetector = Substitute.For<IUltraFaceDetector>();
+        _faceDetector = Substitute.For<ILicensePlateDetector>();
         _objectDetector = new(_faceDetector);
 
         _faceDetector

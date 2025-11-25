@@ -5,19 +5,21 @@ using Deface.NET.ObjectDetection.ONNX;
 using Microsoft.ML;
 using SkiaSharp;
 
-namespace Deface.NET.ObjectDetection.UltraFace;
+namespace Deface.NET.ObjectDetection.YoloNasLicensePlates;
 
-internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDetector
+internal class LicensePlateDetector : OnnxDetectorBase<Input, Output>, ILicensePlateDetector
 {
     private readonly PredictionEngine<Input, Output> _predictionEngine;
 
     private const int Width = 640;
     private const int Height = 640;
     private const float IouThreshold = 0.4f;
+    private const int NumAnchors = 8400;
+    private const int BoxStride = 4;
 
     // GpuDeviceId goes from global settings
-    public UltraFaceDetector(IOnnxProvider onnxProvider, ISettingsProvider settingsProvider, IAppFiles appFiles) 
-        : base(onnxProvider, settingsProvider.Settings, appFiles.UltraFaceONNX)
+    public LicensePlateDetector(IOnnxProvider onnxProvider, ISettingsProvider settingsProvider, IAppFiles appFiles) 
+        : base(onnxProvider, settingsProvider.Settings, appFiles.LicensePlatesONNX)
     {
         _predictionEngine = GetPredictionEngine();
     }
@@ -40,12 +42,9 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
         var model = _pipeline.Fit(_mlContext.Data.LoadFromEnumerable(new List<Input>()));
         return _mlContext.Model.CreatePredictionEngine<Input, Output>(model);
     }
-
     private static float[] PreprocessImage(Frame frame)
     {
         var resized = (SKBitmap)frame.AsRescaledWithPadding(Width, Height);
-
-        // YOLO-NAS expects float32 CHW
         float[] imageData = new float[1 * 3 * Height * Width];
 
         unsafe
@@ -61,7 +60,6 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
             {
                 byte* p = pixels + i * 4; // BGRA memory
 
-                // BGRA → RGB → float32 normalized
                 imageData[offsetR + i] = p[2] / 255f; // R
                 imageData[offsetG + i] = p[1] / 255f; // G
                 imageData[offsetB + i] = p[0] / 255f; // B
@@ -73,37 +71,29 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
 
     private static List<DetectedObject> PostProcess(Output output, int originalW, int originalH, float confThreshold)
     {
-        float[] rawBoxes = output.Output1;      // length = 33600
-        float[] rawScores = output.Output2;    // length = 8400
-
-        int numAnchors = 8400;
-        int boxStride = 4;
+        float[] rawBoxes = output.Boxes;
+        float[] rawScores = output.Scores;
 
         var detections = new List<DetectedObject>();
 
-        for (int i = 0; i < numAnchors; i++)
+        for (int i = 0; i < NumAnchors; i++)
         {
-            // Apply sigmoid to class confidence
-            //float score = Sigmoid(rawScores[i]);
             float score = rawScores[i];
 
             if (score < confThreshold)
                 continue;
 
-            // box index
-            int b = i * boxStride;
+            int b = i * BoxStride;
 
             float x1 = rawBoxes[b + 0];
             float y1 = rawBoxes[b + 1];
             float x2 = rawBoxes[b + 2];
             float y2 = rawBoxes[b + 3];
 
-            detections.Add(new DetectedObject(x1, y1, x2, y2, score)); // only 1 class
+            detections.Add(new DetectedObject(x1, y1, x2, y2, score));
         }
 
-        // NMS recommended
         detections = NMS(detections, 0.45f);
-
         return RescaleBoundingBoxes(detections, originalW, originalH);
     }
 
@@ -123,7 +113,6 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
 
         return selectedFaces;
     }
-
     private static float IOU(DetectedObject box1, DetectedObject box2)
     {
         var intersectionX1 = Math.Max(box1.X1, box2.X1);
@@ -139,7 +128,6 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
 
         return (float)intersectionArea / unionArea;
     }
-
     private static List<DetectedObject> RescaleBoundingBoxes(List<DetectedObject> scaledBoxes, int originalWidth, int originalHeight)
     {
         var scale = Math.Min((float)Width / originalWidth, (float)Height / originalHeight);

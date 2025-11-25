@@ -22,7 +22,7 @@ public class AppFilesTests
         AppFiles appFiles = new(fileSystem);
 
         // Act & Assert
-        var action = () => _ = appFiles.UltraFaceONNX;
+        var action = () => _ = appFiles.LicensePlatesONNX;
         action.ShouldThrow<FileNotFoundException>(string.Format(ExceptionMessages.AppFileNotFound, FileName));
     }
 
@@ -38,7 +38,7 @@ public class AppFilesTests
         AppFiles appFiles = new(fileSystem);
 
         // Act
-        var result = appFiles.UltraFaceONNX;
+        var result = appFiles.LicensePlatesONNX;
 
         // Assert
         result.ShouldBe(FullPath);
