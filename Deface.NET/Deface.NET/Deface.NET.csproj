@@ -61,16 +61,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Resources\yolo_nas2.onnx">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\yolo_nas_new.onnx">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\yolo_nas_newest.onnx">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\yolo_nas_no_pp.onnx">
+	  <None Update="Resources\model.onnx">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

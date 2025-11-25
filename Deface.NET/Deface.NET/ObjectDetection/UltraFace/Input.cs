@@ -15,9 +15,9 @@ internal class Input
 {
     [ColumnName("input")]
     [VectorType(1, 3, 640, 640)]
-    public byte[] Image { get; set; }
+    public float[] Image { get; set; }
 
-    public Input(byte[] image)
+    public Input(float[] image)
     {
         Image = image;
     }

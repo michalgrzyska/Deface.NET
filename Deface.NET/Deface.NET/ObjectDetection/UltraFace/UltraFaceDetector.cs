@@ -41,10 +41,12 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
         return _mlContext.Model.CreatePredictionEngine<Input, Output>(model);
     }
 
-    private static byte[] PreprocessImage(Frame frame)
+    private static float[] PreprocessImage(Frame frame)
     {
         var resized = (SKBitmap)frame.AsRescaledWithPadding(Width, Height);
-        var imageData = new byte[1 * 3 * Height * Width];
+
+        // YOLO-NAS expects float32 CHW
+        float[] imageData = new float[1 * 3 * Height * Width];
 
         unsafe
         {
@@ -57,12 +59,12 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
 
             for (int i = 0; i < total; i++)
             {
-                byte* p = pixels + i * 4; // BGRA order in memory
+                byte* p = pixels + i * 4; // BGRA memory
 
-                // Convert BGRA → RGB (channel-first)
-                imageData[offsetR + i] = p[2]; // R
-                imageData[offsetG + i] = p[1]; // G
-                imageData[offsetB + i] = p[0]; // B
+                // BGRA → RGB → float32 normalized
+                imageData[offsetR + i] = p[2] / 255f; // R
+                imageData[offsetG + i] = p[1] / 255f; // G
+                imageData[offsetB + i] = p[0] / 255f; // B
             }
         }
 
@@ -71,85 +73,38 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
 
     private static List<DetectedObject> PostProcess(Output output, int originalW, int originalH, float confThreshold)
     {
+        float[] rawBoxes = output.Output1;      // length = 33600
+        float[] rawScores = output.Output2;    // length = 8400
+
+        int numAnchors = 8400;
+        int boxStride = 4;
+
         var detections = new List<DetectedObject>();
-
-        int numBoxes = (int)output.NumPredictions[0];
-
-        for (int i = 0; i < numBoxes; i++)
-        {
-            float score = output.Scores[i];
-            if (score < confThreshold)
-                continue;
-
-            long cls = output.Classes[i];
-
-            float x1 = output.Boxes[i * 4 + 0];
-            float y1 = output.Boxes[i * 4 + 1];
-            float x2 = output.Boxes[i * 4 + 2];
-            float y2 = output.Boxes[i * 4 + 3];
-
-            detections.Add(new DetectedObject(x1, y1, x2, y2, score));
-        }
-
-        // Optionally reapply NMS if you want stricter filtering
-        //var boxesNms = NMS(detections, IouThreshold);
-        var rescaledBoxes = RescaleBoundingBoxes(detections, originalW, originalH);
-
-        return rescaledBoxes;
-    }
-
-
-    private static int[] GetClasses(float[] scores, int numAnchors, int numClasses)
-    {
-        int[] classes = new int[numAnchors];
 
         for (int i = 0; i < numAnchors; i++)
         {
-            float bestScore = float.MinValue;
-            int bestClass = -1;
+            // Apply sigmoid to class confidence
+            //float score = Sigmoid(rawScores[i]);
+            float score = rawScores[i];
 
-            for (int c = 0; c < numClasses; c++)
-            {
-                // Apply sigmoid to convert logit → probability
-                float prob = 1f / (1f + MathF.Exp(-scores[i * numClasses + c]));
+            if (score < confThreshold)
+                continue;
 
-                if (prob > bestScore)
-                {
-                    bestScore = prob;
-                    bestClass = c;
-                }
-            }
+            // box index
+            int b = i * boxStride;
 
-            classes[i] = bestClass;
+            float x1 = rawBoxes[b + 0];
+            float y1 = rawBoxes[b + 1];
+            float x2 = rawBoxes[b + 2];
+            float y2 = rawBoxes[b + 3];
+
+            detections.Add(new DetectedObject(x1, y1, x2, y2, score)); // only 1 class
         }
 
-        return classes;
-    }
+        // NMS recommended
+        detections = NMS(detections, 0.45f);
 
-    private static List<DetectedObject> PostProcess(float[] scores, float[] boxes, int originalW, int originalH, float confidenceThreshold)
-    {
-        List<DetectedObject> faces = [];
-        var numBoxes = scores.Length / 2;
-
-        for (int i = 0; i < numBoxes; i++)
-        {
-            var score = scores[i * 2 + 1];
-
-            if (score > confidenceThreshold)
-            {
-                var x1 = boxes[i * 4] * Width;
-                var y1 = boxes[i * 4 + 1] * Height;
-                var x2 = boxes[i * 4 + 2] * Width;
-                var y2 = boxes[i * 4 + 3] * Height;
-
-                faces.Add(new((int)x1, (int)y1, (int)x2, (int)y2, score));
-            }
-        }
-
-        var boxesNms = NMS(faces, IouThreshold);
-        var rescaledBoxes = RescaleBoundingBoxes(boxesNms, originalW, originalH);
-
-        return rescaledBoxes;
+        return RescaleBoundingBoxes(detections, originalW, originalH);
     }
 
     private static List<DetectedObject> NMS(List<DetectedObject> faces, float iouThreshold)
