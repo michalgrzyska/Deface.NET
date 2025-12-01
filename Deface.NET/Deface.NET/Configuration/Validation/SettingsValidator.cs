@@ -9,7 +9,8 @@ internal class SettingsValidator : ISettingsValidator
 
     public SettingsValidator(IExternalProcessFactory externalProcessFactory)
     {
-        RegisterValidator(new ThresholdValidator());
+        RegisterValidator(new FaceThresholdValidator());
+        RegisterValidator(new LicensePlateThresholdValidator());
         RegisterValidator(new RunDetectionEachNFramesValidator());
         RegisterValidator(new MaskScaleValidator());
         RegisterValidator(new FFMpegPathValidator(externalProcessFactory));

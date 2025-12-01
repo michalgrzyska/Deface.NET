@@ -18,42 +18,50 @@ public class ScopedSettingsProviderTests(SettingsFixture settingsFixture)
         var settings = _settingsFixture.Settings;
         var provider = GetScopedSettingsProvider();
 
-        provider.Settings.Threshold.ShouldBe(settings.Threshold);
+        provider.Settings.FaceThreshold.ShouldBe(settings.FaceThreshold);
+        provider.Settings.LicensePlateThreshold.ShouldBe(settings.LicensePlateThreshold);
     }
 
     [Fact]
     public void CustomScopedSettings_AreValuesOk()
     {
         float threshold = 0.99f;
+        float licensePlateThreshold = 0.88f;
 
         var provider = GetScopedSettingsProvider();
 
         provider.LoadForCurrentScope(ProcessingType.Image, x =>
         {
-            x.Threshold = threshold;
+            x.FaceThreshold = threshold;
+            x.LicensePlateThreshold = licensePlateThreshold;
         });
 
-        provider.Settings.Threshold.ShouldBe(threshold);
+        provider.Settings.FaceThreshold.ShouldBe(threshold);
+        provider.Settings.LicensePlateThreshold.ShouldBe(licensePlateThreshold);
     }
 
     [Fact]
     public void CustomScopedSettings_InitiatedTwice_ShouldBeInitatedOnlyOnce()
     {
         float threshold = 0.3f;
+        float licensePlateThreshold = 0.88f;
 
         var provider = GetScopedSettingsProvider();
 
         provider.LoadForCurrentScope(ProcessingType.Image, x =>
         {
-            x.Threshold = threshold;
+            x.FaceThreshold = threshold;
+            x.LicensePlateThreshold = licensePlateThreshold;
         });
 
         provider.LoadForCurrentScope(ProcessingType.Image, x =>
         {
-            x.Threshold = 0.4f;
+            x.FaceThreshold = 0.4f;
+            x.LicensePlateThreshold = 0.5f;
         });
 
-        provider.Settings.Threshold.ShouldBe(threshold);
+        provider.Settings.FaceThreshold.ShouldBe(threshold);
+        provider.Settings.LicensePlateThreshold.ShouldBe(licensePlateThreshold);
     }
 
     private ScopedSettingsProvider GetScopedSettingsProvider(Action<Settings>? action = null)

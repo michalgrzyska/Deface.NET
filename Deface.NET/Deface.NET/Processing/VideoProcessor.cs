@@ -99,7 +99,13 @@ internal sealed class VideoProcessor
 
     private ProcessingResult GetProcessingResult(string inputPath, string outputPath, ProcessedFrames processedFrames)
     {
-        return new(inputPath, outputPath, processedFrames.ProcessingTime, _settings.Threshold, processedFrames.VideoInfo.AverageFps);
+        return new(
+            inputPath, 
+            outputPath, 
+            processedFrames.ProcessingTime, 
+            _settings.FaceThreshold, 
+            _settings.LicensePlateThreshold, 
+            processedFrames.VideoInfo.AverageFps);
     }
 
     private void LogProcessingStarted(string inputPath) => _logger.LogBasic("Video processing started for \"{InputPath}\"", inputPath);

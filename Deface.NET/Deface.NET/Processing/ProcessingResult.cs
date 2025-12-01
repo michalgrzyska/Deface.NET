@@ -21,21 +21,27 @@ public class ProcessingResult
     public TimeSpan ProcessingTime { get; private set; }
 
     /// <summary>
-    /// Gets the threshold used for processing.
+    /// Gets the face threshold used for processing.
     /// </summary>
-    public float Threshold { get; private set; }
+    public float FaceThreshold { get; private set; }
+
+    /// <summary>
+    /// Gets the license plate threshold used for processing.
+    /// </summary>
+    public float LicensePlateThreshold { get; private set; }
 
     /// <summary>
     /// Gets the frames per second (FPS) during processing.
     /// </summary>
     public double Fps { get; private set; }
 
-    internal ProcessingResult(string inputFile, string outputFile, TimeSpan processingTime, float threshold, double fps)
+    internal ProcessingResult(string inputFile, string outputFile, TimeSpan processingTime, float faceThreshold, float licensePlateThreshold, double fps)
     {
         InputFile = inputFile;
         OutputFile = outputFile;
         ProcessingTime = processingTime;
-        Threshold = threshold;
+        LicensePlateThreshold = licensePlateThreshold;
+        FaceThreshold = faceThreshold;
         Fps = fps;
     }
 }

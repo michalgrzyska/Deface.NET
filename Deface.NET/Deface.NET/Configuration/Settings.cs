@@ -24,10 +24,16 @@ public class Settings
     public AnonimizationMethod AnonimizationMethod { get; set; } = AnonimizationMethod.GaussianBlur;
 
     /// <summary>
-    /// Detection threshold. Change that value to adjust detection level (e.g. 0.5 = 50%)
+    /// Face detection threshold. Change that value to adjust detection level (e.g. 0.5 = 50%)
     /// Default: 0.2f
     /// </summary>
-    public float Threshold { get; set; } = 0.2f;
+    public float FaceThreshold { get; set; } = 0.2f;
+
+    /// <summary>
+    /// Face detection threshold. Change that value to adjust detection level (e.g. 0.5 = 50%)
+    /// Default: 0.2f
+    /// </summary>
+    public float LicensePlateThreshold { get; set; } = 0.2f;
 
     /// <summary>
     /// <para>

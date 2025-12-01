@@ -40,7 +40,7 @@ internal sealed class ImageProcessor
         stopwatch.Stop();
 
         _logger.Log(LoggingLevel.Basic, "Processed {Input} and saved to {Output}", inputPath, outputPath);
-        return new(inputPath, outputPath, stopwatch.Elapsed, _settings.Threshold, 1);
+        return new(inputPath, outputPath, stopwatch.Elapsed, _settings.FaceThreshold, _settings.LicensePlateThreshold, 1);
     }
 
     public List<ProcessingResult> ProcessMany(string inputDirectory, string outputDirectory)

@@ -28,7 +28,7 @@ public class SettingsValidatorUnitTests
 
         settings.ApplyAction(settings =>
         {
-            settings.Threshold = threshold;
+            settings.FaceThreshold = threshold;
         });
 
         SettingsValidator validator = new(GetExternalProcessFactory(settings));
@@ -48,7 +48,7 @@ public class SettingsValidatorUnitTests
 
         settings.ApplyAction(settings =>
         {
-            settings.Threshold = threshold;
+            settings.FaceThreshold = threshold;
         });
 
         SettingsValidator validator = new(GetExternalProcessFactory(settings));
@@ -72,7 +72,7 @@ public class SettingsValidatorUnitTests
 
         settings.ApplyAction(settings =>
         {
-            settings.Threshold = threshold;
+            settings.FaceThreshold = threshold;
         });
 
         SettingsValidator validator = new(GetExternalProcessFactory(settings));

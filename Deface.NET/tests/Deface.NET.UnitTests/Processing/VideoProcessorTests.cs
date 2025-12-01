@@ -78,7 +78,8 @@ public class VideoProcessorTests
         result.InputFile.ShouldBe(inputFile);
         result.OutputFile.ShouldBe(outputFile);
         result.ProcessingTime.ShouldNotBe(TimeSpan.Zero);
-        result.Threshold.ShouldBe(_settingsFixture.Settings.Threshold);
+        result.FaceThreshold.ShouldBe(_settingsFixture.Settings.FaceThreshold);
+        result.LicensePlateThreshold.ShouldBe(_settingsFixture.Settings.LicensePlateThreshold);
     }
 
     [Theory]

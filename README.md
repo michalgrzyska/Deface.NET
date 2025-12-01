@@ -2,7 +2,7 @@
 
 ![NuGet](https://img.shields.io/nuget/v/Deface.NET.svg)
 
-Deface.NET is an MIT licensed library for photo and video processing to achieve anonymized resources. It is based on [Ultraface](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB) ONNX model for face detection and [SkiaSharp](https://github.com/mono/SkiaSharp) + [FFMpeg](https://www.ffmpeg.org/) image processing.
+Deface.NET is an MIT licensed library for photo and video processing to achieve anonymized resources. It is based on [Ultraface](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB) ONNX model for face detection, custom trained YOLO-NAS-S ONNX model for license plate detection and [SkiaSharp](https://github.com/mono/SkiaSharp) + [FFMpeg](https://www.ffmpeg.org/) image processing.
 
 ## Installation
 
@@ -18,33 +18,39 @@ Also, you need to install FFMpeg and FFProbe manually.
 
 Deface.NET can be easily added via Dependency Injection:
 
-    services.AddDeface(settings =>
-    {
-        ...
-    });
+```csharp
+services.AddDeface(settings =>
+{
+    ...
+});
+```
 
 and then `IDefaceService` can be easily injected:
 
-    public class SomeDIClass
-    {
-        private readonly IDefaceService _defaceService;
+```csharp
+public class SomeDIClass
+{
+    private readonly IDefaceService _defaceService;
 
-        public SomeDIClass(IDefaceService defaceService)
-        {
-            _defaceService = defaceService;
-        }
+    public SomeDIClass(IDefaceService defaceService)
+    {
+        _defaceService = defaceService;
     }
+}
+```
 
 #### With Standalone Provider
 
 Another way of using Deface.NET is to use `DefaceProvider:`
 
-    IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
-    {
-        ...
-    });
+```csharp
+IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
+{
+    ...
+});
 
-    var result = defaceService.ProcessImage("1.png", "1-processed.png");
+var result = defaceService.ProcessImage("1.png", "1-processed.png");
+```
 
 ## GPU Compatibility
 
@@ -54,7 +60,7 @@ Another way of using Deface.NET is to use `DefaceProvider:`
 
 ### Usage
 
-```
+```csharp
 services.AddDeface(settings =>
 {
     ...
@@ -74,7 +80,8 @@ To find out more informatiom, read the XML comments for a given option property/
 | `LoggingLevel`               | `None`, `Basic`, `Detailed`                |             | -                                      |
 | `AnonimizationShape`         | `Ellipse`, `Rectangle`                     |             | -                                      |
 | `AnonimizationMethod`        | `GaussianBlur`, `Mosaic`, `Color(r, g, b)` |             | -                                      |
-| `Threshold`                  | `float`                                    |             | `0 <= Threshold <= 1`                  |
+| `FaceThreshold`              | `float`                                    |             | `0 <= FaceThreshold <= 1`              |
+| `LicensePlateThreshold`      | `float`                                    |             | `0 <= LicensePlateThreshold <= 1`      |
 | `RunDetectionEachNFrames`    | `int`                                      |             | `1 <= RunDetectionEachNFrames`         |
 | `MaskScale`                  | `float`                                    |             | `1 <= MaskScale`                       |
 | `ImageFormat`                | `Png`, `Jpeg(quality)`                     |             | -                                      |
@@ -110,3 +117,17 @@ Currently, the Ultraface model used in Deface.NET achieves only ~30% performance
 In some cases (such as with Azure Functions), Deface.NET may throw a `FileNotFoundException` indicating that `Settings.CustomBaseDirectory` should be overridden. This happens because the native static method `AppContext.BaseDirectory` from the `System` namespace may not return the actual directory containing the application DLLs.
 
 To resolve this, set the `CustomBaseDirectory` property when registering Deface.NET. In such cases, applications often provide the correct application directory as an environment variable.
+
+#### 4. Missing ONNX files
+
+In case your application throws an exception about missing `.onnx` files (most like due to Docker container), to your `.csproj` file add:
+
+```csharp
+<Target Name="CopyResourcesToPublish" AfterTargets="Publish">
+    <ItemGroup>
+        <GeneratedResources Include="$(OutputPath)Resources\**" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(GeneratedResources)" DestinationFolder="$(PublishDir)Resources\%(RecursiveDir)" />
+</Target>
+```

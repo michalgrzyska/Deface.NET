@@ -22,7 +22,7 @@ public class AppFilesTests
         AppFiles appFiles = new(fileSystem);
 
         // Act & Assert
-        var action = () => _ = appFiles.UltraFaceONNX;
+        var action = () => _ = appFiles.LicensePlatesONNX;
         action.ShouldThrow<FileNotFoundException>(string.Format(ExceptionMessages.AppFileNotFound, FileName));
     }
 

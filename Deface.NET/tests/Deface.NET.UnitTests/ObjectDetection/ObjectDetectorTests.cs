@@ -1,6 +1,7 @@
 ﻿using Deface.NET.Graphics.Models;
 using Deface.NET.ObjectDetection;
 using Deface.NET.ObjectDetection.UltraFace;
+using Deface.NET.ObjectDetection.YoloNasLicensePlates;
 using Deface.NET.UnitTests._TestsConfig;
 using Deface.NET.UnitTests.Graphics.Helpers;
 using NSubstitute;
@@ -12,6 +13,7 @@ public class ObjectDetectorTests
 {
     private readonly SettingsFixture _settingsFixture;
 
+    private readonly ILicensePlateDetector _platesDetector;
     private readonly IUltraFaceDetector _faceDetector;
     private readonly ObjectDetector _objectDetector;
 
@@ -27,8 +29,14 @@ public class ObjectDetectorTests
     {
         _settingsFixture = settingsFixture;
 
+        _platesDetector = Substitute.For<ILicensePlateDetector>();
         _faceDetector = Substitute.For<IUltraFaceDetector>();
-        _objectDetector = new(_faceDetector);
+
+        _objectDetector = new(_platesDetector, _faceDetector);
+
+        _platesDetector
+            .Detect(Arg.Any<Frame>(), Arg.Any<Settings>())
+            .Returns(testData);
 
         _faceDetector
             .Detect(Arg.Any<Frame>(), Arg.Any<Settings>())
@@ -49,7 +57,7 @@ public class ObjectDetectorTests
 
         // Assert
 
-        _faceDetector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
+        _platesDetector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
         objects.ShouldAllBe(x => x.IsResized);
     }
 }

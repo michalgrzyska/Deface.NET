@@ -2,6 +2,10 @@
 
 internal record DetectedObject(int X1, int Y1, int X2, int Y2, float Confidence, bool IsResized = false)
 {
+    public DetectedObject(float X1, float Y1, float X2, float Y2, float Confidence) 
+        : this((int)X1, (int)Y1, (int)X2, (int)Y2, Confidence)
+    { }
+
     public DetectedObject GetResized(float scaleFactor = 1.0f)
     {
         if (IsResized || scaleFactor == 1.0f)
