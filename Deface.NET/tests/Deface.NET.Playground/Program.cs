@@ -9,11 +9,13 @@ IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
     options.AnonimizationMethod = AnonimizationMethod.Color(255, 0, 0);
     options.AnonimizationShape = AnonimizationShape.Rectangle;
     options.EncodingCodec = EncodingCodec.H264;
-    options.Threshold = 0.8f;
+    options.FaceThreshold = 0.8f;
     options.Hardware = Hardware.Cuda(0);
 });
 
-var result = defaceService.ProcessVideo(TestResources.Video_Short_640_360_24fps, "C://DefaceTest/testtttt.mp4");
+//var result = defaceService.ProcessVideo(TestResources.Video_Short_640_360_24fps, "C://DefaceTest/testtttt.mp4");
+var result = defaceService.ProcessVideo("C://DefaceTest//1.mp4", "C://DefaceTest/testtttt.mp4");
+
 //var result = defaceService.ProcessVideo("C:\\Users\\mihax\\Downloads\\test.mp4", "C://DefaceTest/testtttt");
 
 //var result = defaceService.ProcessVideo(

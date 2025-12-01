@@ -30,7 +30,7 @@ internal class LicensePlateDetector : OnnxDetectorBase<Input, Output>, ILicenseP
         Input input = new(preprocessedImage);
 
         var output = _predictionEngine.Predict(input);
-        var result = PostProcess(output, frame.Width, frame.Height, settings.Threshold);
+        var result = PostProcess(output, frame.Width, frame.Height, settings.LicensePlateThreshold);
 
         return result;
     }

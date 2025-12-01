@@ -40,7 +40,7 @@ public class UltraFaceDetectorTests : IDisposable
     {
         var settings = _settingsFixture.WithAction(x =>
         {
-            x.Threshold = 0.8f;
+            x.FaceThreshold = 0.8f;
         });
             
         var frame = TestFrameHelper.GetTestFrame(imagePath);

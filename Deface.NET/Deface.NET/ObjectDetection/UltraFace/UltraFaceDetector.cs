@@ -28,7 +28,7 @@ internal class UltraFaceDetector : OnnxDetectorBase<Input, Output>, IUltraFaceDe
         Input input = new(preprocessedImage);
 
         var output = _predictionEngine.Predict(input);
-        var result = PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height, settings.Threshold);
+        var result = PostProcess(output.Scores, output.Boxes, frame.Width, frame.Height, settings.FaceThreshold);
 
         return result;
     }
