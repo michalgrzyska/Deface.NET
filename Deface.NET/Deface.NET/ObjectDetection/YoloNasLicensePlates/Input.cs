@@ -6,7 +6,7 @@ namespace Deface.NET.ObjectDetection.YoloNasLicensePlates;
 [ExcludeFromCodeCoverage]
 internal class Input(float[] image)
 {
-    [ColumnName("input")]
+    [ColumnName(LicensePlatesContants.Input)]
     [VectorType(1, 3, 640, 640)]
     public float[] Image { get; set; } = image;
 }
