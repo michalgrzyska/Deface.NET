@@ -10,11 +10,12 @@ IDefaceService defaceService = DefaceProvider.GetDefaceService(options =>
     options.AnonimizationShape = AnonimizationShape.Rectangle;
     options.EncodingCodec = EncodingCodec.H264;
     options.FaceThreshold = 0.8f;
+    options.LicensePlateThreshold = 0.8f;
     options.Hardware = Hardware.Cuda(0);
 });
 
 //var result = defaceService.ProcessVideo(TestResources.Video_Short_640_360_24fps, "C://DefaceTest/testtttt.mp4");
-var result = defaceService.ProcessVideo("C://DefaceTest//1.mp4", "C://DefaceTest/testtttt.mp4");
+//var result = defaceService.ProcessVideo("C://DefaceTest//1.mp4", "C://DefaceTest/testtttt.mp4");
 
 //var result = defaceService.ProcessVideo("C:\\Users\\mihax\\Downloads\\test.mp4", "C://DefaceTest/testtttt");
 
@@ -23,6 +24,6 @@ var result = defaceService.ProcessVideo("C://DefaceTest//1.mp4", "C://DefaceTest
 //    "/tmp/result.mp4"
 //);
 
-//var result = defaceService.ProcessImage(TestResources.Car1, "C://DefaceTest/test11111.jpg");
+var result = defaceService.ProcessImage(TestResources.Car1, "C://DefaceTest/test11111.jpg");
 
 //Console.ReadKey();
