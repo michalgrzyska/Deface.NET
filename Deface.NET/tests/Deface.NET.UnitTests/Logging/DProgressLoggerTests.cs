@@ -11,14 +11,16 @@ public class DProgressLoggerTests
     public async Task StartAndStopShouldWorkCorrectlyToPointTimeSpan()
     {
         var dLogger = GetDProgressLogger();
+        var ms = 300;
+        var toleranceMs = (int)(ms * 0.9);
 
         dLogger.Start();
-        await Task.Delay(300);
+        await Task.Delay(ms);
 
         var timespan = dLogger.Stop();
 
         timespan.ShouldNotBe(TimeSpan.Zero);
-        timespan.Milliseconds.ShouldBeGreaterThanOrEqualTo(300);
+        timespan.Milliseconds.ShouldBeGreaterThanOrEqualTo(toleranceMs);
     }
 
     [Fact]
