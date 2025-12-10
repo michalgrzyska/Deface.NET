@@ -14,8 +14,8 @@ internal class ObjectDetector(ILicensePlateDetector licensePlatesDetector, IUltr
 
     public List<DetectedObject> Detect(Frame frame, Settings settings)
     {
-        var plates = _licensePlatesDetector.Detect(frame, settings);
-        var faces = _ultraFaceDetector.Detect(frame, settings);
+        var plates = settings.DisableLicensePlateDetection ? [] : _licensePlatesDetector.Detect(frame, settings);
+        var faces = settings.DisableFaceDetection ? [] : _ultraFaceDetector.Detect(frame, settings);
 
         List<DetectedObject> objects = [..plates, ..faces];
         return objects.Select(x => x.GetResized(settings.MaskScale)).ToList();

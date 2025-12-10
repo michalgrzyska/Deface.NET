@@ -58,6 +58,45 @@ public class ObjectDetectorTests
         // Assert
 
         _platesDetector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
+        _faceDetector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
+
         objects.ShouldAllBe(x => x.IsResized);
+    }
+
+    [Fact]
+    public void Detect_FaceDetectionDisabled_PlatesDetectorCalledOnly()
+    {
+        var settings = _settingsFixture.WithAction(s =>
+        {
+            s.DisableFaceDetection = true;
+        });
+
+        var frame = TestFrameHelper.GetTestFrame();
+
+        // Act
+        var objects = _objectDetector.Detect(frame, settings);
+
+        // Assert
+        _platesDetector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
+        _faceDetector.Received(0).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
+    }
+
+    [Fact]
+    public void Detect_LicensePlateDetectionDisabled_FaceDetectorCalledOnly()
+    {
+        var settings = _settingsFixture.WithAction(s =>
+        {
+            s.DisableLicensePlateDetection = true;
+        });
+
+        var frame = TestFrameHelper.GetTestFrame();
+
+        // Act
+        var objects = _objectDetector.Detect(frame, settings);
+
+        // Assert
+
+        _platesDetector.Received(0).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
+        _faceDetector.Received(1).Detect(Arg.Any<Frame>(), Arg.Any<Settings>());
     }
 }

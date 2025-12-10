@@ -24,6 +24,22 @@ public class Settings
     public AnonimizationMethod AnonimizationMethod { get; set; } = AnonimizationMethod.GaussianBlur;
 
     /// <summary>
+    /// Gets or sets a value indicating whether face detection is disabled during processing.
+    /// </summary>
+    /// <remarks>Set this property to <see langword="true"/> to prevent the system from performing face
+    /// detection. Disabling face detection may improve performance but will omit any face-related analysis or
+    /// features.</remarks>
+    public bool DisableFaceDetection { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets a value indicating whether license plate detection is disabled.
+    /// </summary>
+    /// <remarks>Set this property to <see langword="true"/> to prevent the system from performing license
+    /// plate detection during processing. This may improve performance if license plate recognition is not
+    /// required.</remarks>
+    public bool DisableLicensePlateDetection { get; set; } = false;
+
+    /// <summary>
     /// Face detection threshold. Change that value to adjust detection level (e.g. 0.5 = 50%)
     /// Default: 0.2f
     /// </summary>
