@@ -73,22 +73,24 @@ services.AddDeface(settings =>
 
 To find out more informatiom, read the XML comments for a given option property/value.
 
-| Option                       | Value                                      | Required    | Additional info                        |
-| ---------------------------- | ------------------------------------------ | ----------- | -------------------------------------- |
-| `FFMpegPath`                 | `string`                                   | videos only | -                                      |
-| `FFProbePath`                | `string`                                   | videos only |
-| `LoggingLevel`               | `None`, `Basic`, `Detailed`                |             | -                                      |
-| `AnonimizationShape`         | `Ellipse`, `Rectangle`                     |             | -                                      |
-| `AnonimizationMethod`        | `GaussianBlur`, `Mosaic`, `Color(r, g, b)` |             | -                                      |
-| `FaceThreshold`              | `float`                                    |             | `0 <= FaceThreshold <= 1`              |
-| `LicensePlateThreshold`      | `float`                                    |             | `0 <= LicensePlateThreshold <= 1`      |
-| `RunDetectionEachNFrames`    | `int`                                      |             | `1 <= RunDetectionEachNFrames`         |
-| `MaskScale`                  | `float`                                    |             | `1 <= MaskScale`                       |
-| `ImageFormat`                | `Png`, `Jpeg(quality)`                     |             | -                                      |
-| `Hardware`                   | `Cpu()`, `Cuda(gpuDeviceId)`               |             | -                                      |
-| `EncodingCodec`              | `VP9`, `H264`                              |             | -                                      |
-| `HideCommercialFeaturesInfo` | `bool`                                     |             | -                                      |
-| `CustomBaseDirectory`        | `string`                                   |             | See FAQ's CustomBaseDirectory section. |
+| Option                         | Value                                      | Required   | Additional info                        |
+| ------------------------------ | ------------------------------------------ | ---------- | -------------------------------------- |
+| `FFMpegPath`                   | `string`                                   | for videos | -                                      |
+| `FFProbePath`                  | `string`                                   | for images |
+| `LoggingLevel`                 | `None`, `Basic`, `Detailed`                |            | -                                      |
+| `AnonimizationShape`           | `Ellipse`, `Rectangle`                     |            | -                                      |
+| `AnonimizationMethod`          | `GaussianBlur`, `Mosaic`, `Color(r, g, b)` |            | -                                      |
+| `FaceThreshold`                | `float`                                    |            | `0 <= FaceThreshold <= 1`              |
+| `LicensePlateThreshold`        | `float`                                    |            | `0 <= LicensePlateThreshold <= 1`      |
+| `DisableFaceDetection`         | `bool`                                     |            |                                        |
+| `DisableLicensePlateDetection` | `bool`                                     |            |                                        |
+| `RunDetectionEachNFrames`      | `int`                                      |            | `1 <= RunDetectionEachNFrames`         |
+| `MaskScale`                    | `float`                                    |            | `1 <= MaskScale`                       |
+| `ImageFormat`                  | `Png`, `Jpeg(quality)`                     |            | -                                      |
+| `Hardware`                     | `Cpu()`, `Cuda(gpuDeviceId)`               |            | -                                      |
+| `EncodingCodec`                | `VP9`, `H264`                              |            | -                                      |
+| `HideCommercialFeaturesInfo`   | `bool`                                     |            | -                                      |
+| `CustomBaseDirectory`          | `string`                                   |            | See FAQ's CustomBaseDirectory section. |
 
 ## Commercial Features
 
