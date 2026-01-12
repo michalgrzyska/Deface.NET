@@ -110,9 +110,10 @@ The current list of commercial features requiring an additional license:
 
 Videos may not be processed correctly on Windows if the destination path exceeds 260 characters. See [Microsoft Docs](https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry) to learn how to enable long paths.
 
-#### 2. GPU performance
+#### 2. GPU Performance
 
 Currently, the Ultraface model used in Deface.NET achieves only ~30% performance improvement when running on a GPU. We are working on optimizing it.
+**NOTE**: GPU is strongly recommended with license plate blurring - current model is poorly optimized for CPU usage.
 
 #### 3. `CustomBaseDirectory`
 
@@ -120,7 +121,7 @@ In some cases (such as with Azure Functions), Deface.NET may throw a `FileNotFou
 
 To resolve this, set the `CustomBaseDirectory` property when registering Deface.NET. In such cases, applications often provide the correct application directory as an environment variable.
 
-#### 4. Missing ONNX files
+#### 4. Missing ONNX Files
 
 In case your application throws an exception about missing `.onnx` files (most like due to Docker container), to your `.csproj` file add:
 
@@ -133,3 +134,7 @@ In case your application throws an exception about missing `.onnx` files (most l
     <Copy SourceFiles="@(GeneratedResources)" DestinationFolder="$(PublishDir)Resources\%(RecursiveDir)" />
 </Target>
 ```
+
+#### 5. Docker Support
+
+`nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04` image is tested inside production environment and works correctly.
