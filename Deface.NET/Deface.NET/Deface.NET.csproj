@@ -8,7 +8,7 @@
 		<Platforms>AnyCPU;x64</Platforms>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<Authors>Michał Grzyśka</Authors>
-		<Version>10.0.0</Version>
+		<Version>8.0.0</Version>
 		<Description>Video and photo anonymization library for .NET</Description>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
