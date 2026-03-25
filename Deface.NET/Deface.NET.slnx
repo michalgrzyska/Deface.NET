@@ -1,0 +1,21 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests/Deface.NET.UnitTests/code-coverage-report.ps1" />
+    <File Path="tests/dockerfile" />
+    <Project Path="tests/Deface.NET.IntegrationTests/Deface.NET.IntegrationTests.csproj" />
+    <Project Path="tests/Deface.NET.PerformanceTestRunner/Deface.NET.PerformanceTestRunner.csproj" />
+    <Project Path="tests/Deface.NET.Playground/Deface.NET.Playground.csproj" />
+    <Project Path="tests/Deface.NET.TestResources/Deface.NET.TestResources.csproj" />
+    <Project Path="tests/Deface.NET.UnitTests/Deface.NET.UnitTests.csproj" />
+  </Folder>
+  <Project Path="Deface.NET/Deface.NET.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+</Solution>
